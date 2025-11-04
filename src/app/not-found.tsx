@@ -7,7 +7,7 @@ const montserrat = Montserrat({
 
 export default function NotFound() {
 	return (
-		<div className="h-screen w-full bg-[url('/not-found.png')] bg-center bg-cover relative">
+		<div className="h-screen w-full bg-[url('/Auth/rektorat.png')] bg-center bg-cover relative">
 			<div className="absolute flex w-full h-full bg-black/80 z-10 items-center justify-center">
 				<div
 					className={`max-w-[810px] flex flex-col items-center text-center gap-3 p-4 ${montserrat.className}`}
