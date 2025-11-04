@@ -1,18 +1,15 @@
 "use client";
-import {
-	BookUser,
-	ChevronDown,
-	Cog,
-	Ellipsis,
-	History,
-	ShoppingCart,
-	UserCheck,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "@/context/SidebarContext";
+import Data from "../../public/images/sidebar/data.svg";
+import Documents from "../../public/images/sidebar/documents.svg";
+import Home from "../../public/images/sidebar/home.svg";
+import Users from "../../public/images/sidebar/users.svg";
 
 type NavItem = {
 	name: string;
@@ -28,29 +25,24 @@ const AppSidebar: React.FC = () => {
 	const navItems: NavItem[] = useMemo(
 		() => [
 			{
-				icon: <Cog />,
-				name: "Sparepart",
-				path: "/sparepart",
+				icon: <Home className="w-full h-full" />,
+				name: "Home",
+				path: "/",
 			},
 			{
-				icon: <BookUser />,
-				name: "Supplier",
-				path: "/supplier",
+				icon: <Data className="w-full h-full" />,
+				name: "Data",
+				path: "/data",
 			},
 			{
-				icon: <UserCheck />,
-				name: "Langganan",
-				path: "/customer",
+				icon: <Documents className="w-full h-full" />,
+				name: "Documents",
+				path: "/documents",
 			},
 			{
-				icon: <History />,
-				name: "Riwayat Penjualan",
-				path: "/transaction-history",
-			},
-			{
-				icon: <ShoppingCart />,
-				name: "Kasir",
-				path: "/cashier",
+				icon: <Users className="w-full h-full" />,
+				name: "Users",
+				path: "/users",
 			},
 		],
 		[],
@@ -134,21 +126,29 @@ const AppSidebar: React.FC = () => {
 								href={nav.path}
 								className={`relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm group ${
 									isActive(nav.path)
-										? "bg-brand-50 text-brand-500"
-										: "text-gray-700 hover:bg-gray-100 group-hover:text-gray-700"
+										? "bg-primary-1000 text-white"
+										: "text-secondary-1000 hover:bg-gray-100 group-hover:text-gray-700"
 								}`}
 							>
 								<span
 									className={`${
 										isActive(nav.path)
 											? "text-brand-500 "
-											: "text-gray-500 group-hover:text-gray-700"
+											: "text-secondary-1000 group-hover:text-gray-700"
 									}`}
 								>
 									{nav.icon}
 								</span>
 								{(isExpanded || isHovered || isMobileOpen) && (
-									<span className={`menu-item-text`}>{nav.name}</span>
+									<span
+										className={`menu-item-text ${
+											isActive(nav.path)
+												? "group-hover:text-white"
+												: "group-hover:text-gray-700"
+										}`}
+									>
+										{nav.name}
+									</span>
 								)}
 							</Link>
 						)
@@ -252,12 +252,12 @@ const AppSidebar: React.FC = () => {
 
 	return (
 		<aside
-			className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+			className={`fixed mt-28 flex flex-col -top-2 lg:top-0 px-5 -left-1 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-999 border-r border-gray-200 
         ${
 					isExpanded || isMobileOpen
-						? "w-[290px]"
+						? "w-[280px]"
 						: isHovered
-							? "w-[290px]"
+							? "w-[280px]"
 							: "w-[90px]"
 				}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
@@ -266,37 +266,25 @@ const AppSidebar: React.FC = () => {
 			onMouseLeave={() => setIsHovered(false)}
 		>
 			<div
-				className={`py-8 flex ${
+				className={`py-8 flex flex-col ${
 					!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
 				}`}
 			>
 				<Link href="/">
-					{isExpanded || isHovered || isMobileOpen ? (
-						<h1 className="font-semibold text-brand-600 text-3xl">CRS</h1>
-					) : (
-						<h1 className="font-semibold text-brand-600 text-3xl">SM</h1>
-					)}
+					<Image
+						src="/images/crs-logo.png"
+						alt="CRS"
+						width={140}
+						height={140}
+						className="w-34 lg:w-40"
+						priority
+					/>
 				</Link>
 			</div>
 			<div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
 				<nav className="mb-6">
 					<div className="flex flex-col gap-4">
-						<div>
-							<h2
-								className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-									!isExpanded && !isHovered
-										? "lg:justify-center"
-										: "justify-start"
-								}`}
-							>
-								{isExpanded || isHovered || isMobileOpen ? (
-									"Menu"
-								) : (
-									<Ellipsis />
-								)}
-							</h2>
-							{renderMenuItems(filteredNavItems, "main")}
-						</div>
+						<div>{renderMenuItems(filteredNavItems, "main")}</div>
 					</div>
 				</nav>
 			</div>

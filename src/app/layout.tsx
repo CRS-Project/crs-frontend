@@ -5,52 +5,55 @@ import { Montserrat } from "next/font/google";
 import Head from "next/head";
 import Providers from "@/app/providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import AppHeader from "@/layouts/AppHeader";
+import AppSidebar from "@/layouts/AppSidebar";
+import Backdrop from "@/layouts/Backdrop";
 
 const montserrat = Montserrat({
-	subsets: ["latin"],
-	weight: ["400", "700", "800"],
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
 });
 
 const siteConfig = {
-	title: "Next Template",
-	description:
-		"A Next.js 15 starter template with TypeScript, Tailwind CSS v4, and built-in tools for efficient development.",
-	url: process.env.SITE_URL || "https://example.com",
+  title: "Next Template",
+  description:
+    "A Next.js 15 starter template with TypeScript, Tailwind CSS v4, and built-in tools for efficient development.",
+  url: process.env.SITE_URL || "https://example.com",
 };
 
 export const metadata: Metadata = {
-	metadataBase: new URL(siteConfig.url),
-	title: {
-		default: siteConfig.title,
-		template: `%s - ${siteConfig.title}`,
-	},
-	description: siteConfig.description,
-	twitter: {
-		card: "summary_large_image",
-	},
-	robots: { index: true, follow: true },
-	authors: [
-		{
-			name: siteConfig.title,
-			url: siteConfig.url,
-		},
-	],
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: `%s - ${siteConfig.title}`,
+  },
+  description: siteConfig.description,
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: { index: true, follow: true },
+  authors: [
+    {
+      name: siteConfig.title,
+      url: siteConfig.url,
+    },
+  ],
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<html lang="en">
-			<Head>
-				<meta name="apple-mobile-web-app-title" content={siteConfig.title} />
-			</Head>
-			{process.env.NEXT_PUBLIC_RUN_MODE === "production" && <GoogleAnalytics />}
-			<body className={`${montserrat.className}`}>
-				<Providers>{children}</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <Head>
+        <meta name="apple-mobile-web-app-title" content={siteConfig.title} />
+      </Head>
+      {process.env.NEXT_PUBLIC_RUN_MODE === "production" && <GoogleAnalytics />}
+      <body className={`${montserrat.className}`}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }
