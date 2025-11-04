@@ -5,8 +5,8 @@ import * as React from "react";
 import { toast } from "react-hot-toast";
 import Loading from "@/app/loading";
 import useAuthStore from "@/app/stores/useAuthStore";
-import api from "@/lib/api";
 import { getToken, removeToken } from "@/lib/cookies";
+import api from "@/service/api";
 import type { User } from "@/types/user";
 
 const ROLE = ["admin", "writer"] as const;

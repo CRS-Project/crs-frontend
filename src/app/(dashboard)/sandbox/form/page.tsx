@@ -7,7 +7,7 @@ import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
-import api from "@/lib/api";
+import api from "@/service/api";
 import type { ApiError, ApiResponse } from "@/types/api";
 
 type SandboxForm = {
