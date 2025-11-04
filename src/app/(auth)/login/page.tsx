@@ -16,7 +16,7 @@ export default function LoginPage() {
 
 	return (
 		<Authentication>
-			<div className="flex flex-col justify-center items-center">
+			<div className="flex flex-col justify-center items-center text-center">
 				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
 				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
 			</div>
@@ -46,8 +46,13 @@ export default function LoginPage() {
 							Forgot your password?
 						</Link>
 					</div>
-					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
-						Submit
+					<Button
+						className="w-full text-sm mt-3"
+						variant="blue"
+						type="submit"
+						size="lg"
+					>
+						Login
 					</Button>
 				</form>
 			</FormProvider>

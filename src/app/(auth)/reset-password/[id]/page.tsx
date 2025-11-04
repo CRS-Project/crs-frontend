@@ -1,8 +1,8 @@
 "use client";
 
+import { ArrowLeft, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { IoIosArrowRoundBack, IoIosLock } from "react-icons/io";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import Authentication from "@/layouts/Authentication";
@@ -18,8 +18,8 @@ export default function RegisterPage() {
 	return (
 		<Authentication>
 			<div className="flex flex-col justify-center items-center text-center">
-				<IoIosLock className="text-[50px]" />
-				<h2 className="text-[36px] font-bold">Reset Password!</h2>
+				<LockKeyhole size={56} />
+				<h2 className="text-[36px] mt-5 font-bold">Reset Password!</h2>
 				<p className="font-light text-[15.5px]">
 					Please set your new password{" "}
 				</p>
@@ -46,6 +46,7 @@ export default function RegisterPage() {
 									"Password must contain both uppercase and lowercase letters",
 							},
 						}}
+						helperText="Password must be 8 character, mix uppercase and lowercase"
 					/>
 					<Input
 						id="confirmNewPassword"
@@ -59,8 +60,14 @@ export default function RegisterPage() {
 								return value === newPassword || "Passwords do not match";
 							},
 						}}
+						helperText="Please re-type to confirm your new password"
 					/>
-					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
+					<Button
+						className="w-full text-sm mt-3"
+						variant="blue"
+						type="submit"
+						size="lg"
+					>
 						Reset Password
 					</Button>
 				</form>
@@ -68,7 +75,7 @@ export default function RegisterPage() {
 					href="/login"
 					className="text-sm mt-6 hover:underline flex justify-center items-center"
 				>
-					<IoIosArrowRoundBack className="mr-2 text-xl font-bold" />
+					<ArrowLeft className="mr-2 text-xl font-bold" />
 					Back to Login
 				</Link>
 			</FormProvider>
