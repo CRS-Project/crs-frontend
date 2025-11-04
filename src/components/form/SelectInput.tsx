@@ -19,6 +19,8 @@ import LabelText from "@/components/form/LabelText";
 import clsxm from "@/lib/clsxm";
 import type { ExtractProps } from "@/lib/helper";
 
+export type SelectOption = { value: string | number; label: string };
+
 export type SelectInputProps = {
 	label: string | null;
 	id: string;

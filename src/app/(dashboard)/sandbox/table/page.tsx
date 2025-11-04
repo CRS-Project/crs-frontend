@@ -14,15 +14,7 @@ type Ttable = {
 export default function TableTest() {
 	return (
 		<div className="flex h-full min-h-screen w-full flex-col items-center bg-white justify-center overflow-hidden">
-			<Table
-				className="text-black w-3/4"
-				data={data}
-				columns={columns}
-				withFilter
-				withEntries
-				withPaginationControl
-				withLink
-			/>
+			<Table className="text-black w-3/4" data={data} columns={columns} />
 		</div>
 	);
 }
