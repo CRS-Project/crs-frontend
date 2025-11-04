@@ -8,54 +8,64 @@ import Authentication from "@/layouts/Authentication";
 import type { LoginRequest } from "@/types/login";
 
 export default function LoginPage() {
-	const methods = useForm<LoginRequest>();
+  const methods = useForm<LoginRequest>();
+  const router = useRouter();
 
-	const onSubmit: SubmitHandler<LoginRequest> = (data) => {
-		console.log(data);
-	};
+  const mutation = useLogin({
+    onSuccess: () => {
+      toast.success("Logged in successfully!");
+      methods.reset();
+      router.push("/");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.error("Login error:", error);
+    },
+  });
 
-	return (
-		<Authentication>
-			<div className="flex flex-col justify-center items-center text-center">
-				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
-				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
-			</div>
-			<FormProvider {...methods}>
-				<form
-					className="space-y-4 mt-[22px]"
-					onSubmit={methods.handleSubmit(onSubmit)}
-				>
-					<Input
-						id="usernameEmail"
-						label="Email/Username"
-						placeholder="Your Email"
-						validation={{ required: "Email/Username is required" }}
-					/>
-					<Input
-						id="password"
-						label="Password"
-						type="password"
-						placeholder="Introduce your password"
-						validation={{ required: "Password is required" }}
-					/>
-					<div className="w-full text-right">
-						<Link
-							href="/forgot-password"
-							className="text-sm hover:text-slate-500 transition-all duration-200 ease-in-out"
-						>
-							Forgot your password?
-						</Link>
-					</div>
-					<Button
-						className="w-full text-sm mt-3"
-						variant="blue"
-						type="submit"
-						size="lg"
-					>
-						Login
-					</Button>
-				</form>
-			</FormProvider>
-		</Authentication>
-	);
+  const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
+    console.log(data);
+    const formData = parseToFormData(data);
+    await mutation.mutateAsync(formData);
+  };
+
+  return (
+    <Authentication>
+      <div className="flex flex-col justify-center items-center">
+        <h2 className="text-[36px] font-bold">WELCOME BACK</h2>
+        <p className="font-light text-[15.5px]">Sign in to start using CSR</p>
+      </div>
+      <FormProvider {...methods}>
+        <form
+          className="space-y-4 mt-[22px]"
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <Input
+            id="usernameEmail"
+            label="Email/Username"
+            placeholder="Your Email"
+            validation={{ required: "Email/Username is required" }}
+          />
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            placeholder="Introduce your password"
+            validation={{ required: "Password is required" }}
+          />
+          <div className="w-full text-right">
+            <Link
+              href="/forgot-password"
+              className="text-sm hover:text-slate-500 transition-all duration-200 ease-in-out"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+          <Button className="w-full text-sm mt-3" variant="blue" type="submit">
+            Submit
+          </Button>
+        </form>
+      </FormProvider>
+    </Authentication>
+  );
 }
