@@ -5,9 +5,6 @@ import { Montserrat } from "next/font/google";
 import Head from "next/head";
 import Providers from "@/app/providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import AppHeader from "@/layouts/AppHeader";
-import AppSidebar from "@/layouts/AppSidebar";
-import Backdrop from "@/layouts/Backdrop";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
