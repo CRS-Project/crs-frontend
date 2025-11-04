@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSidebar } from "@/context/SidebarContext";
-import Data from "../../public/images/sidebar/data.svg";
-import Documents from "../../public/images/sidebar/documents.svg";
-import Home from "../../public/images/sidebar/home.svg";
-import Users from "../../public/images/sidebar/users.svg";
+import Data from "../../public/icons/data.svg";
+import Documents from "../../public/icons/documents.svg";
+import Home from "../../public/icons/home.svg";
+import Users from "../../public/icons/users.svg";
 
 type NavItem = {
 	name: string;
@@ -25,22 +25,22 @@ const AppSidebar: React.FC = () => {
 	const navItems: NavItem[] = useMemo(
 		() => [
 			{
-				icon: <Home className="w-full h-full" />,
+				icon: <Home className="w-fit h-fit" />,
 				name: "Home",
-				path: "/",
+				path: "/sandbox",
 			},
 			{
-				icon: <Data className="w-full h-full" />,
+				icon: <Data className="w-fit h-fit" />,
 				name: "Data",
 				path: "/data",
 			},
 			{
-				icon: <Documents className="w-full h-full" />,
+				icon: <Documents className="w-fit h-fit" />,
 				name: "Documents",
 				path: "/documents",
 			},
 			{
-				icon: <Users className="w-full h-full" />,
+				icon: <Users className="w-fit h-fit" />,
 				name: "Users",
 				path: "/users",
 			},
@@ -100,7 +100,7 @@ const AppSidebar: React.FC = () => {
 							<span
 								className={` ${
 									openSubmenu?.type === menuType && openSubmenu?.index === index
-										? "text-brand-500 "
+										? "text-brand-500"
 										: "text-gray-500 group-hover:text-gray-700 "
 								}`}
 							>
@@ -124,7 +124,9 @@ const AppSidebar: React.FC = () => {
 						nav.path && (
 							<Link
 								href={nav.path}
-								className={`relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm group ${
+								className={`relative flex items-center w-full gap-3 ${
+									(isExpanded || isHovered || isMobileOpen) && "px-3 py-2"
+								} font-medium rounded-lg text-theme-sm group ${
 									isActive(nav.path)
 										? "bg-primary-1000 text-white"
 										: "text-secondary-1000 hover:bg-gray-100 group-hover:text-gray-700"
@@ -135,13 +137,16 @@ const AppSidebar: React.FC = () => {
 										isActive(nav.path)
 											? "text-brand-500 "
 											: "text-secondary-1000 group-hover:text-gray-700"
+									} ${
+										!(isExpanded || isHovered || isMobileOpen) &&
+										"aspect-square p-2 flex justify-center items-center mx-auto"
 									}`}
 								>
 									{nav.icon}
 								</span>
 								{(isExpanded || isHovered || isMobileOpen) && (
 									<span
-										className={`menu-item-text ${
+										className={`menu-item-text font-semibold ${
 											isActive(nav.path)
 												? "group-hover:text-white"
 												: "group-hover:text-gray-700"
@@ -252,7 +257,9 @@ const AppSidebar: React.FC = () => {
 
 	return (
 		<aside
-			className={`fixed mt-28 flex flex-col -top-2 lg:top-0 px-5 -left-1 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-999 border-r border-gray-200 
+			className={`fixed flex flex-col p-6 -left-1 bg-white text-gray-900 ${
+				isMobileOpen ? "h-[calc(100vh-72.8px)]" : "h-screen"
+			} transition-all justify-between duration-300 ease-in-out z-999 border-r border-gray-200 
         ${
 					isExpanded || isMobileOpen
 						? "w-[280px]"
@@ -260,34 +267,39 @@ const AppSidebar: React.FC = () => {
 							? "w-[280px]"
 							: "w-[90px]"
 				}
-        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isMobileOpen ? "translate-x-0 mt-[72.8px]" : "-translate-x-full"}
         lg:translate-x-0`}
 			onMouseEnter={() => !isExpanded && setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>
-			<div
-				className={`py-8 flex flex-col ${
-					!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-				}`}
-			>
-				<Link href="/">
-					<Image
-						src="/images/crs-logo.png"
-						alt="CRS"
-						width={140}
-						height={140}
-						className="w-34 lg:w-40"
-						priority
-					/>
-				</Link>
+			<div>
+				<div
+					className={`flex flex-col  ${
+						!isExpanded && !isHovered
+							? "lg:justify-center mb-8"
+							: "justify-start mb-12"
+					}`}
+				>
+					<Link href="/">
+						<Image
+							src="/images/CRS-Logo-V1.png"
+							alt="CRS"
+							width={300}
+							height={140}
+							className="w-34 lg:w-40"
+							priority
+						/>
+					</Link>
+				</div>
+				<div className="flex flex-col overflow-x-hidden overflow-y-auto duration-300 ease-linear no-scrollbar">
+					<nav className="mb-6">
+						<div className="flex flex-col gap-4">
+							<div>{renderMenuItems(filteredNavItems, "main")}</div>
+						</div>
+					</nav>
+				</div>
 			</div>
-			<div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-				<nav className="mb-6">
-					<div className="flex flex-col gap-4">
-						<div>{renderMenuItems(filteredNavItems, "main")}</div>
-					</div>
-				</nav>
-			</div>
+			<div>hello world</div>
 		</aside>
 	);
 };
