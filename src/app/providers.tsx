@@ -8,7 +8,7 @@ import {
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "react-hot-toast";
 import { SidebarProvider } from "@/context/SidebarContext";
-import api from "@/lib/api";
+import api from "@/service/api";
 
 const defaultQueryFn = async ({ queryKey }: QueryOptions) => {
 	const { data } = await api.get(`${queryKey?.[0]}`);
