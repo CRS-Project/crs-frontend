@@ -46,7 +46,7 @@ export default function Typography<T extends React.ElementType>({
 	children,
 	weight = "regular",
 	className,
-	font = "Inter",
+	font = "Montserrat",
 	...props
 }: TypographyProps<T> &
 	Omit<React.ComponentProps<T>, keyof TypographyProps<T>>) {

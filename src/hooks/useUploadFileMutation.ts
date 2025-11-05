@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import api from "@/lib/api";
+import api from "@/service/api";
 
 export const useUploadFileMutation = (id: string, label?: string) => {
 	const saveFileToSessionStorage = (file: File) => {

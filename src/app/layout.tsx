@@ -1,7 +1,7 @@
 import "./globals.css";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import Head from "next/head";
 import Providers from "@/app/providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -9,7 +9,10 @@ import AppHeader from "@/layouts/AppHeader";
 import AppSidebar from "@/layouts/AppSidebar";
 import Backdrop from "@/layouts/Backdrop";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const montserrat = Montserrat({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 const siteConfig = {
 	title: "Next Template",
@@ -48,13 +51,8 @@ export default function RootLayout({
 				<meta name="apple-mobile-web-app-title" content={siteConfig.title} />
 			</Head>
 			{process.env.NEXT_PUBLIC_RUN_MODE === "production" && <GoogleAnalytics />}
-			<body className={`${inter.className}`}>
-				<Providers>
-					<AppHeader />
-					<AppSidebar />
-					<Backdrop />
-					{children}
-				</Providers>
+			<body className={`${montserrat.className}`}>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);
