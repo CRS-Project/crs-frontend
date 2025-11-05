@@ -1,18 +1,37 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { IoIosArrowRoundBack, IoIosLock } from "react-icons/io";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import { useForgotPassword } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
+import parseToFormData from "@/lib/utils";
 import type { ForgotPasswordRequest } from "@/types/reset";
 
 export default function RegisterPage() {
 	const methods = useForm<ForgotPasswordRequest>();
+	const router = useRouter();
 
-	const onSubmit: SubmitHandler<ForgotPasswordRequest> = (data) => {
+	const mutation = useForgotPassword({
+		onSuccess: () => {
+			toast.success("Password reset instructions sent!");
+			methods.reset();
+			router.push("/login");
+		},
+		onError: (error) => {
+			toast.error(error.message);
+			console.error("Forgot Password error:", error);
+		},
+	});
+
+	const onSubmit: SubmitHandler<ForgotPasswordRequest> = async (data) => {
 		console.log(data);
+		const formData = parseToFormData(data);
+		await mutation.mutateAsync(formData);
 	};
 
 	return (

@@ -1,17 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import { useLogin } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
+import parseToFormData from "@/lib/utils";
 import type { LoginRequest } from "@/types/login";
 
 export default function LoginPage() {
 	const methods = useForm<LoginRequest>();
+	const router = useRouter();
 
-	const onSubmit: SubmitHandler<LoginRequest> = (data) => {
+	const mutation = useLogin({
+		onSuccess: () => {
+			toast.success("Logged in successfully!");
+			methods.reset();
+			router.push("/");
+		},
+		onError: (error) => {
+			toast.error(error.message);
+			console.error("Login error:", error);
+		},
+	});
+
+	const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
 		console.log(data);
+		const formData = parseToFormData(data);
+		await mutation.mutateAsync(formData);
 	};
 
 	return (
