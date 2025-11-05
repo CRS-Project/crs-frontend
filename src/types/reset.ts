@@ -1,8 +1,8 @@
 export type ForgotPasswordRequest = {
-	usernameEmail: string;
+	email: string;
 };
 
 export type ResetPasswordRequest = {
-	newPassword: string;
+	new_password: string;
 	confirmNewPassword: string;
 };

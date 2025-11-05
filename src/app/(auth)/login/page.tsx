@@ -1,22 +1,38 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import { useLogin } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
 import type { LoginRequest } from "@/types/login";
 
 export default function LoginPage() {
 	const methods = useForm<LoginRequest>();
+	const router = useRouter();
 
-	const onSubmit: SubmitHandler<LoginRequest> = (data) => {
-		console.log(data);
+	const mutation = useLogin({
+		onSuccess: () => {
+			toast.success("Logged in successfully!");
+			methods.reset();
+			router.push("/");
+		},
+		onError: (error) => {
+			toast.error(error.message);
+			console.error("Login error:", error);
+		},
+	});
+
+	const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
+		await mutation.mutateAsync(data);
 	};
 
 	return (
 		<Authentication>
-			<div className="flex flex-col justify-center items-center text-center">
+			<div className="flex flex-col justify-center items-center">
 				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
 				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
 			</div>
@@ -26,10 +42,10 @@ export default function LoginPage() {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<Input
-						id="usernameEmail"
+						id="email"
 						label="Email/Username"
 						placeholder="Your Email"
-						validation={{ required: "Email/Username is required" }}
+						validation={{ required: "Email is required" }}
 					/>
 					<Input
 						id="password"
@@ -46,13 +62,8 @@ export default function LoginPage() {
 							Forgot your password?
 						</Link>
 					</div>
-					<Button
-						className="w-full text-sm mt-3"
-						variant="blue"
-						type="submit"
-						size="lg"
-					>
-						Login
+					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
+						Submit
 					</Button>
 				</form>
 			</FormProvider>

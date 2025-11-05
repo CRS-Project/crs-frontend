@@ -13,7 +13,7 @@ export default function Authentication({ children }: AuthenticationProps) {
 				<div
 					className="h-full w-full bg-cover bg-center"
 					style={{
-						backgroundImage: "url('/images/auth/rektorat.png')",
+						backgroundImage: "url('/Auth/rektorat.png')",
 					}}
 				>
 					<div className="flex h-full items-center justify-center bg-black/80">

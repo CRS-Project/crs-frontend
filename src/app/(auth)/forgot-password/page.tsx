@@ -2,24 +2,40 @@
 
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import { useForgotPassword } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
 import type { ForgotPasswordRequest } from "@/types/reset";
 
-export default function ForgotPasswordPage() {
+export default function ForgetPasswordPage() {
 	const methods = useForm<ForgotPasswordRequest>();
+	const router = useRouter();
 
-	const onSubmit: SubmitHandler<ForgotPasswordRequest> = (data) => {
-		console.log(data);
+	const mutation = useForgotPassword({
+		onSuccess: () => {
+			toast.success("Password reset instructions sent!");
+			methods.reset();
+			router.push("/login");
+		},
+		onError: (error) => {
+			toast.error(error.message);
+			console.error("Forgot Password error:", error);
+		},
+	});
+
+	const onSubmit: SubmitHandler<ForgotPasswordRequest> = async (data) => {
+		await mutation.mutateAsync(data);
 	};
 
 	return (
 		<Authentication>
 			<div className="flex flex-col justify-center items-center text-center">
 				<LockKeyhole size={56} />
-				<h2 className="text-[36px] mt-5 font-bold">Forgot Password?</h2>
+				<h2 className="text-[36px] font-bold">Forgot Password?</h2>
 				<p className="font-light text-[15.5px]">
 					Please enter your email recover, we’ll send you reset instructions{" "}
 				</p>
@@ -30,17 +46,12 @@ export default function ForgotPasswordPage() {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<Input
-						id="usernameEmail"
-						label="Email/Username"
+						id="email"
+						label="Email"
 						placeholder="Your Email"
-						validation={{ required: "Email/Username is required" }}
+						validation={{ required: "Email is required" }}
 					/>
-					<Button
-						className="w-full text-sm mt-3"
-						variant="blue"
-						type="submit"
-						size="lg"
-					>
+					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
 						Send
 					</Button>
 				</form>
