@@ -132,12 +132,12 @@ export default function SelectInput({
 			background: state.isDisabled
 				? "#F3F4F6" // light gray
 				: state.isFocused
-					? "#ea8080" // primary-400
+					? "#005bc4" // primary-500
 					: state.isSelected
-						? "#ea8080" // primary-400
+						? "#005bc4" // primary-500
 						: "white",
 			":hover": {
-				background: "#ee9a9a ", // primary-300
+				background: "#0046ab", // primary-600
 				color: "white",
 			},
 			cursor: "pointer",
@@ -147,7 +147,7 @@ export default function SelectInput({
 			display: "flex",
 			alignItems: "center",
 			gap: "0.25rem",
-			background: "#ea8080", // primary-400
+			background: "#005bc4", // primary-500
 			borderRadius: "0.375rem",
 			padding: "0.25rem 0.75rem",
 			margin: 0,

@@ -1,5 +1,6 @@
 "use client";
 
+import { HeroUIProvider } from "@heroui/system";
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -26,9 +27,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Toaster position="top-center" />
-			<SidebarProvider>
-				<NuqsAdapter>{children}</NuqsAdapter>
-			</SidebarProvider>
+			<HeroUIProvider>
+				<SidebarProvider>
+					<NuqsAdapter>{children}</NuqsAdapter>
+				</SidebarProvider>
+			</HeroUIProvider>
 		</QueryClientProvider>
 	);
 }

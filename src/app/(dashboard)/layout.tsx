@@ -7,30 +7,28 @@ import AppSidebar from "@/layouts/AppSidebar";
 import Backdrop from "@/layouts/Backdrop";
 
 export default function AdminLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+	const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
-  const mainContentMargin = isMobileOpen
-    ? "ml-0"
-    : isExpanded || isHovered
-    ? "lg:ml-[279px]"
-    : "lg:ml-[88px]";
+	const mainContentMargin = isMobileOpen
+		? "ml-0"
+		: isExpanded || isHovered
+			? "lg:ml-[279px]"
+			: "lg:ml-[88px]";
 
-  return (
-    <div className="min-h-screen xl:flex">
-      <AppSidebar />
-      <Backdrop />
-      <div
-        className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
-      >
-        <AppHeader />
-        <div className="mx-auto min-h-[calc(100vh-84.8px)] lg:min-h-[calc(100vh-112px)]">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="min-h-screen xl:flex">
+			<AppSidebar />
+			<Backdrop />
+			<div
+				className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
+			>
+				<AppHeader />
+				<div className="mx-auto">{children}</div>
+			</div>
+		</div>
+	);
 }

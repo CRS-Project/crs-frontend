@@ -16,7 +16,7 @@ export default function HelperText({
 				as="p"
 				font="Inter"
 				weight="regular"
-				className={clsxm("text-xs !leading-tight text-gray-900", className)}
+				className={clsxm("text-xs !leading-tight text-[#737373]", className)}
 			>
 				{children}
 			</Typography>

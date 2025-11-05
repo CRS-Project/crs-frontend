@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const { heroui } = require("@heroui/theme");
 
 const config: Config = {
 	content: [
@@ -8,6 +9,8 @@ const config: Config = {
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+		"./node_modules/@heroui/theme/dist/components/dropdown.js",
+		"./node_modules/@heroui/theme/dist/components/modal.js",
 	],
 	theme: {
 		container: {
@@ -23,22 +26,10 @@ const config: Config = {
 			},
 			colors: {
 				primary: {
-					//   50: "#fae1e1",
-					//* Background
-					//   100: "#f7cccc",
-					//   200: "#f3b3b3",
-					//* Complement
-					//   300: "#ee9a9a",
-					//   400: "#ea8080",
-					//* Default
-					//   500: "#e66767",
-					//* Hovered
-					//   600: "#c05656",
-					//* Active
-					//   700: "#994545",
-					//   800: "#733434",
-					//   900: "#4d2222",
-					1000: "#2D66E4",
+					500: "#005bc4",
+					600: "#0046ab",
+					700: "#00217b",
+					800: "#001c73",
 				},
 				blue: {
 					500: "#2d66e4",
@@ -47,21 +38,21 @@ const config: Config = {
 					800: "#000e71",
 				},
 				secondary: {
-					//   50: "#f9d6d5",
+					50: "#f9d6d5",
 					//* Background
-					//   100: "#f6bbba",
-					//   200: "#f19a97",
+					100: "#f6bbba",
+					200: "#f19a97",
 					//* Complement
-					//   300: "#ec7874",
-					//   400: "#e85652",
+					300: "#ec7874",
+					400: "#e85652",
 					//* Default
-					//   500: "#e3342f",
+					500: "#e3342f",
 					//* Hovered
-					//   600: "#bd2b27",
+					600: "#bd2b27",
 					//* Active
-					//   700: "#97231f",
-					//   800: "#721a18",
-					//   900: "#4c1110",
+					700: "#97231f",
+					800: "#721a18",
+					900: "#4c1110",
 					1000: "#C1C1C1",
 				},
 				"primary-bg": "#dc3545", // bg
@@ -76,6 +67,6 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [heroui()],
 };
 export default config;

@@ -37,7 +37,7 @@ export default function TBody<T extends RowData>({
 					>
 						{row.getVisibleCells().map((cell) => (
 							<td key={cell.id} className="px-4 py-3">
-								<p className="text-sm text-gray-900">
+								<p className="text-sm text-[#11181C]">
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}
 								</p>
 							</td>

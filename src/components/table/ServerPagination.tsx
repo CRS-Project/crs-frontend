@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 type ServerPaginationProps = {
 	currentPage: number;
 	totalPages: number;
@@ -21,10 +23,10 @@ export default function ServerPagination({
 						type="button"
 						key={i}
 						onClick={() => onPageChange(i + 1)}
-						className={`h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+						className={`h-10 w-10 cursor-pointer rounded-md text-sm font-medium transition-colors ${
 							pageIndex === i
-								? "bg-emerald-600 text-white hover:bg-emerald-700"
-								: "bg-transparent text-emerald-800 hover:bg-gray-50"
+								? "bg-primary-500 text-white hover:bg-primary-600"
+								: "bg-transparent text-primary-700 hover:bg-gray-50"
 						}`}
 					>
 						{i + 1}
@@ -39,10 +41,10 @@ export default function ServerPagination({
 				type="button"
 				key={0}
 				onClick={() => onPageChange(1)}
-				className={`h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+				className={`h-10 w-10 cursor-pointer rounded-md text-sm font-medium transition-colors ${
 					pageIndex === 0
-						? "bg-emerald-600 text-white hover:bg-emerald-700"
-						: "bg-transparent text-emerald-800 hover:bg-gray-50"
+						? "bg-primary-500 text-white hover:bg-primary-600"
+						: "bg-transparent text-primary-700 hover:bg-gray-50"
 				}`}
 			>
 				1
@@ -53,7 +55,7 @@ export default function ServerPagination({
 			buttons.push(
 				<span
 					key="ellipsis-start"
-					className="px-2 font-semibold text-emerald-800"
+					className="px-2 font-semibold text-primary-700"
 				>
 					...
 				</span>,
@@ -69,10 +71,10 @@ export default function ServerPagination({
 					type="button"
 					key={i}
 					onClick={() => onPageChange(i + 1)}
-					className={`h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+					className={`h-10 w-10 cursor-pointer rounded-md text-sm font-medium transition-colors ${
 						pageIndex === i
-							? "bg-emerald-600 text-white hover:bg-emerald-700"
-							: "bg-transparent text-emerald-800 hover:bg-gray-50"
+							? "bg-primary-500 text-white hover:bg-primary-600"
+							: "bg-transparent text-primary-700 hover:bg-gray-50"
 					}`}
 				>
 					{i + 1}
@@ -84,7 +86,7 @@ export default function ServerPagination({
 			buttons.push(
 				<span
 					key="ellipsis-end"
-					className="px-2 font-semibold text-emerald-800"
+					className="px-2 font-semibold text-primary-700"
 				>
 					...
 				</span>,
@@ -96,10 +98,10 @@ export default function ServerPagination({
 				type="button"
 				key={totalPages - 1}
 				onClick={() => onPageChange(totalPages)}
-				className={`h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors ${
+				className={`h-10 w-10 cursor-pointer rounded-md text-sm font-medium transition-colors ${
 					pageIndex === totalPages - 1
-						? "bg-emerald-600 text-white hover:bg-emerald-700"
-						: "bg-transparent text-emerald-800 hover:bg-gray-50"
+						? "bg-primary-500 text-white hover:bg-primary-600"
+						: "bg-transparent text-primary-700 hover:bg-gray-50"
 				}`}
 			>
 				{totalPages}
@@ -111,10 +113,41 @@ export default function ServerPagination({
 
 	if (totalPages <= 1) return null;
 
+	const canGoPrevious = currentPage > 1;
+	const canGoNext = currentPage < totalPages;
+
 	return (
 		<div className="flex flex-col items-end justify-center">
 			<div className="mt-6 flex flex-row items-center gap-1" {...rest}>
+				<button
+					type="button"
+					onClick={() => onPageChange(currentPage - 1)}
+					disabled={!canGoPrevious}
+					className={`h-10 px-3 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
+						canGoPrevious
+							? "bg-transparent text-primary-700 hover:bg-gray-50 cursor-pointer"
+							: "bg-transparent text-gray-400 cursor-not-allowed"
+					}`}
+					aria-label="Previous page"
+				>
+					<ChevronLeft className="w-4 h-4" />
+				</button>
+
 				{renderPageButtons()}
+
+				<button
+					type="button"
+					onClick={() => onPageChange(currentPage + 1)}
+					disabled={!canGoNext}
+					className={`h-10 px-3 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
+						canGoNext
+							? "bg-transparent text-primary-700 hover:bg-gray-50 cursor-pointer"
+							: "bg-transparent text-gray-400 cursor-not-allowed"
+					}`}
+					aria-label="Next page"
+				>
+					<ChevronRight className="w-4 h-4" />
+				</button>
 			</div>
 		</div>
 	);

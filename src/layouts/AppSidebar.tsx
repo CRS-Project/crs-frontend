@@ -129,7 +129,7 @@ const AppSidebar: React.FC = () => {
                   (isExpanded || isHovered || isMobileOpen) && "px-3 py-2"
                 } font-medium rounded-lg text-theme-sm group ${
                   isActive(nav.path)
-                    ? "bg-primary-1000 text-white"
+                    ? "bg-blue-500 text-white"
                     : "text-secondary-1000 hover:bg-gray-100 group-hover:text-gray-700"
                 }`}
               >

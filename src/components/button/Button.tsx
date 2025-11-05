@@ -5,6 +5,7 @@ import clsxm from "@/lib/clsxm";
 
 const ButtonVariant = [
 	"primary",
+	"secondary",
 	"blue",
 	"green",
 	"yellow",
@@ -78,6 +79,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 							"active:bg-primary-700",
 							"focus-visible:ring-primary-400",
 						],
+						variant === "secondary" && [
+							"bg-[#F4F4F5] text-primary-600",
+							"border border-[#F4F4F5]",
+							"hover:bg-gray-200 hover:text-primary-700",
+							"active:bg-gray-300",
+							"focus-visible:ring-primary-400",
+						],
 						variant === "blue" && [
 							"bg-blue-500 text-white",
 							"border border-blue-600",
@@ -93,11 +101,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 							"focus-visible:ring-green-400",
 						],
 						variant === "red" && [
-							"bg-red-500 text-white",
-							"border border-red-600",
-							"hover:bg-red-600 hover:text-white",
-							"active:bg-red-700",
-							"focus-visible:ring-red-400",
+							"bg-[#FDD0DF] text-[#920B3A]",
+							"border border-[#FDD0DF]",
+							"hover:bg-[#cba0af] hover:text-[#920B3A]",
+							"active:bg-[#9b7280]",
+							"focus-visible:ring-[#FDD0DF]",
 						],
 						variant === "yellow" && [
 							"bg-yellow-500 text-white",
@@ -144,7 +152,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 									"red",
 									"yellow",
 								].includes(variant),
-								"text-gray-900": ["outline", "ghost"].includes(variant),
+								"text-gray-900": ["outline", "ghost", "secondary"].includes(
+									variant,
+								),
 							},
 						)}
 					>

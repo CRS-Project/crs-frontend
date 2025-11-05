@@ -15,18 +15,21 @@ export default function THead<T extends RowData>({
 	...rest
 }: THeadProps<T>) {
 	return (
-		<thead className="bg-gray-50" {...rest}>
+		<thead className="bg-[#F4F4F5] rounded-lg overflow-hidden" {...rest}>
 			{table.getHeaderGroups().map((headerGroup) => (
 				<tr key={headerGroup.id}>
 					{headerGroup.headers.map((header) => (
 						<th
 							key={header.id}
 							onClick={header.column.getToggleSortingHandler()}
-							className={clsxm(sortable && "hover:cursor-pointer", "text-left")}
+							className={clsxm(
+								sortable && "hover:cursor-pointer",
+								"text-left first:rounded-l-lg last:rounded-r-lg",
+							)}
 						>
 							<div className="relative flex items-center justify-start gap-2 px-4 py-3">
 								{header.isPlaceholder ? null : (
-									<p className="text-start text-sm font-medium text-gray-700">
+									<p className="text-start text-[#71717A] text-[12px] font-semibold">
 										{flexRender(
 											header.column.columnDef.header,
 											header.getContext(),
