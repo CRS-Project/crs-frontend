@@ -16,8 +16,8 @@ export default function AdminLayout({
 	const mainContentMargin = isMobileOpen
 		? "ml-0"
 		: isExpanded || isHovered
-			? "lg:ml-[290px]"
-			: "lg:ml-[90px]";
+			? "lg:ml-[279px]"
+			: "lg:ml-[88px]";
 
 	return (
 		<div className="min-h-screen xl:flex">
@@ -27,7 +27,7 @@ export default function AdminLayout({
 				className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
 			>
 				<AppHeader />
-				<div className="p-4 mx-auto md:p-6 bg-gray-50 min-h-[calc(100vh-64.8px)] lg:min-h-[calc(100vh-76px)]">
+				<div className="mx-auto min-h-[calc(100vh-84.8px)] lg:min-h-[calc(100vh-112px)]">
 					{children}
 				</div>
 			</div>

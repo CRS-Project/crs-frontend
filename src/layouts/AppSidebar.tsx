@@ -1,18 +1,16 @@
 "use client";
-import {
-	BookUser,
-	ChevronDown,
-	Cog,
-	Ellipsis,
-	History,
-	ShoppingCart,
-	UserCheck,
-} from "lucide-react";
+import { ArrowRight, ChevronDown, Play } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Button from "@/components/button/Button";
 import { useSidebar } from "@/context/SidebarContext";
+import Data from "../../public/icons/data.svg";
+import Documents from "../../public/icons/documents.svg";
+import Home from "../../public/icons/home.svg";
+import Users from "../../public/icons/users.svg";
 
 type NavItem = {
 	name: string;
@@ -28,29 +26,24 @@ const AppSidebar: React.FC = () => {
 	const navItems: NavItem[] = useMemo(
 		() => [
 			{
-				icon: <Cog />,
-				name: "Sparepart",
-				path: "/sparepart",
+				icon: <Home className="w-fit h-fit" />,
+				name: "Home",
+				path: "/sandbox",
 			},
 			{
-				icon: <BookUser />,
-				name: "Supplier",
-				path: "/supplier",
+				icon: <Data className="w-fit h-fit" />,
+				name: "Data",
+				path: "/data",
 			},
 			{
-				icon: <UserCheck />,
-				name: "Langganan",
-				path: "/customer",
+				icon: <Documents className="w-fit h-fit" />,
+				name: "Documents",
+				path: "/documents",
 			},
 			{
-				icon: <History />,
-				name: "Riwayat Penjualan",
-				path: "/transaction-history",
-			},
-			{
-				icon: <ShoppingCart />,
-				name: "Kasir",
-				path: "/cashier",
+				icon: <Users className="w-fit h-fit" />,
+				name: "Users",
+				path: "/users",
 			},
 		],
 		[],
@@ -108,7 +101,7 @@ const AppSidebar: React.FC = () => {
 							<span
 								className={` ${
 									openSubmenu?.type === menuType && openSubmenu?.index === index
-										? "text-brand-500 "
+										? "text-brand-500"
 										: "text-gray-500 group-hover:text-gray-700 "
 								}`}
 							>
@@ -132,23 +125,36 @@ const AppSidebar: React.FC = () => {
 						nav.path && (
 							<Link
 								href={nav.path}
-								className={`relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm group ${
+								className={`relative flex items-center w-full gap-3 ${
+									(isExpanded || isHovered || isMobileOpen) && "px-3 py-2"
+								} font-medium rounded-lg text-theme-sm group ${
 									isActive(nav.path)
-										? "bg-brand-50 text-brand-500"
-										: "text-gray-700 hover:bg-gray-100 group-hover:text-gray-700"
+										? "bg-primary-1000 text-white"
+										: "text-secondary-1000 hover:bg-gray-100 group-hover:text-gray-700"
 								}`}
 							>
 								<span
 									className={`${
 										isActive(nav.path)
 											? "text-brand-500 "
-											: "text-gray-500 group-hover:text-gray-700"
+											: "text-secondary-1000 group-hover:text-gray-700"
+									} ${
+										!(isExpanded || isHovered || isMobileOpen) &&
+										"aspect-square p-2 flex justify-center items-center mx-auto"
 									}`}
 								>
 									{nav.icon}
 								</span>
 								{(isExpanded || isHovered || isMobileOpen) && (
-									<span className={`menu-item-text`}>{nav.name}</span>
+									<span
+										className={`menu-item-text font-semibold ${
+											isActive(nav.path)
+												? "group-hover:text-white"
+												: "group-hover:text-gray-700"
+										}`}
+									>
+										{nav.name}
+									</span>
 								)}
 							</Link>
 						)
@@ -252,54 +258,64 @@ const AppSidebar: React.FC = () => {
 
 	return (
 		<aside
-			className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+			className={`fixed flex flex-col p-6 -left-1 bg-white text-gray-900 ${
+				isMobileOpen ? "h-[calc(100vh-72.8px)]" : "h-screen"
+			} transition-all justify-between duration-300 ease-in-out z-999 border-r border-gray-200 
         ${
 					isExpanded || isMobileOpen
-						? "w-[290px]"
+						? "w-[280px]"
 						: isHovered
-							? "w-[290px]"
+							? "w-[280px]"
 							: "w-[90px]"
 				}
-        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isMobileOpen ? "translate-x-0 mt-[72.8px]" : "-translate-x-full"}
         lg:translate-x-0`}
 			onMouseEnter={() => !isExpanded && setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>
-			<div
-				className={`py-8 flex ${
-					!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-				}`}
-			>
-				<Link href="/">
-					{isExpanded || isHovered || isMobileOpen ? (
-						<h1 className="font-semibold text-brand-600 text-3xl">CRS</h1>
-					) : (
-						<h1 className="font-semibold text-brand-600 text-3xl">SM</h1>
-					)}
-				</Link>
-			</div>
-			<div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-				<nav className="mb-6">
-					<div className="flex flex-col gap-4">
-						<div>
-							<h2
-								className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-									!isExpanded && !isHovered
-										? "lg:justify-center"
-										: "justify-start"
-								}`}
-							>
-								{isExpanded || isHovered || isMobileOpen ? (
-									"Menu"
-								) : (
-									<Ellipsis />
-								)}
-							</h2>
-							{renderMenuItems(filteredNavItems, "main")}
+			<div>
+				<div
+					className={`flex flex-col  ${
+						!isExpanded && !isHovered
+							? "lg:justify-center mb-8"
+							: "justify-start mb-12"
+					}`}
+				>
+					<Link href="/">
+						<Image
+							src="/images/CRS-Logo-V1.png"
+							alt="CRS"
+							width={300}
+							height={140}
+							className="w-28 lg:w-40"
+							priority
+						/>
+					</Link>
+				</div>
+				<div className="flex flex-col overflow-x-hidden overflow-y-auto duration-300 ease-linear no-scrollbar">
+					<nav className="mb-6">
+						<div className="flex flex-col gap-4">
+							<div>{renderMenuItems(filteredNavItems, "main")}</div>
 						</div>
-					</div>
-				</nav>
+					</nav>
+				</div>
 			</div>
+			{(isExpanded || isHovered || isMobileOpen) && (
+				<div
+					className={`flex flex-col items-center overflow-x-hidden overflow-y-auto gap-2 md:gap-4 px-4 py-5 w-[232px] bg-primary-1000 rounded-lg`}
+				>
+					<h2 className="text-white font-bold text-base md:text-lg">
+						How To Use This App?
+					</h2>
+
+					<Button rightIcon={ArrowRight} variant="white" className="w-full">
+						Guidebook
+					</Button>
+					<Button rightIcon={Play} variant="primary" className="w-full">
+						Video Tutorial
+					</Button>
+				</div>
+			)}
 		</aside>
 	);
 };

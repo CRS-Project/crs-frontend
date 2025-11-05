@@ -8,6 +8,7 @@ const ButtonVariant = [
 	"blue",
 	"green",
 	"yellow",
+	"white",
 	"red",
 	"outline",
 	"ghost",
@@ -49,7 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				type="button"
 				disabled={disabled}
 				className={clsxm(
-					"inline-flex items-center cursor-pointer justify-center rounded-lg font-medium",
+					"inline-flex items-center cursor-pointer justify-between rounded-lg font-medium",
 					"focus:outline-none focus-visible:ring",
 					"shadow-sm",
 					"transition-colors duration-75",
@@ -73,7 +74,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 					[
 						variant === "primary" && [
 							"bg-primary-500 text-white",
-							"border border-primary-600",
 							"hover:bg-primary-600 hover:text-white",
 							"active:bg-primary-700",
 							"focus-visible:ring-primary-400",
@@ -105,6 +105,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 							"hover:bg-yellow-600 hover:text-white",
 							"active:bg-yellow-700",
 							"focus-visible:ring-yellow-400",
+						],
+						variant === "white" && [
+							"bg-white text-primary-1000",
+							"border border-gray-200",
+							"hover:bg-gray-200 hover:text-primary-1000",
+							"active:bg-gray-100",
+							"focus-visible:ring-gray-300",
 						],
 						variant === "outline" && [
 							"text-black",
