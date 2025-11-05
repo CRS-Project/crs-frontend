@@ -1,10 +1,11 @@
 "use client";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Button from "@/components/button/Button";
 import { useSidebar } from "@/context/SidebarContext";
 import Data from "../../public/icons/data.svg";
 import Documents from "../../public/icons/documents.svg";
@@ -286,7 +287,7 @@ const AppSidebar: React.FC = () => {
 							alt="CRS"
 							width={300}
 							height={140}
-							className="w-34 lg:w-40"
+							className="w-28 lg:w-40"
 							priority
 						/>
 					</Link>
@@ -299,7 +300,22 @@ const AppSidebar: React.FC = () => {
 					</nav>
 				</div>
 			</div>
-			<div>hello world</div>
+			{(isExpanded || isHovered || isMobileOpen) && (
+				<div
+					className={`flex flex-col items-center overflow-x-hidden overflow-y-auto gap-2 md:gap-4 px-4 py-5 w-[232px] bg-primary-1000 rounded-lg`}
+				>
+					<h2 className="text-white font-bold text-base md:text-lg">
+						How To Use This App?
+					</h2>
+
+					<Button rightIcon={ArrowRight} variant="white" className="w-full">
+						Guidebook
+					</Button>
+					<Button rightIcon={Play} variant="primary" className="w-full">
+						Video Tutorial
+					</Button>
+				</div>
+			)}
 		</aside>
 	);
 };
