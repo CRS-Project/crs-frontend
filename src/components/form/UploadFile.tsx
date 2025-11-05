@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleArrowUp } from "lucide-react";
+import { Upload } from "lucide-react";
 import * as React from "react";
 import { type Accept, type FileRejection, useDropzone } from "react-dropzone";
 import {
@@ -14,8 +14,8 @@ import FilePreview from "@/components/form/FilePreview";
 import HelperText from "@/components/form/HelperText";
 import LabelText from "@/components/form/LabelText";
 import { useUploadFileMutation } from "@/hooks/useUploadFileMutation";
-import clsxm from "@/lib/clsxm";
 import type { FileWithPreview } from "@/types/dropzone";
+import Button from "../button/Button";
 
 export type UploadFileProps = {
 	id: string;
@@ -194,25 +194,11 @@ export default function UploadFile({
 								})}
 								data-cy={`upload-${id}-input`}
 							/>
-							<div
-								className={clsxm(
-									"w-full cursor-pointer rounded-md bg-typo-white border border-gray-500",
-									"flex flex-col items-center space-y-[6px]",
-									"border border-gray-900 text-gray-900 text-sm",
-									"hover:ring-1 hover:ring-inset hover:ring-gray-900 transition duration-300",
-									error
-										? "border-none ring-2 ring-inset ring-red-500 placeholder:text-gray-500 focus:ring-red-500 bg-red-100"
-										: "group-hover:border-typo-main group-focus:border-typo-main",
-									disabled && "cursor-not-allowed opacity-50",
-									className,
-								)}
+							<Button
+								className={`w-full flex items-center gap-2 py-2 ${className}`}
 							>
-								<div className="rounded-xl px-4 py-3">
-									<p className="text-center font-semibold text-gray-900 flex items-center gap-2">
-										<CircleArrowUp /> Unggah Berkas
-									</p>
-								</div>
-							</div>
+								Upload File <Upload size={20} />
+							</Button>
 						</div>
 					)}
 				/>

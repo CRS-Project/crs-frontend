@@ -27,9 +27,7 @@ export default function AdminLayout({
 				className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
 			>
 				<AppHeader />
-				<div className="mx-auto min-h-[calc(100vh-84.8px)] lg:min-h-[calc(100vh-112px)]">
-					{children}
-				</div>
+				<div className="mx-auto">{children}</div>
 			</div>
 		</div>
 	);
