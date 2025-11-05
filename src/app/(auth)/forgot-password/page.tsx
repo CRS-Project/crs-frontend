@@ -34,7 +34,7 @@ export default function ForgetPasswordPage() {
   return (
     <Authentication>
       <div className="flex flex-col justify-center items-center text-center">
-        <IoIosLock className="text-[50px]" />
+        <LockKeyhole size={56} />
         <h2 className="text-[36px] font-bold">Forgot Password?</h2>
         <p className="font-light text-[15.5px]">
           Please enter your email recover, we’ll send you reset instructions{" "}
@@ -59,7 +59,7 @@ export default function ForgetPasswordPage() {
           href="/login"
           className="text-sm mt-6 hover:underline flex justify-center items-center"
         >
-          <IoIosArrowRoundBack className="mr-2 text-xl font-bold" />
+          <ArrowLeft className="mr-2 text-xl font-bold" />
           Back to Login
         </Link>
       </FormProvider>
