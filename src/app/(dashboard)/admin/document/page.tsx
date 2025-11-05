@@ -2,7 +2,7 @@ import DirectoryMenu from "@/components/card/DirectoryMenu";
 
 export default function AdminDocumentPage() {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-8 px-16 max-xl:px-6 max-xl:py-8 max-md:p-4">
 			{directoryData.map((item) => (
 				<DirectoryMenu
 					key={item.title}
