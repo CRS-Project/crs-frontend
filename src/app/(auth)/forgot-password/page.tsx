@@ -9,10 +9,9 @@ import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useForgotPassword } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
-import parseToFormData from "@/lib/utils";
 import type { ForgotPasswordRequest } from "@/types/reset";
 
-export default function RegisterPage() {
+export default function ForgetPasswordPage() {
 	const methods = useForm<ForgotPasswordRequest>();
 	const router = useRouter();
 
@@ -29,9 +28,7 @@ export default function RegisterPage() {
 	});
 
 	const onSubmit: SubmitHandler<ForgotPasswordRequest> = async (data) => {
-		console.log(data);
-		const formData = parseToFormData(data);
-		await mutation.mutateAsync(formData);
+		await mutation.mutateAsync(data);
 	};
 
 	return (
@@ -49,10 +46,10 @@ export default function RegisterPage() {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<Input
-						id="usernameEmail"
-						label="Email/Username"
+						id="email"
+						label="Email"
 						placeholder="Your Email"
-						validation={{ required: "Email/Username is required" }}
+						validation={{ required: "Email is required" }}
 					/>
 					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
 						Send

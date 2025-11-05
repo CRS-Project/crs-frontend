@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IoIosArrowRoundBack, IoIosLock } from "react-icons/io";
@@ -9,14 +9,15 @@ import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useResetPassword } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
-import parseToFormData from "@/lib/utils";
 import type { ResetPasswordRequest } from "@/types/reset";
 
-export default function RegisterPage() {
+export default function ResetPasswordPage() {
 	const methods = useForm<ResetPasswordRequest>();
+	const { id } = useParams();
 	const router = useRouter();
 
 	const mutation = useResetPassword({
+		id: id as string,
 		onSuccess: () => {
 			toast.success("Password has been reset successfully!");
 			methods.reset();
@@ -29,9 +30,7 @@ export default function RegisterPage() {
 	});
 
 	const onSubmit: SubmitHandler<ResetPasswordRequest> = async (data) => {
-		console.log(data);
-		const formData = parseToFormData(data);
-		await mutation.mutateAsync(formData);
+		await mutation.mutateAsync(data);
 	};
 
 	return (
@@ -49,7 +48,7 @@ export default function RegisterPage() {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<Input
-						id="newPassword"
+						id="new_password"
 						type="password"
 						label="New Password"
 						placeholder="Your New Password"
@@ -74,7 +73,7 @@ export default function RegisterPage() {
 						validation={{
 							required: "Confirm Password is required",
 							validate: (value: string) => {
-								const newPassword = methods.getValues("newPassword");
+								const newPassword = methods.getValues("new_password");
 								return value === newPassword || "Passwords do not match";
 							},
 						}}

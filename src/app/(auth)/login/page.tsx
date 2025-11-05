@@ -8,7 +8,6 @@ import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useLogin } from "@/hooks/useAuth";
 import Authentication from "@/layouts/Authentication";
-import parseToFormData from "@/lib/utils";
 import type { LoginRequest } from "@/types/login";
 
 export default function LoginPage() {
@@ -28,9 +27,7 @@ export default function LoginPage() {
 	});
 
 	const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
-		console.log(data);
-		const formData = parseToFormData(data);
-		await mutation.mutateAsync(formData);
+		await mutation.mutateAsync(data);
 	};
 
 	return (
@@ -45,10 +42,10 @@ export default function LoginPage() {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<Input
-						id="usernameEmail"
+						id="email"
 						label="Email/Username"
 						placeholder="Your Email"
-						validation={{ required: "Email/Username is required" }}
+						validation={{ required: "Email is required" }}
 					/>
 					<Input
 						id="password"
