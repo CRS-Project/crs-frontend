@@ -1,0 +1,39 @@
+import DirectoryMenu from "@/components/card/DirectoryMenu";
+
+export default function AdminDocumentPage() {
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+			{directoryData.map((item) => (
+				<DirectoryMenu
+					key={item.title}
+					title={item.title}
+					description={item.description}
+					linkHref={item.linkHref}
+				/>
+			))}
+		</div>
+	);
+}
+
+const directoryData = [
+	{
+		title: "FPSO ITS",
+		description: "Floating Production, Storage, and Offloading",
+		linkHref: "/admin/document",
+	},
+	{
+		title: "OLNG ITS",
+		description: "Onshore LNG (Liquefied Natural Gas)",
+		linkHref: "/admin/document",
+	},
+	{
+		title: "FPSO ITB",
+		description: "Floating Production, Storage, and Offloading",
+		linkHref: "/admin/document",
+	},
+	{
+		title: "OLNG ITB",
+		description: "Onshore LNG (Liquefied Natural Gas)",
+		linkHref: "/admin/document",
+	},
+];
