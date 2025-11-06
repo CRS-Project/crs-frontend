@@ -16,6 +16,11 @@ export type EditDocumentRequest = {
 	package_id?: string;
 	discipline_id?: string;
 };
+
+export type ImportDocumentRequest = {
+	file: File;
+};
+
 export type WithToken = {
 	token: string;
 };

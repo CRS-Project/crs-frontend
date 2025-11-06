@@ -13,7 +13,7 @@ interface DocumentDetailModalProps {
 	document: Document | null;
 }
 
-export default function DocumentDetailModal({
+export default function DeleteDocumentModal({
 	isOpen,
 	onClose,
 	document,
