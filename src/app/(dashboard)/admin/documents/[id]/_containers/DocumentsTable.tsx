@@ -29,6 +29,7 @@ import CreateDocumentModal from "./CreateDocumentModal";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import DocumentDetailModal from "./DocumentDetailModal";
 import EditDocumentModal from "./EditDocumentModal";
+import ImportDocumentModal from "./ImportDocumentModal";
 
 export default function DocumentsTable() {
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
@@ -49,6 +50,7 @@ export default function DocumentsTable() {
 		create: false,
 		edit: false,
 		delete: false,
+		import: false,
 	});
 	const [selectedDocument, setSelectedDocument] =
 		React.useState<Document | null>(null);
@@ -143,6 +145,7 @@ export default function DocumentsTable() {
 									variant="white"
 									size="lg"
 									className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+									onClick={() => setIsOpen({ ...isOpen, import: true })}
 								>
 									Import Document
 								</Button>
@@ -265,19 +268,30 @@ export default function DocumentsTable() {
 					isOpen={isOpen.delete}
 					onClose={() => setIsOpen({ ...isOpen, delete: false })}
 				/>
+				<ImportDocumentModal
+					isOpen={isOpen.import}
+					onClose={() => setIsOpen({ ...isOpen, import: false })}
+				/>
 			</div>
 		</div>
 	);
 }
 
 function getDocumentTableColumns(
-	isOpen: { detail: boolean; create: boolean; edit: boolean; delete: boolean },
+	isOpen: {
+		detail: boolean;
+		create: boolean;
+		edit: boolean;
+		delete: boolean;
+		import: boolean;
+	},
 	setIsOpen: React.Dispatch<
 		React.SetStateAction<{
 			detail: boolean;
 			create: boolean;
 			edit: boolean;
 			delete: boolean;
+			import: boolean;
 		}>
 	>,
 	setSelectedDocument: React.Dispatch<React.SetStateAction<Document | null>>,
