@@ -10,8 +10,8 @@ import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
 import type { EditUserRequest, User } from "@/types/user";
+import { useEditUserMutation } from "../../_hooks/useEditUserMutation";
 import { useDeleteUserMutation } from "../_hooks/useDeleteUserMutation";
-import { useEditUserMutation } from "../_hooks/useEditUserMutation";
 import { useGetUserByIDQuery } from "../_hooks/useGetUserByIDQuery";
 
 interface EditUserModalProps {

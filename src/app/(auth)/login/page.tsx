@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useLogin } from "@/hooks/useAuth";
-import Authentication from "@/layouts/Authentication";
 import type { LoginRequest } from "@/types/login";
 
 export default function LoginPage() {
@@ -31,7 +30,7 @@ export default function LoginPage() {
 	};
 
 	return (
-		<Authentication>
+		<>
 			<div className="flex flex-col justify-center items-center">
 				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
 				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
@@ -67,6 +66,6 @@ export default function LoginPage() {
 					</Button>
 				</form>
 			</FormProvider>
-		</Authentication>
+		</>
 	);
 }

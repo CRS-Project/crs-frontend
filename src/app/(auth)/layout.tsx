@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 
-interface AuthenticationProps {
+interface AuthenticationLayoutProps {
 	children: React.ReactNode;
 }
 
-export default function Authentication({ children }: AuthenticationProps) {
+export default function AuthenticationLayout({
+	children,
+}: AuthenticationLayoutProps) {
 	return (
 		<div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
 			<div className="relative hidden lg:block">

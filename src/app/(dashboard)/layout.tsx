@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import type React from "react";
 import { useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layouts/AppHeader";
@@ -12,6 +13,7 @@ export default function AdminLayout({
 	children: React.ReactNode;
 }) {
 	const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+	const pathname = usePathname();
 
 	const mainContentMargin = isMobileOpen
 		? "ml-0"
@@ -26,7 +28,7 @@ export default function AdminLayout({
 			<div
 				className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
 			>
-				<AppHeader />
+				{pathname !== "/profile" && <AppHeader />}
 				<div className="mx-auto">{children}</div>
 			</div>
 		</div>
