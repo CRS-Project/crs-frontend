@@ -4,11 +4,10 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export const getToken = (): string => cookies.get("@example/token");
+export const getToken = (): string => cookies.get("@crs/token");
 
 export const setToken = (token: string) => {
-	cookies.set("@example/token", token, { path: "/" });
+	cookies.set("@crs/token", token, { path: "/" });
 };
 
-export const removeToken = () =>
-	cookies.remove("@example/token", { path: "/" });
+export const removeToken = () => cookies.remove("@crs/token", { path: "/" });

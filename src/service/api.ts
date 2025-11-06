@@ -1,9 +1,7 @@
-import axios, { type AxiosError } from "axios";
+import axios from "axios";
 import type { GetServerSidePropsContext } from "next/types";
 import Cookies from "universal-cookie";
-
 import { getToken } from "@/lib/cookies";
-import type { UninterceptedApiError } from "@/types/api";
 
 const context = <GetServerSidePropsContext>{};
 
@@ -43,29 +41,4 @@ api.interceptors.request.use((config) => {
 
 	return config;
 });
-
-api.interceptors.response.use(
-	(config) => {
-		return config;
-	},
-	(error: AxiosError<UninterceptedApiError>) => {
-		// parse error
-		if (error.response?.data.message) {
-			return Promise.reject({
-				...error,
-				response: {
-					...error.response,
-					data: {
-						...error.response.data,
-						message:
-							typeof error.response.data.message === "string"
-								? error.response.data.message
-								: Object.values(error.response.data.message)[0][0],
-					},
-				},
-			});
-		}
-		return Promise.reject(error);
-	},
-);
 export default api;
