@@ -28,7 +28,7 @@ const AppSidebar: React.FC = () => {
 			{
 				icon: <Home className="w-fit h-fit" />,
 				name: "Home",
-				path: "/sandbox",
+				path: "/",
 			},
 			{
 				icon: <Data className="w-fit h-fit" />,
@@ -38,7 +38,7 @@ const AppSidebar: React.FC = () => {
 			{
 				icon: <Documents className="w-fit h-fit" />,
 				name: "Documents",
-				path: "/documents",
+				path: "/admin/documents",
 			},
 			{
 				icon: <Users className="w-fit h-fit" />,
