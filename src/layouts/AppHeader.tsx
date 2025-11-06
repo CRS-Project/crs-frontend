@@ -1,10 +1,11 @@
 "use client";
 import { Logs, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import useAuthStore from "@/app/stores/useAuthStore";
 import { useSidebar } from "@/context/SidebarContext";
-import { useAuthStore } from "@/hooks/useAuthStore";
 
 const AppHeader: React.FC = () => {
 	const [today, setToday] = useState("");
@@ -76,7 +77,10 @@ const AppHeader: React.FC = () => {
 								Hello, {user?.name ?? "Super Admin ITS"}!
 							</h1>
 						</div>
-						<div className="hidden sm:flex gap-2 items-center text-gray-700 text-base">
+						<Link
+							className="hidden rounded-xl px-4 transition-colors duration-200 hover:bg-gray-50 sm:flex gap-2 items-center text-gray-700 text-base"
+							href="/profile"
+						>
 							<Image
 								src="/images/user.png"
 								alt="User"
@@ -85,7 +89,7 @@ const AppHeader: React.FC = () => {
 								className="w-12 h-12 rounded-full"
 							/>
 							<p>{user?.name ?? "Super Admin ITS"}</p>
-						</div>
+						</Link>
 					</div>
 				</div>
 			</div>

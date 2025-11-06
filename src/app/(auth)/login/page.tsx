@@ -1,46 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
-import { useLogin } from "@/hooks/useAuth";
-import Authentication from "@/layouts/Authentication";
 import type { LoginRequest } from "@/types/login";
+import useLoginMutation from "./_hooks/useLoginMutation";
 
 export default function LoginPage() {
-	const methods = useForm<LoginRequest>();
-	const router = useRouter();
-
-	const mutation = useLogin({
-		onSuccess: () => {
-			toast.success("Logged in successfully!");
-			methods.reset();
-			router.push("/");
-		},
-		onError: (error) => {
-			toast.error(error.message);
-			console.error("Login error:", error);
-		},
+	const methods = useForm<LoginRequest>({
+		mode: "onChange",
 	});
 
-	const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
-		await mutation.mutateAsync(data);
+	const { handleSubmit } = methods;
+
+	const { mutate, isPending } = useLoginMutation();
+
+	const onSubmit = (data: LoginRequest) => {
+		mutate(data);
 	};
 
+	//   const mutation = useLogin({
+	//     onSuccess: () => {
+	//       toast.success("Logged in successfully!");
+	//       methods.reset();
+	//       router.push("/home");
+	//     },
+	//     onError: (error) => {
+	//       toast.error(error.message);
+	//       console.error("Login error:", error);
+	//     },
+	//   });
+
+	//   const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
+	//     await mutation.mutateAsync(data);
+	//   };
+
 	return (
-		<Authentication>
+		<>
 			<div className="flex flex-col justify-center items-center">
 				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
 				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
 			</div>
 			<FormProvider {...methods}>
-				<form
-					className="space-y-4 mt-[22px]"
-					onSubmit={methods.handleSubmit(onSubmit)}
-				>
+				<form className="space-y-4 mt-[22px]" onSubmit={handleSubmit(onSubmit)}>
 					<Input
 						id="email"
 						label="Email/Username"
@@ -62,11 +65,16 @@ export default function LoginPage() {
 							Forgot your password?
 						</Link>
 					</div>
-					<Button className="w-full text-sm mt-3" variant="blue" type="submit">
+					<Button
+						className="w-full text-sm mt-3"
+						variant="blue"
+						type="submit"
+						isLoading={isPending}
+					>
 						Submit
 					</Button>
 				</form>
 			</FormProvider>
-		</Authentication>
+		</>
 	);
 }
