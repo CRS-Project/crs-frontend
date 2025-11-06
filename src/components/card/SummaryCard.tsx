@@ -20,7 +20,7 @@ export default function SummaryCard({
 	return (
 		<Card
 			className={clsxm("w-[280px] px-6 py-4 rounded-lg lg:gap-2", [
-				variant === "primary" && ["bg-primary-1000 text-white"],
+				variant === "primary" && ["bg-blue-500 text-white"],
 				variant === "white" && ["bg-white text-primary-1000"],
 			])}
 		>

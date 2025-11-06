@@ -95,7 +95,6 @@ export default function RecapChart() {
 				{/* GRID */}
 				<CartesianGrid stroke="#E3F2FD" strokeDasharray="3 3" />
 
-				{/* AXIS */}
 				<XAxis dataKey="date" tick={{ fill: colors.deepBlue }} />
 				<YAxis yAxisId="left" tick={{ fill: colors.deepBlue }} />
 				<YAxis
@@ -103,7 +102,7 @@ export default function RecapChart() {
 					orientation="right"
 					stroke={colors.mediumBlue}
 					tick={{ fill: colors.mediumBlue }}
-					tickFormatter={(v) => `${v}%`}
+					tickFormatter={(v: number | string) => `${v}%`}
 				/>
 
 				<Tooltip />
