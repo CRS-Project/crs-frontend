@@ -9,6 +9,7 @@ const config: Config = {
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+		"./node_modules/@heroui/theme/dist/components/(card|ripple).js",
 		"./node_modules/@heroui/theme/dist/components/dropdown.js",
 		"./node_modules/@heroui/theme/dist/components/modal.js",
 	],
