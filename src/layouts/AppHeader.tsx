@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import useAuthStore from "@/app/stores/useAuthStore";
 import { useSidebar } from "@/context/SidebarContext";
-import { useAuthStore } from "@/hooks/useAuthStore";
 
 const AppHeader: React.FC = () => {
 	const [today, setToday] = useState("");

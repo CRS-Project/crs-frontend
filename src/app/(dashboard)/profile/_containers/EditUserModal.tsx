@@ -191,4 +191,5 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 const roleOptions = [
 	{ value: "CONTRACTOR", label: "Contractor" },
 	{ value: "REVIEWER", label: "Reviewer" },
+	{ value: "SUPER ADMIN", label: "Super Admin" },
 ];
