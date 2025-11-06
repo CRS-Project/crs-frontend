@@ -1,10 +1,10 @@
 "use client";
 
+import { ArrowLeft, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { IoIosArrowRoundBack, IoIosLock } from "react-icons/io";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useResetPassword } from "@/hooks/useAuth";
@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
 	return (
 		<Authentication>
 			<div className="flex flex-col justify-center items-center text-center">
-				<IoIosLock className="text-[50px]" />
+				<LockKeyhole size={56} />
 				<h2 className="text-[36px] font-bold">Reset Password!</h2>
 				<p className="font-light text-[15.5px]">
 					Please set your new password{" "}
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
 					href="/login"
 					className="text-sm mt-6 hover:underline flex justify-center items-center"
 				>
-					<IoIosArrowRoundBack className="mr-2 text-xl font-bold" />
+					<ArrowLeft className="mr-2 text-xl font-bold" />
 					Back to Login
 				</Link>
 			</FormProvider>
