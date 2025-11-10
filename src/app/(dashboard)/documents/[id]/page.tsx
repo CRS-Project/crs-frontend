@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
+import type { DocumentPageParams } from "@/types/document";
 import DocumentsTable from "./_containers/DocumentsTable";
-
-type DocumentPageParams = Promise<{ id: string }>;
 
 export const metadata: Metadata = {
 	title: "Document Details",
@@ -13,6 +12,6 @@ export default async function DocumentDetails({
 }: {
 	params: DocumentPageParams;
 }) {
-	await params;
-	return <DocumentsTable />;
+	const { id } = await params;
+	return <DocumentsTable id={id} />;
 }

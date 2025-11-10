@@ -7,16 +7,40 @@ import type { CreateDocumentRequest } from "@/types/document";
 
 interface useCreateDocumentMutationProps {
 	onSuccess?: () => void;
+	uploadFile: (file: File) => Promise<{ data: { url: string } }>;
+	packageId: string;
 }
 
 export function useCreateDocumentMutation({
 	onSuccess,
+	uploadFile,
+	packageId,
 }: useCreateDocumentMutationProps) {
 	const queryClient = useQueryClient();
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: CreateDocumentRequest) => {
-			const response = await api.post("/v1/document", data);
+			let documentUrl = data.document_url;
+
+			if (data.document_file) {
+				const file = Array.isArray(data.document_file)
+					? data.document_file[0]
+					: data.document_file;
+
+				if (file instanceof File) {
+					const uploadResponse = await uploadFile(file);
+					documentUrl = uploadResponse.data.url;
+				}
+			}
+
+			const payload = {
+				...data,
+				...(documentUrl && { document_url: documentUrl }),
+				package_id: packageId,
+				document_file: undefined,
+			};
+
+			const response = await api.post("/v1/document", payload);
 			return response.data;
 		},
 		onSuccess: () => {

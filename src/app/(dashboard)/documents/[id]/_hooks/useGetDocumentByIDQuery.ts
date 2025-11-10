@@ -10,6 +10,7 @@ export function useGetDocumentByIDQuery(id: string) {
 			return data;
 		},
 		enabled: !!id && id.trim() !== "",
+		staleTime: 0,
 	});
 
 	return { data, isLoading, error };
