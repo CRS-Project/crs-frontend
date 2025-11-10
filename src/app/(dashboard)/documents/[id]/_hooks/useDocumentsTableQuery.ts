@@ -5,7 +5,7 @@ import api from "@/service/api";
 import type { PaginatedApiResponse, PaginationQueryParams } from "@/types/api";
 import type { Document } from "@/types/document";
 
-export function useDocumentsTableQuery() {
+export function useDocumentsTableQuery(id: string) {
 	const [search, setSearch] = React.useState("");
 	const [sortBy, setSortBy] = React.useState<string>("");
 	const [sortDir, setSortDir] = React.useState<string>("");
@@ -13,6 +13,8 @@ export function useDocumentsTableQuery() {
 	const [currentPage, setCurrentPage] = React.useState(1);
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [debouncedSearch, setDebouncedSearch] = React.useState(search);
+
+	const formattedId = id.replace(/-/g, " ");
 
 	React.useEffect(() => {
 		const timer = setTimeout(() => {
@@ -62,10 +64,22 @@ export function useDocumentsTableQuery() {
 		error,
 		isFetching,
 	} = useQuery<PaginatedApiResponse<Document[]>>({
-		queryKey: ["documents", queryParams],
+		queryKey: ["documents", formattedId, queryParams],
 		queryFn: async () => {
-			const res = await api.get("/v1/document", {
-				params: queryParams,
+			const filters: string[] = [formattedId];
+			const filterBy: string[] = ["search"];
+
+			if (debouncedSearch.trim()) {
+				filters.push(debouncedSearch.trim());
+				filterBy.push("search");
+			}
+
+			const res = await api.get(`/v1/document`, {
+				params: {
+					...queryParams,
+					filter: filters.join(","),
+					filter_by: filterBy.join(","),
+				},
 			});
 			return res.data;
 		},

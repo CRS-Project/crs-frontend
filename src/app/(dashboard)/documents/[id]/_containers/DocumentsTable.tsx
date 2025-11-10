@@ -17,33 +17,34 @@ import {
 	Search,
 	Trash2,
 } from "lucide-react";
+import { notFound } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
+import { getDocumentDirectory } from "@/constants/document";
 import type { Document } from "@/types/document";
 import { useDocumentsTableQuery } from "../_hooks/useDocumentsTableQuery";
+import { useGetPackageId } from "../_hooks/useGetPackageId";
 import CreateDocumentModal from "./CreateDocumentModal";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import DocumentDetailModal from "./DocumentDetailModal";
 import EditDocumentModal from "./EditDocumentModal";
 import ImportDocumentModal from "./ImportDocumentModal";
 
-export default function DocumentsTable() {
+export default function DocumentsTable({ id }: { id: string }) {
+	const directory = getDocumentDirectory(id);
+	const formattedId = id.replace(/-/g, " ");
+	if (!directory) {
+		notFound();
+	}
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
 	const [visibleColumns, setVisibleColumns] = React.useState<any>(
-		new Set([
-			"document_number",
-			"document_title",
-			"type",
-			"package",
-			"deadline",
-			"status",
-		]),
+		new Set(["id", "document_title", "document_type", "package", "status"]),
 	);
 	const [isOpen, setIsOpen] = React.useState({
 		detail: false,
@@ -72,11 +73,14 @@ export default function DocumentsTable() {
 		handlePerPageChange: handlePerPageChangeValue,
 		handlePageChange,
 		setSorting,
-	} = useDocumentsTableQuery();
+	} = useDocumentsTableQuery(id);
 
-	const highlightedPackage = data?.[0]?.package ?? "OLNG ITS";
-	const highlightedTitle =
-		data?.[0]?.document_name ?? "Floating Production, Storage, and Offloading";
+	const { data: packageData } = useGetPackageId(formattedId);
+
+	const packageId = packageData?.data?.[0]?.id;
+
+	const packageTitle = directory.title;
+	const packageDescription = directory.description;
 
 	const documentTableColumns = React.useMemo(
 		() => getDocumentTableColumns(isOpen, setIsOpen, setSelectedDocument),
@@ -102,14 +106,7 @@ export default function DocumentsTable() {
 	const handleColumnVisibilityChange = React.useCallback((keys: any) => {
 		if (keys === "all") {
 			setVisibleColumns(
-				new Set([
-					"document_number",
-					"document_title",
-					"type",
-					"package",
-					"deadline",
-					"status",
-				]),
+				new Set(["id", "document_title", "document_type", "package", "status"]),
 			);
 			return;
 		}
@@ -133,10 +130,10 @@ export default function DocumentsTable() {
 					<div className="flex flex-col md:flex-row gap-4">
 						<div className="space-y-2 w-full">
 							<h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-								{highlightedPackage}
+								{packageTitle}
 							</h2>
-							<p className="text-sm text-white/70 md:text-base">
-								{highlightedTitle}
+							<p className="text-sm text-white font-medium md:text-base">
+								{packageDescription}
 							</p>
 						</div>
 						<div className="w-full flex gap-4 flex-row items-end md:justify-end">
@@ -198,13 +195,10 @@ export default function DocumentsTable() {
 								variant="flat"
 								onSelectionChange={handleColumnVisibilityChange}
 							>
-								<DropdownItem key="document_number">
-									Document Number
-								</DropdownItem>
+								<DropdownItem key="id">Document Number</DropdownItem>
 								<DropdownItem key="document_title">Document Title</DropdownItem>
-								<DropdownItem key="type">Doc Type</DropdownItem>
+								<DropdownItem key="document_type">Doc Type</DropdownItem>
 								<DropdownItem key="package">Package</DropdownItem>
-								<DropdownItem key="deadline">Deadline</DropdownItem>
 								<DropdownItem key="status">Status</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
@@ -257,6 +251,7 @@ export default function DocumentsTable() {
 				<CreateDocumentModal
 					isOpen={isOpen.create}
 					onClose={() => setIsOpen({ ...isOpen, create: false })}
+					packageId={packageId}
 				/>
 				<EditDocumentModal
 					document={selectedDocument}
@@ -298,7 +293,7 @@ function getDocumentTableColumns(
 ): ColumnDef<Document>[] {
 	return [
 		{
-			accessorKey: "document_number",
+			accessorKey: "id",
 			header: "DOCUMENT NUMBER",
 			enableColumnFilter: false,
 		},
@@ -308,7 +303,7 @@ function getDocumentTableColumns(
 			enableColumnFilter: false,
 		},
 		{
-			accessorKey: "type",
+			accessorKey: "document_type",
 			header: "DOC TYPE",
 			enableColumnFilter: false,
 		},
@@ -317,11 +312,6 @@ function getDocumentTableColumns(
 			header: "PACKAGE",
 			enableColumnFilter: false,
 			enableSorting: false,
-		},
-		{
-			accessorKey: "deadline",
-			header: "DEADLINE",
-			enableColumnFilter: false,
 		},
 		{
 			accessorKey: "status",

@@ -50,14 +50,13 @@ export default function DeleteDocumentModal({
 						</ModalHeader>
 						<ModalBody>
 							<h1 className="text-[#1B1B1B] font-bold text-4xl">
-								Delete Document
+								Delete Document?
 							</h1>
 							<p className="text-[#1B1B1B] font-semibold text-xl">
 								Are you sure you want to delete document{" "}
 								<span className="text-[#920B3A]">
-									{document?.document_name}
+									"{document?.document_title}"
 								</span>
-								?
 							</p>
 							<div className="grid grid-cols-2 gap-3 pb-8 mt-3">
 								<Button

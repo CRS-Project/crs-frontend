@@ -6,38 +6,47 @@ import { X } from "lucide-react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
-import DateInput from "@/components/form/DateInput";
 import Input from "@/components/form/Input";
+import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
+import { STATUS_DOCUMENT_OPTIONS } from "@/constants/document";
 import type { CreateDocumentRequest } from "@/types/document";
 import { useCreateDocumentMutation } from "../_hooks/useCreateDocumentMutation";
+import { useDocumentUpload } from "../_hooks/useDocumentUpload";
 
 interface CreateDocumentModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	packageId: string;
 }
 
 export default function CreateDocumentModal({
 	isOpen,
 	onClose,
+	packageId,
 }: CreateDocumentModalProps) {
+	const { mutateAsync: uploadFile, isPending: isUploading } =
+		useDocumentUpload();
 	const methods = useForm<CreateDocumentRequest>({
 		mode: "onTouched",
 	});
 
 	const { handleSubmit, reset } = methods;
 
-	const { mutate, isPending } = useCreateDocumentMutation({
+	const { mutate, isPending: isUpdating } = useCreateDocumentMutation({
 		onSuccess: () => {
 			onClose();
 			reset();
 		},
+		uploadFile,
+		packageId,
 	});
 
 	const onSubmit: SubmitHandler<CreateDocumentRequest> = (data) => {
 		mutate(data);
 	};
 
+	const isPending = isUploading || isUpdating;
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -76,7 +85,7 @@ export default function CreateDocumentModal({
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
 							<Input
-								id="document_number"
+								id="id"
 								label="Document Number"
 								placeholder="Input Document Number"
 								validation={{ required: "Document Number wajib diisi!" }}
@@ -87,10 +96,15 @@ export default function CreateDocumentModal({
 								placeholder="Input Document Title"
 								validation={{ required: "Document Title wajib diisi!" }}
 							/>
+							<Input
+								id="document_serial_number"
+								label="Document Serial Number"
+								placeholder="Input Document Serial Number"
+								validation={{ required: "Document Serial Number wajib diisi!" }}
+							/>
 							<UploadFile
-								id="pdf_document"
-								label="PDF Document"
-								maxSize={10000000000}
+								id="document_file"
+								maxSize={10485760}
 								accept={{
 									"application/pdf": [".pdf"],
 								}}
@@ -98,22 +112,16 @@ export default function CreateDocumentModal({
 								helperText="Max. size docs 10mb, file type PDF"
 							/>
 							<Input
-								id="type"
+								id="document_type"
 								label="Document Type"
 								placeholder="Input Document Type"
 								validation={{ required: "Document Type wajib diisi!" }}
 							/>
 							<Input
-								id="category"
+								id="document_category"
 								label="Document Category"
 								placeholder="Input Document Category"
 								validation={{ required: "Document Category wajib diisi!" }}
-							/>
-							<DateInput
-								id="deadline"
-								label="Deadline"
-								placeholder="Input Deadline Date"
-								validation={{ required: "Deadline wajib diisi!" }}
 							/>
 							<Input
 								id="company_document_number"
@@ -124,11 +132,11 @@ export default function CreateDocumentModal({
 								}}
 							/>
 							<Input
-								id="constructor_document_number"
-								label="Constructor Document Number"
-								placeholder="Input Constructor Document Number"
+								id="contractor_document_number"
+								label="Contractor Document Number"
+								placeholder="Input Contractor Document Number"
 								validation={{
-									required: "Constructor Document Number wajib diisi!",
+									required: "Contractor Document Number wajib diisi!",
 								}}
 							/>
 							<Input
@@ -138,10 +146,29 @@ export default function CreateDocumentModal({
 								validation={{ required: "CTR Number wajib diisi!" }}
 							/>
 							<Input
-								id="subdiscipline"
+								id="wbs"
+								label="WBS"
+								placeholder="Input WBS"
+								validation={{ required: "WBS wajib diisi!" }}
+							/>
+							<Input
+								id="discipline"
+								label="Discipline"
+								placeholder="Input Discipline"
+								validation={{ required: "Discipline wajib diisi!" }}
+							/>
+							<Input
+								id="sub_discipline"
 								label="SubDiscipline"
 								placeholder="Input SubDiscipline"
 								validation={{ required: "SubDiscipline wajib diisi!" }}
+							/>
+							<SelectInput
+								id="status"
+								label="Status Document"
+								placeholder="Input Status Document"
+								validation={{ required: "Status Document wajib diisi!" }}
+								options={STATUS_DOCUMENT_OPTIONS}
 							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
