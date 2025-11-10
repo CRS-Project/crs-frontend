@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useResetPassword } from "@/hooks/useAuth";
-import Authentication from "@/layouts/Authentication";
 import type { ResetPasswordRequest } from "@/types/reset";
 
 export default function ResetPasswordPage() {
@@ -34,7 +33,7 @@ export default function ResetPasswordPage() {
 	};
 
 	return (
-		<Authentication>
+		<>
 			<div className="flex flex-col justify-center items-center text-center">
 				<LockKeyhole size={56} />
 				<h2 className="text-[36px] font-bold">Reset Password!</h2>
@@ -90,6 +89,6 @@ export default function ResetPasswordPage() {
 					Back to Login
 				</Link>
 			</FormProvider>
-		</Authentication>
+		</>
 	);
 }

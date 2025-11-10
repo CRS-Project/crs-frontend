@@ -2,18 +2,18 @@
 
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import { useForgotPassword } from "@/hooks/useAuth";
-import Authentication from "@/layouts/Authentication";
 import type { ForgotPasswordRequest } from "@/types/reset";
 
 export default function ForgetPasswordPage() {
 	const methods = useForm<ForgotPasswordRequest>();
 	const router = useRouter();
+	const pathname = usePathname();
 
 	const mutation = useForgotPassword({
 		onSuccess: () => {
@@ -32,7 +32,7 @@ export default function ForgetPasswordPage() {
 	};
 
 	return (
-		<Authentication>
+		<>
 			<div className="flex flex-col justify-center items-center text-center">
 				<LockKeyhole size={56} />
 				<h2 className="text-[36px] font-bold">Forgot Password?</h2>
@@ -55,14 +55,16 @@ export default function ForgetPasswordPage() {
 						Send
 					</Button>
 				</form>
-				<Link
-					href="/login"
-					className="text-sm mt-6 hover:underline flex justify-center items-center"
-				>
-					<ArrowLeft className="mr-2 text-xl font-bold" />
-					Back to Login
-				</Link>
+				{pathname === "/forgot-password" && (
+					<Link
+						href="/login"
+						className="text-sm mt-6 hover:underline flex justify-center items-center"
+					>
+						<ArrowLeft className="mr-2 text-xl font-bold" />
+						Back to Login
+					</Link>
+				)}
 			</FormProvider>
-		</Authentication>
+		</>
 	);
 }
