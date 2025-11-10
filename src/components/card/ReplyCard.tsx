@@ -1,6 +1,6 @@
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/EditReplyModal";
 import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
@@ -24,11 +24,25 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 	} = replies || {};
 
 	const { user } = useAuthStore();
+	const ref = useRef<HTMLDivElement>(null);
 	const [showMenu, setShowMenu] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		edit: false,
 		delete: false,
 	});
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (ref.current && !ref.current.contains(event.target as Node)) {
+				setShowMenu(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	const handleEditClick = () => {
 		setShowMenu(false);
@@ -78,41 +92,44 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 				</div>
 
 				{/* Menu Button */}
-				<div className="relative flex-shrink-0">
-					<button
-						type="button"
-						onClick={() => setShowMenu(!showMenu)}
-						className="p-1 hover:bg-gray-100 rounded transition-colors"
-					>
-						<EllipsisVertical className="w-5 h-5 text-gray-600" />
-					</button>
+				<div
+					ref={ref}
+					className="relative flex-shrink-0 cursor-pointer cursor-pointer"
+				>
+					{(user?.role === ROLE.SUPERADMIN ||
+						replies.user_comment.name === user?.name) && (
+						<button
+							type="button"
+							onClick={() => setShowMenu(!showMenu)}
+							className="p-1 hover:bg-gray-100 rounded transition-colors"
+						>
+							<EllipsisVertical className="w-5 h-5 text-gray-600" />
+						</button>
+					)}
 
 					{/* Dropdown Menu */}
-					{showMenu && (
-						<div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[120px] z-10">
-							{(user?.role === ROLE.SUPERADMIN ||
-								replies.user_comment.id === user?.id) && (
-								<>
-									<button
-										type="button"
-										onClick={handleEditClick}
-										className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-									>
-										<Pencil className="w-[12px] h-[12px]" />
-										Edit
-									</button>
-									<button
-										type="button"
-										onClick={handleDeleteClick}
-										className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-									>
-										<Trash className="w-[12px] h-[12px]" />
-										Delete
-									</button>
-								</>
-							)}
-						</div>
-					)}
+					{(user?.role === ROLE.SUPERADMIN ||
+						replies.user_comment.name === user?.name) &&
+						showMenu && (
+							<div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[120px] z-10">
+								<button
+									type="button"
+									onClick={handleEditClick}
+									className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+								>
+									<Pencil className="w-[12px] h-[12px]" />
+									Edit
+								</button>
+								<button
+									type="button"
+									onClick={handleDeleteClick}
+									className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
+								>
+									<Trash className="w-[12px] h-[12px]" />
+									Delete
+								</button>
+							</div>
+						)}
 				</div>
 			</div>
 

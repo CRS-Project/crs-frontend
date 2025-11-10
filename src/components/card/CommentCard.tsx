@@ -1,6 +1,7 @@
 import { EllipsisVertical, Eye, Pencil, Reply, Trash } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { set } from "react-hook-form";
 import CommentDetailModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/CommentDetailModal";
 import EditCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/EditCommentModal";
 import CreateReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/CreateReplyModal";
@@ -39,6 +40,21 @@ export default function CommentCard({
 		reply: false,
 		updateStatus: false,
 	});
+
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (ref.current && !ref.current.contains(event.target as Node)) {
+				setShowMenu(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	if (!comments) return null;
 
@@ -127,11 +143,11 @@ export default function CommentCard({
 				</div>
 
 				{!isPreview && (
-					<div className="relative flex-shrink-0">
+					<div ref={ref} className="relative flex-shrink-0">
 						<button
 							type="button"
 							onClick={() => setShowMenu(!showMenu)}
-							className="p-1 hover:bg-gray-100 rounded transition-colors"
+							className="p-1 hover:bg-gray-100 rounded transition-colors cursor-pointer"
 						>
 							<EllipsisVertical className="w-5 h-5 text-gray-600" />
 						</button>
@@ -141,7 +157,7 @@ export default function CommentCard({
 								<button
 									type="button"
 									onClick={handleDetailClick}
-									className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+									className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
 								>
 									<Eye className="w-[12px] h-[12px]" />
 									Detail
@@ -149,11 +165,11 @@ export default function CommentCard({
 								{comments?.status === null && (
 									<>
 										{user?.role === ROLE.SUPERADMIN ||
-											(comments.user_comment.id === user?.id && (
+											(comments.user_comment.name === user?.name && (
 												<button
 													type="button"
 													onClick={handleEditClick}
-													className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+													className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
 												>
 													<Pencil className="w-[12px] h-[12px]" />
 													Edit
@@ -162,7 +178,7 @@ export default function CommentCard({
 										<button
 											type="button"
 											onClick={handleReplyClick}
-											className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+											className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
 										>
 											<Reply className="w-[12px] h-[12px]" />
 											Reply
@@ -170,11 +186,11 @@ export default function CommentCard({
 									</>
 								)}
 								{user?.role === ROLE.SUPERADMIN ||
-									(comments.user_comment.id === user?.id && (
+									(comments.user_comment.name === user?.name && (
 										<button
 											type="button"
 											onClick={handleDeleteClick}
-											className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+											className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
 										>
 											<Trash className="w-[12px] h-[12px]" />
 											Delete
