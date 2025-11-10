@@ -37,9 +37,11 @@ import ImportDocumentModal from "./ImportDocumentModal";
 export default function DocumentsTable({ id }: { id: string }) {
 	const directory = getDocumentDirectory(id);
 	const formattedId = id.replace(/-/g, " ");
+
 	if (!directory) {
 		notFound();
 	}
+
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
@@ -78,6 +80,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 	const { data: packageData } = useGetPackageId(formattedId);
 
 	const packageId = packageData?.data?.[0]?.id;
+	console.log(packageId);
 
 	const packageTitle = directory.title;
 	const packageDescription = directory.description;
@@ -251,7 +254,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 				<CreateDocumentModal
 					isOpen={isOpen.create}
 					onClose={() => setIsOpen({ ...isOpen, create: false })}
-					packageId={packageId}
+					packageId={packageId ?? ""}
 				/>
 				<EditDocumentModal
 					document={selectedDocument}

@@ -3,7 +3,7 @@ import api from "@/service/api";
 
 export function useGetPackageId(search: string) {
 	const { data, isLoading, error } = useQuery({
-		queryKey: ["package"],
+		queryKey: ["package", search],
 		queryFn: async () => {
 			const { data } = await api.get(`v1/package`, {
 				params: {
@@ -13,7 +13,7 @@ export function useGetPackageId(search: string) {
 			});
 			return data;
 		},
-		staleTime: 5 * 60 * 1000, // 5 minutes
+		staleTime: 0,
 	});
 
 	return { data, isLoading, error };
