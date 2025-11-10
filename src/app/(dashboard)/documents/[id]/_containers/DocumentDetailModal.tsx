@@ -2,14 +2,13 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { File, X } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
-import DateInput from "@/components/form/DateInput";
 import Input from "@/components/form/Input";
-import UploadFile from "@/components/form/UploadFile";
 import type { Document } from "@/types/document";
 import { useGetDocumentByIDQuery } from "../_hooks/useGetDocumentByIDQuery";
 
@@ -29,6 +28,9 @@ export default function DocumentDetailModal({
 		mode: "onTouched",
 		defaultValues: data?.data,
 	});
+
+	const { watch } = methods;
+	const currentDocumentUrl = watch("document_url");
 
 	React.useEffect(() => {
 		if (data?.data) {
@@ -75,67 +77,107 @@ export default function DocumentDetailModal({
 					<FormProvider {...methods}>
 						<div className="my-8 space-y-2">
 							<Input
-								id="document_number"
+								id="id"
 								label="Document Number"
 								placeholder="Input Document Number"
 								readOnly
+								validation={{ required: "Document Number wajib diisi!" }}
 							/>
 							<Input
 								id="document_title"
 								label="Document Title"
 								placeholder="Input Document Title"
+								validation={{ required: "Document Title wajib diisi!" }}
 								readOnly
 							/>
-							<UploadFile
-								id="pdf_document"
-								label="PDF Document"
-								maxSize={10000000000}
-								accept={{
-									"application/pdf": [".pdf"],
-								}}
-								maxFiles={1}
-								helperText="Max. size docs 10mb, file type PDF"
-							/>
 							<Input
-								id="type"
+								id="document_serial_number"
+								label="Document Serial Number"
+								placeholder="Input Document Serial Number"
+								validation={{ required: "Document Serial Number wajib diisi!" }}
+								readOnly
+							/>
+							{currentDocumentUrl && (
+								<div className="space-y-2">
+									<h4 className="text-sm font-semibold text-gray-900">
+										Upload Document
+									</h4>
+									<Link
+										href={`https://${currentDocumentUrl}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
+									>
+										<File size={16} />
+										<span>View Current Document</span>
+									</Link>
+								</div>
+							)}
+							<Input
+								id="document_type"
 								label="Document Type"
 								placeholder="Input Document Type"
+								validation={{ required: "Document Type wajib diisi!" }}
 								readOnly
 							/>
 							<Input
-								id="category"
+								id="document_category"
 								label="Document Category"
 								placeholder="Input Document Category"
-								readOnly
-							/>
-							<DateInput
-								id="deadline"
-								label="Deadline"
-								placeholder="Input Deadline Date"
+								validation={{ required: "Document Category wajib diisi!" }}
 								readOnly
 							/>
 							<Input
 								id="company_document_number"
 								label="Company Document Number"
 								placeholder="Input Company Document Number"
+								validation={{
+									required: "Company Document Number wajib diisi!",
+								}}
 								readOnly
 							/>
 							<Input
-								id="constructor_document_number"
-								label="Constructor Document Number"
-								placeholder="Input Constructor Document Number"
+								id="contractor_document_number"
+								label="Contractor Document Number"
+								placeholder="Input Contractor Document Number"
+								validation={{
+									required: "Contractor Document Number wajib diisi!",
+								}}
 								readOnly
 							/>
 							<Input
 								id="ctr_number"
 								label="CTR Number"
 								placeholder="Input CTR Number"
+								validation={{ required: "CTR Number wajib diisi!" }}
 								readOnly
 							/>
 							<Input
-								id="subdiscipline"
+								id="wbs"
+								label="WBS"
+								placeholder="Input WBS"
+								validation={{ required: "WBS wajib diisi!" }}
+								readOnly
+							/>
+							<Input
+								id="discipline"
+								label="Discipline"
+								placeholder="Input Discipline"
+								validation={{ required: "Discipline wajib diisi!" }}
+								readOnly
+							/>
+							<Input
+								id="sub_discipline"
 								label="SubDiscipline"
 								placeholder="Input SubDiscipline"
+								validation={{ required: "SubDiscipline wajib diisi!" }}
+								readOnly
+							/>
+							<Input
+								id="status"
+								label="Status Document"
+								placeholder="Input Status Document"
+								validation={{ required: "Status Document wajib diisi!" }}
 								readOnly
 							/>
 						</div>
