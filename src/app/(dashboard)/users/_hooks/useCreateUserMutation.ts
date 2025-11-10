@@ -25,7 +25,6 @@ export function useCreateUserMutation({
 			if (onSuccess) onSuccess();
 		},
 		onError: (err: AxiosError<ApiError>) => {
-			console.log(err);
 			toast.error(
 				`${err?.response?.data?.message}: ${err?.response?.data?.error}`,
 			);

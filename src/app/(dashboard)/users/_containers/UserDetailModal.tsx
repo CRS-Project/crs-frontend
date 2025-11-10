@@ -2,13 +2,15 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { File, X } from "lucide-react";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
+import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
+import ButtonLink from "@/components/links/ButtonLink";
 import type { User } from "@/types/user";
 import { useGetUserByIDQuery } from "../_hooks/useGetUserByIDQuery";
 
@@ -73,32 +75,10 @@ export default function UserDetailModal({
 
 					<FormProvider {...methods}>
 						<div className="my-8 space-y-2">
-							<SelectInput
-								id="role"
-								label="Role"
-								options={roleOptions}
-								placeholder="Select User Role"
-								readOnly
-								disabled
-							/>
-							<SelectInput
-								id="package_id"
-								label="Package"
-								options={packageOptions}
-								placeholder="Select User Package"
-								readOnly
-								disabled
-							/>
 							<Input
 								id="name"
 								label="Full Name"
 								placeholder="Input User Full Name"
-								readOnly
-							/>
-							<Input
-								id="initial"
-								label="Initial"
-								placeholder="Input Initial Account"
 								readOnly
 							/>
 							<Input
@@ -109,15 +89,43 @@ export default function UserDetailModal({
 								readOnly
 							/>
 							<Input
+								id="initial"
+								label="Initial"
+								placeholder="Input Initial Account"
+								readOnly
+							/>
+							<Input
 								id="institution"
 								label="Institution"
 								placeholder="Input Institution"
 								readOnly
 							/>
+							{user?.role === "REVIEWER" && (
+								<Input
+									id="discipline"
+									label="Discipline"
+									placeholder="Input Discipline"
+									readOnly
+								/>
+							)}
 							<Input
-								id="discipline"
-								label="Discipline"
-								placeholder="Input Discipline"
+								id="discipline_number"
+								label="Number Discipline"
+								placeholder="Input Number Discipline"
+								readOnly
+							/>
+							<SelectInput
+								id="role"
+								label="Role"
+								options={roleOptions}
+								placeholder="Select User Role"
+								readOnly
+								disabled
+							/>
+							<Input
+								id="package"
+								label="Package"
+								placeholder="Select User Package"
 								readOnly
 							/>
 							<Input
@@ -127,6 +135,15 @@ export default function UserDetailModal({
 								placeholder="Input Password Account"
 								readOnly
 							/>
+							<LabelText>Profile Picture</LabelText>
+							<ButtonLink
+								href={`https://${user?.photo_profile ?? ""}`}
+								className="w-full"
+								variant="secondary"
+								leftIcon={File}
+							>
+								Open File
+							</ButtonLink>
 						</div>
 					</FormProvider>
 					<Button size="lg" onClick={onClose} className="w-full">
@@ -139,10 +156,6 @@ export default function UserDetailModal({
 }
 
 const roleOptions = [
-	{ value: "CONTRACTOR", label: "Contractor" },
-	{ value: "REVIEWER", label: "Reviewer" },
-];
-const packageOptions = [
 	{ value: "CONTRACTOR", label: "Contractor" },
 	{ value: "REVIEWER", label: "Reviewer" },
 ];

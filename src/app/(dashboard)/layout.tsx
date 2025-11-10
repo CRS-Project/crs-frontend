@@ -2,16 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import type React from "react";
+import withAuth from "@/components/hoc/withAuth";
 import { useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layouts/AppHeader";
 import AppSidebar from "@/layouts/AppSidebar";
 import Backdrop from "@/layouts/Backdrop";
 
-export default function AdminLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+function AdminLayout({ children }: { children: React.ReactNode }) {
 	const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 	const pathname = usePathname();
 
@@ -34,3 +31,5 @@ export default function AdminLayout({
 		</div>
 	);
 }
+
+export default withAuth(AdminLayout, "user");

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
 import { useSidebar } from "@/context/SidebarContext";
 import Data from "../../public/icons/data.svg";
@@ -21,6 +22,8 @@ type NavItem = {
 
 const AppSidebar: React.FC = () => {
 	const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+	const { user } = useAuthStore();
+
 	const pathname = usePathname();
 
 	const navItems: NavItem[] = useMemo(
@@ -28,7 +31,7 @@ const AppSidebar: React.FC = () => {
 			{
 				icon: <Home className="w-fit h-fit" />,
 				name: "Home",
-				path: "/",
+				path: "/home",
 			},
 			{
 				icon: <Data className="w-fit h-fit" />,
@@ -51,31 +54,28 @@ const AppSidebar: React.FC = () => {
 
 	const filterNavItems = (role: string) => {
 		switch (role) {
-			case "superAdmin":
+			case "SUPER ADMIN":
 				return navItems;
-			case "admin":
+			case "CONTRACTOR":
 				return navItems.filter(
 					(link) =>
-						link.name === "Dashboard" ||
-						link.name === "Profile" ||
-						link.name === "Purchase Order" ||
-						link.name === "Delivery Order" ||
-						link.name === "Customer Management" ||
-						link.name === "Product Specification",
+						link.name === "Home" ||
+						link.name === "Data" ||
+						link.name === "Documents",
 				);
-			case "sales":
+			case "REVIEWER":
 				return navItems.filter(
 					(link) =>
-						link.name === "Dashboard" ||
-						link.name === "Profile" ||
-						link.name === "Product Specification",
+						link.name === "Home" ||
+						link.name === "Data" ||
+						link.name === "Documents",
 				);
 			default:
 				return [];
 		}
 	};
 
-	const filteredNavItems = filterNavItems("superAdmin");
+	const filteredNavItems = filterNavItems(user?.role || "");
 
 	const renderMenuItems = (
 		navItems: NavItem[],
@@ -204,7 +204,10 @@ const AppSidebar: React.FC = () => {
 	);
 	const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-	const isActive = useCallback((path: string) => path === pathname, [pathname]);
+	const isActive = useCallback(
+		(path: string) => pathname.includes(path),
+		[pathname],
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: "Intentional"
 	useEffect(() => {
