@@ -27,14 +27,23 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 		"EDIT",
 	);
 
-	const methods = useForm<User>({
+	const methods = useForm<EditUserRequest>({
 		mode: "onTouched",
-		defaultValues: user ?? {},
 	});
 
 	React.useEffect(() => {
 		if (user) {
-			methods.reset(user);
+			methods.reset({
+				name: user.name ?? "",
+				email: user.email ?? "",
+				initial: user.initial ?? "",
+				institution: user.institution ?? "",
+				role: user.role ?? "",
+				discipline_number: user.discipline_number ?? 0,
+				photo_profile: user.photo_profile ?? "",
+				package_id: user.package_id ?? "",
+				discipline_id: user.discipline_id ?? "",
+			});
 		}
 	}, [user, methods]);
 
@@ -49,7 +58,19 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 	});
 
 	const onSubmit: SubmitHandler<EditUserRequest> = (data) => {
-		mutate(data);
+		const filteredData = {
+			name: data.name,
+			email: data.email,
+			initial: data.initial,
+			role: user?.role ?? "",
+			photo_profile: data.photo_profile,
+			package_id: user?.package_id ?? "",
+			discipline_id: user?.discipline_id ?? "",
+			institution: user?.institution ?? "",
+			discipline_number: user?.discipline_number ?? 0,
+		};
+
+		mutate(filteredData);
 	};
 
 	return (
@@ -133,14 +154,15 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 									Reset Password
 								</Button>
 								<UploadFile
-									id="profile_picture"
+									id="photo_profile"
 									label="Profile Picture"
-									maxSize={2000000}
+									maxSize={1000 * 1024}
 									accept={{
 										"image/*": [".jpg", ".jpeg", ".png"],
 										"application/pdf": [".pdf"],
 									}}
 									maxFiles={1}
+									uploadToApi
 									helperText="Max. size picture 1mb"
 									validation={{ required: "Profile picture wajib diisi!" }}
 								/>

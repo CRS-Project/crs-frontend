@@ -39,6 +39,8 @@ const hasAccess = (
 	switch (userRole) {
 		case "CONTRACTOR":
 			return routeRole === "user" || routeRole === "public";
+		case "REVIEWER":
+			return routeRole === "user" || routeRole === "public";
 
 		default:
 			return false;
