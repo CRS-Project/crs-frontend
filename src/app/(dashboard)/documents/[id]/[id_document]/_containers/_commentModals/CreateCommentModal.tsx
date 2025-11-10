@@ -3,6 +3,7 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
 import { Send, X } from "lucide-react";
+import { useParams } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
@@ -10,6 +11,7 @@ import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
 import type { CreateCommentRequest } from "@/types/comment";
+import { useCreateCommentMutation } from "../../_hooks/useCreateCommentMutation";
 import { useGetDocument } from "../../_hooks/useGetDocument";
 
 interface CreateCommentModalProps {
@@ -22,6 +24,7 @@ export default function CreateCommentModal({
 	onClose,
 }: CreateCommentModalProps) {
 	const { data: documentIDs } = useGetDocument();
+	const { id, id_document } = useParams();
 
 	const methods = useForm<CreateCommentRequest>({
 		mode: "onTouched",
@@ -29,11 +32,17 @@ export default function CreateCommentModal({
 
 	const { handleSubmit, reset } = methods;
 
-	const onSubmit: SubmitHandler<CreateCommentRequest> = (data) => {
-		console.log("Create comment:", data);
-		// mutate(data);
-		onClose();
-		reset();
+	const mutation = useCreateCommentMutation({
+		area_of_concern_group_id: id as string,
+		area_of_concern_id: id_document as string,
+		onSuccess: () => {
+			onClose();
+			reset();
+		},
+	});
+
+	const onSubmit: SubmitHandler<CreateCommentRequest> = async (data) => {
+		mutation.mutate(data);
 	};
 
 	return (
@@ -125,6 +134,7 @@ export default function CreateCommentModal({
 								<Button
 									className="col-span-2 justify-center"
 									type="submit"
+									isLoading={mutation.isPending}
 									rightIcon={Send}
 								>
 									Send

@@ -5,7 +5,11 @@ import CommentDetailModal from "@/app/(dashboard)/documents/[id]/[id_document]/_
 import EditCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/EditCommentModal";
 import CreateReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/CreateReplyModal";
 import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
+import UpdateStatusModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/UpdateStatusModal";
+import useAuthStore from "@/app/stores/useAuthStore";
+import { COMMENT_STATUS, ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
+import Button from "../button/Button";
 import ReplyCard from "./ReplyCard";
 
 interface CommentCardProps {
@@ -25,12 +29,15 @@ export default function CommentCard({
 		} = {},
 	} = comments || {};
 
+	const { user } = useAuthStore();
 	const [showMenu, setShowMenu] = useState(false);
+	const [isCloseComment, setIsCloseComment] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		detail: false,
 		edit: false,
 		delete: false,
 		reply: false,
+		updateStatus: false,
 	});
 
 	if (!comments) return null;
@@ -51,6 +58,17 @@ export default function CommentCard({
 	};
 
 	const handleReplyClick = () => {
+		setIsOpen({ ...isOpen, reply: true });
+		setShowMenu(false);
+	};
+
+	const handleChangeStatusClick = () => {
+		setIsOpen({ ...isOpen, updateStatus: true });
+		setShowMenu(false);
+	};
+
+	const handleCloseCommentClick = () => {
+		setIsCloseComment(true);
 		setIsOpen({ ...isOpen, reply: true });
 		setShowMenu(false);
 	};
@@ -89,12 +107,12 @@ export default function CommentCard({
 						<span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded">
 							{role}
 						</span>
-						{comments.status === "ACCEPTED" && (
+						{comments.status === COMMENT_STATUS.ACCEPTED && (
 							<span className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded">
 								Accepted
 							</span>
 						)}
-						{comments.status === "REJECT" && (
+						{comments.status === COMMENT_STATUS.REJECTED && (
 							<span className="px-3 py-1 bg-red-600 text-white text-xs font-medium rounded">
 								Rejected
 							</span>
@@ -108,7 +126,6 @@ export default function CommentCard({
 					</p>
 				</div>
 
-				{/* Menu Button - Only show when not in preview mode */}
 				{!isPreview && (
 					<div className="relative flex-shrink-0">
 						<button
@@ -119,17 +136,8 @@ export default function CommentCard({
 							<EllipsisVertical className="w-5 h-5 text-gray-600" />
 						</button>
 
-						{/* Dropdown Menu */}
 						{showMenu && (
 							<div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[120px] z-10">
-								<button
-									type="button"
-									onClick={handleEditClick}
-									className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-								>
-									<Pencil className="w-[12px] h-[12px]" />
-									Edit
-								</button>
 								<button
 									type="button"
 									onClick={handleDetailClick}
@@ -138,22 +146,40 @@ export default function CommentCard({
 									<Eye className="w-[12px] h-[12px]" />
 									Detail
 								</button>
-								<button
-									type="button"
-									onClick={handleReplyClick}
-									className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-								>
-									<Reply className="w-[12px] h-[12px]" />
-									Reply
-								</button>
-								<button
-									type="button"
-									onClick={handleDeleteClick}
-									className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-								>
-									<Trash className="w-[12px] h-[12px]" />
-									Delete
-								</button>
+								{comments?.status === null && (
+									<>
+										{user?.role === ROLE.SUPERADMIN ||
+											(comments.user_comment.id === user?.id && (
+												<button
+													type="button"
+													onClick={handleEditClick}
+													className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+												>
+													<Pencil className="w-[12px] h-[12px]" />
+													Edit
+												</button>
+											))}
+										<button
+											type="button"
+											onClick={handleReplyClick}
+											className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+										>
+											<Reply className="w-[12px] h-[12px]" />
+											Reply
+										</button>
+									</>
+								)}
+								{user?.role === ROLE.SUPERADMIN ||
+									(comments.user_comment.id === user?.id && (
+										<button
+											type="button"
+											onClick={handleDeleteClick}
+											className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+										>
+											<Trash className="w-[12px] h-[12px]" />
+											Delete
+										</button>
+									))}
 							</div>
 						)}
 					</div>
@@ -177,20 +203,40 @@ export default function CommentCard({
 				{comments.comment_at}
 			</div>
 			{/*Reply Section*/}
-			{comment_replies && comment_replies.length > 0 && (
-				<div className="flex pl-[2rem] mt-4">
-					<div className="border-l-2 border-gray-200 w-[1rem]" />
-					<div className="mt-[12px] flex flex-col gap-[12px] pl-[2rem] w-full">
-						{comment_replies.map((reply) => (
-							<ReplyCard
-								key={reply.id}
-								replies={reply}
-								parentComment={comments}
-							/>
-						))}
-					</div>
+			<div className="flex pl-[2rem] mt-4">
+				<div className="border-l-2 border-gray-200 w-[1rem]" />
+				<div className="mt-[12px] flex flex-col gap-[12px] pl-[2rem] w-full">
+					{comment_replies?.map((reply) => (
+						<ReplyCard
+							key={reply.id}
+							replies={reply}
+							parentComment={comments}
+						/>
+					))}
+					{!isPreview &&
+						comments?.status === null &&
+						user?.role !== ROLE.CONTRACTOR && (
+							<>
+								<Button
+									onClick={handleChangeStatusClick}
+									variant="primary"
+									size="sm"
+									className="w-full"
+								>
+									Set Status
+								</Button>
+								<Button
+									onClick={handleCloseCommentClick}
+									variant="secondary"
+									size="sm"
+									className="w-full"
+								>
+									Close Comment
+								</Button>
+							</>
+						)}
 				</div>
-			)}
+			</div>
 			{/* Modals */}
 			<CommentDetailModal
 				comment={comments}
@@ -208,9 +254,15 @@ export default function CommentCard({
 				onClose={() => setIsOpen({ ...isOpen, delete: false })}
 			/>
 			<CreateReplyModal
+				isCloseComment={isCloseComment}
 				comment={comments}
 				isOpen={isOpen.reply}
 				onClose={() => setIsOpen({ ...isOpen, reply: false })}
+			/>
+			<UpdateStatusModal
+				comment={comments}
+				isOpen={isOpen.updateStatus}
+				onClose={() => setIsOpen({ ...isOpen, updateStatus: false })}
 			/>
 		</div>
 	);

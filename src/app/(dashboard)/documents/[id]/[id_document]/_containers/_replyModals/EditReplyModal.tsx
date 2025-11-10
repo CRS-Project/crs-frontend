@@ -3,6 +3,7 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useParams } from "next/navigation";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
@@ -10,6 +11,7 @@ import IconButton from "@/components/button/IconButton";
 import CommentCard from "@/components/card/CommentCard";
 import TextArea from "@/components/form/TextArea";
 import type { Comment, EditCommentRequest } from "@/types/comment";
+import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
 
 interface EditReplyModalProps {
 	parentComment: Comment | null;
@@ -24,8 +26,10 @@ export default function EditReplyModal({
 	parentComment,
 	reply,
 }: EditReplyModalProps) {
+	const { id, id_document } = useParams();
+
 	const methods = useForm<EditCommentRequest>({
-		mode: "onTouched",
+		mode: "onSubmit",
 		defaultValues: {
 			document_id: "",
 			section: reply?.section ?? "",
@@ -42,20 +46,19 @@ export default function EditReplyModal({
 
 	const { handleSubmit, reset } = methods;
 
-	// TODO: Add mutation hook when API is ready
-	// const { mutate, isPending } = useEditReplyMutation({
-	// 	onSuccess: () => {
-	// 		onClose();
-	// 		reset();
-	// 	},
-	// 	id: reply?.id ?? "",
-	// });
+	const mutation = useEditCommentMutation({
+		area_of_concern_group_id: id as string,
+		area_of_concern_id: id_document as string,
+		comment_id: reply?.id as string,
+		onSuccess: () => {
+			onClose();
+			reset();
+		},
+	});
 
-	const onSubmit: SubmitHandler<EditCommentRequest> = (data) => {
-		console.log("Edit reply:", data);
-		// mutate(data);
-		onClose();
-		reset();
+	const onSubmit: SubmitHandler<EditCommentRequest> = async (data) => {
+		data.document_id = reply?.document_id || "";
+		mutation.mutate(data);
 	};
 
 	return (

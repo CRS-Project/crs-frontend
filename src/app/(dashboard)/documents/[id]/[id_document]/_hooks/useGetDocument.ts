@@ -2,10 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { get } from "@/service/call";
 import { MAIN_ENDPOINT } from "@/service/endpoint";
 
-export const useGetDocument = (
-	onSuccess?: () => void,
-	onError?: () => void,
-) => {
+export const useGetDocument = () => {
 	return useQuery({
 		queryFn: async () => {
 			const { Kind, OK } = await get(MAIN_ENDPOINT.Document.FetchDocuments);

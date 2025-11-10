@@ -3,35 +3,50 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
 import { Send, X } from "lucide-react";
+import { useParams } from "next/navigation";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import CommentCard from "@/components/card/CommentCard";
 import TextArea from "@/components/form/TextArea";
 import type { Comment, CreateReplyRequest } from "@/types/comment";
+import { useCreateReplyMutation } from "../../_hooks/useCreateReplyMutation";
 
 interface CreateReplyModalProps {
+	isCloseComment: boolean;
 	isOpen: boolean;
 	onClose: () => void;
 	comment: Comment;
 }
 
 export default function CreateReplyModal({
+	isCloseComment,
 	comment,
 	isOpen,
 	onClose,
 }: CreateReplyModalProps) {
+	const { id, id_document } = useParams();
+
 	const methods = useForm<CreateReplyRequest>({
-		mode: "onTouched",
+		mode: "onSubmit",
 	});
 
 	const { handleSubmit, reset } = methods;
 
-	const onSubmit: SubmitHandler<CreateReplyRequest> = (data) => {
-		console.log("Create reply:", data);
-		// mutate(data);
-		onClose();
-		reset();
+	const mutation = useCreateReplyMutation({
+		area_of_concern_group_id: id as string,
+		area_of_concern_id: id_document as string,
+		comment_id: comment?.id as string,
+		onSuccess: () => {
+			onClose();
+			reset();
+		},
+	});
+
+	const onSubmit: SubmitHandler<CreateReplyRequest> = async (data) => {
+		data.is_close_out_comment = isCloseComment;
+		data.document_id = comment?.document_id;
+		mutation.mutate(data);
 	};
 
 	return (
@@ -66,7 +81,9 @@ export default function CreateReplyModal({
 							className="w-8 h-8 rounded-full"
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
-						<h2 className="text-2xl font-bold text-[#52525B]">Reply Comment</h2>
+						<h2 className="text-2xl font-bold text-[#52525B]">
+							{isCloseComment ? "Close of Comment" : "Reply Comment"}
+						</h2>
 					</div>
 
 					<div className="mt-6">
@@ -77,8 +94,12 @@ export default function CreateReplyModal({
 							<TextArea
 								className="h-[91px]"
 								id="comment"
-								label="Comment Text"
-								placeholder="Comment Text"
+								label={isCloseComment ? "Close Comment" : "Comment"}
+								placeholder={
+									isCloseComment
+										? "Input your close comment"
+										: "Input your reply comment"
+								}
 								validation={{ required: "Comment Text is required!" }}
 							/>
 

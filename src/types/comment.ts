@@ -7,6 +7,7 @@ export interface Comment {
 	baseline: string;
 	status: string;
 	comment_at: string;
+	document_id: string;
 	user_comment: UserComment;
 	comment_replies: Comment[];
 }
@@ -31,4 +32,6 @@ export interface EditCommentRequest {
 	section: string;
 	comment: string;
 	baseline: string;
+	is_close_out_comment: boolean;
+	status: string;
 }

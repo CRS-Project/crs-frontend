@@ -5,23 +5,24 @@ import { X } from "lucide-react";
 import { useParams } from "next/navigation";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
+import { COMMENT_STATUS } from "@/lib/data";
 import type { Comment } from "@/types/comment";
-import { useDeleteCommentMutation } from "../_hooks/useDeleteComment";
+import { useEditCommentMutation } from "../_hooks/useEditCommentMutation";
 
-interface DeleteCommentModalProps {
+interface UpdateStatusModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	comment: Comment | null;
 }
 
-export default function DeleteCommentModal({
+export default function UpdateStatusModal({
 	isOpen,
 	onClose,
 	comment,
-}: DeleteCommentModalProps) {
+}: UpdateStatusModalProps) {
 	const { id, id_document } = useParams();
 
-	const mutation = useDeleteCommentMutation({
+	const mutation = useEditCommentMutation({
 		area_of_concern_group_id: id as string,
 		area_of_concern_id: id_document as string,
 		comment_id: comment?.id as string,
@@ -30,8 +31,16 @@ export default function DeleteCommentModal({
 		},
 	});
 
-	const handleDelete = () => {
-		mutation.mutate();
+	const handleChangeStatus = (status: string) => () => {
+		if (!comment) return;
+
+		const data = {
+			...comment,
+			document_id: comment.document_id || "",
+			status,
+			is_close_out_comment: status === COMMENT_STATUS.ACCEPTED,
+		};
+		mutation.mutate(data);
 	};
 
 	return (
@@ -47,12 +56,12 @@ export default function DeleteCommentModal({
 			}}
 		>
 			<ModalContent className="px-6">
-				{(onClose) => (
+				{(onCloseModal) => (
 					<>
 						<ModalHeader className="flex w-full justify-end">
 							<IconButton
 								variant="ghost"
-								onClick={onClose}
+								onClick={onCloseModal}
 								icon={X}
 								className="w-8 h-8 rounded-full"
 								iconClassName="w-6 h-6 text-[#3F3F46]"
@@ -60,31 +69,28 @@ export default function DeleteCommentModal({
 						</ModalHeader>
 						<ModalBody>
 							<h1 className="text-[#1B1B1B] font-bold text-4xl">
-								Delete Comment
+								Change Status
 							</h1>
 							<p className="text-[#1B1B1B] font-semibold text-xl">
-								Are you sure you want to delete this comment from{" "}
-								<span className="text-[#920B3A]">
-									{comment?.user_comment?.name}
-								</span>
-								?
+								Are you sure want to changes status comment{" "}
+								<span className="text-[#920B3A]">{comment?.id}</span>?
 							</p>
 							<div className="grid grid-cols-2 gap-3 pb-8 mt-3">
 								<Button
-									onClick={onClose}
-									variant="secondary"
-									size="lg"
-									className="w-full"
-								>
-									Cancel
-								</Button>
-								<Button
-									onClick={handleDelete}
+									onClick={handleChangeStatus(COMMENT_STATUS.REJECTED)}
 									variant="red"
 									size="lg"
 									className="w-full"
 								>
-									Yes, Delete Comment
+									Set Rejected
+								</Button>
+								<Button
+									onClick={handleChangeStatus(COMMENT_STATUS.ACCEPTED)}
+									variant="primary"
+									size="lg"
+									className="w-full"
+								>
+									Set Accepted
 								</Button>
 							</div>
 						</ModalBody>

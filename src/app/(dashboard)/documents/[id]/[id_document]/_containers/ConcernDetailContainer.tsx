@@ -7,7 +7,7 @@ import LabelText from "@/components/form/LabelText";
 import type { Concern } from "@/types/concern";
 
 interface ConcernDetailModalProps {
-	concern: Concern | null;
+	concern: Concern | undefined;
 }
 
 const defaultConcernValue: Concern = {
@@ -15,16 +15,7 @@ const defaultConcernValue: Concern = {
 	area_of_concern_id: "Marine-1219-2132",
 	description: "01. Alignment of project execution strategy across Dual FEED",
 	package: "FPSO ITS",
-	consolidators: [
-		{
-			id: "1",
-			name: "John Doe",
-		},
-		{
-			id: "2",
-			name: "Jane Smith",
-		},
-	],
+	consolidators: [],
 };
 
 export default function ConcernDetailModal({

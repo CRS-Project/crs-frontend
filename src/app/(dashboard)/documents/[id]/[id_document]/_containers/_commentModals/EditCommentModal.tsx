@@ -3,13 +3,17 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useParams } from "next/navigation";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
+import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
 import type { Comment, EditCommentRequest } from "@/types/comment";
+import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
+import { useGetDocument } from "../../_hooks/useGetDocument";
 
 interface EditCommentModalProps {
 	comment: Comment | null;
@@ -22,10 +26,13 @@ export default function EditCommentModal({
 	onClose,
 	comment,
 }: EditCommentModalProps) {
+	const { id, id_document } = useParams();
+	const { data: documentIDs } = useGetDocument();
+
 	const methods = useForm<EditCommentRequest>({
-		mode: "onTouched",
+		mode: "onSubmit",
 		defaultValues: {
-			document_id: "",
+			document_id: comment?.document_id ?? "",
 			section: comment?.section ?? "",
 			comment: comment?.comment ?? "",
 			baseline: comment?.baseline ?? "",
@@ -40,20 +47,18 @@ export default function EditCommentModal({
 
 	const { handleSubmit, reset } = methods;
 
-	// TODO: Add mutation hook when API is ready
-	// const { mutate, isPending } = useEditCommentMutation({
-	// 	onSuccess: () => {
-	// 		onClose();
-	// 		reset();
-	// 	},
-	// 	id: comment?.id ?? "",
-	// });
+	const mutation = useEditCommentMutation({
+		area_of_concern_group_id: id as string,
+		area_of_concern_id: id_document as string,
+		comment_id: comment?.id as string,
+		onSuccess: () => {
+			onClose();
+			reset();
+		},
+	});
 
-	const onSubmit: SubmitHandler<EditCommentRequest> = (data) => {
-		console.log("Edit comment:", data);
-		// mutate(data);
-		onClose();
-		reset();
+	const onSubmit: SubmitHandler<EditCommentRequest> = async (data) => {
+		mutation.mutate(data);
 	};
 
 	return (
@@ -114,6 +119,22 @@ export default function EditCommentModal({
 								placeholder="Input Baseline/Justification/Reference"
 								validation={{ required: "Baseline is required!" }}
 							/>
+							<SelectInput
+								id="document_id"
+								label="Document ID"
+								options={
+									documentIDs
+										? documentIDs.map(
+												(doc: { id: string; document_title: string }) => ({
+													value: doc.id,
+													label: doc.document_title,
+												}),
+											)
+										: []
+								}
+								placeholder="Select Document ID"
+								validation={{ required: "Document ID is required!" }}
+							/>
 							<Input
 								id="section"
 								label="Section Document"
@@ -133,7 +154,12 @@ export default function EditCommentModal({
 								>
 									Cancel
 								</Button>
-								<Button className="col-span-2" type="submit" size="lg">
+								<Button
+									className="col-span-2"
+									type="submit"
+									size="lg"
+									isLoading={mutation.isPending}
+								>
 									Save Update Comment
 								</Button>
 							</div>

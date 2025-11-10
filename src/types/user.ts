@@ -14,6 +14,7 @@ export type User = {
 };
 
 export type UserComment = {
+	id: string;
 	name: string;
 	photo_profile: string | null;
 	role: string;

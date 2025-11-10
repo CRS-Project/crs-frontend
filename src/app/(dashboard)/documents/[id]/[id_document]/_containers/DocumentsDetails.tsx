@@ -8,36 +8,56 @@ import {
 	DropdownTrigger,
 } from "@heroui/dropdown";
 import { ArrowLeft, Download, Filter, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
 import Loading from "@/app/loading";
+import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
 import CommentCard from "@/components/card/CommentCard";
+import { ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
 import { useFetchComments } from "../_hooks/useCommentQuery";
+import { useGetAreaConcernByID } from "../_hooks/useGetAreaConcernByID";
 import CreateCommentModal from "./_commentModals/CreateCommentModal";
 import ConcernDetailModal from "./ConcernDetailContainer";
 
 export default function DocumentsDetails() {
 	const router = useRouter();
-	const [filteredType, setFilteredType] = React.useState<any>(
-		new Set(["accepted", "rejected"]),
+	const { id, id_document } = useParams();
+	const { user } = useAuthStore();
+
+	const { data: concern } = useGetAreaConcernByID(
+		id as string,
+		id_document as string,
 	);
+
+	const { data: comments, isLoading } = useFetchComments(
+		id as string,
+		id_document as string,
+	);
+
+	const [filteredType, setFilteredType] = React.useState<any>(
+		new Set(["ACCEPT", "REJECT", "NULL"]),
+	);
+
 	const [isOpen, setIsOpen] = React.useState({
 		create: false,
 	});
 
-	const { data: comments, isLoading } = useFetchComments(
-		"d37cc922-d310-4cdd-829f-d2f18ef6c08d",
-		"0240ddc0-48d3-420c-919d-8f0f4f758cac",
-	);
+	const filteredComments = React.useMemo(() => {
+		if (!comments) return [];
+		return comments.filter((comment: Comment) =>
+			filteredType.has(comment.status === null ? "NULL" : comment.status),
+		);
+	}, [comments, filteredType]);
 
 	if (isLoading) {
 		return <Loading />;
 	}
 
-	const highlightedPackage = "Marine-1219-2132";
+	const highlightedPackage = concern?.area_of_concern_id || "Marine-1219-2132";
 	const highlightedTitle =
+		concern?.description ||
 		"01. Alignment of project execution strategy across Dual FEED";
 
 	return (
@@ -78,27 +98,33 @@ export default function DocumentsDetails() {
 				</div>
 			</div>
 
-			<div className="flex flex-col md:flex-row mb-10">
-				{/* Comment Section */}
-				<div className="flex flex-col gap-[27px] border-r-1 pr-[2.5rem] w-full md:w-[60%]">
+			<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-0 mb-10">
+				<div className="w-full lg:col-span-5 lg:pl-[2.5rem] lg:order-2 order-1">
+					<h1 className="font-bold text-[1.5rem] mb-4">Detail of Concern</h1>
+					<ConcernDetailModal concern={concern} />
+				</div>
+
+				<div className="flex flex-col gap-[27px] lg:border-r-1 lg:pr-[2.5rem] w-full lg:col-span-7 lg:order-1 order-2">
 					{/* Comment Header */}
-					<div className="w-full flex justify-between items-center">
+					<div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 						<h1 className="font-bold text-[1.5rem]">All Comments</h1>
-						<div className="flex gap-2">
-							<Button
-								variant="blue"
-								leftIcon={Plus}
-								className="w-fit max-md:w-full"
-								onClick={() => setIsOpen({ ...isOpen, create: true })}
-							>
-								Add Comment
-							</Button>
+						<div className="flex gap-2 w-full sm:w-auto">
+							{user?.role !== ROLE.CONTRACTOR && (
+								<Button
+									variant="blue"
+									leftIcon={Plus}
+									className="flex-1 sm:w-fit md:flex-auto"
+									onClick={() => setIsOpen({ ...isOpen, create: true })}
+								>
+									Add Comment
+								</Button>
+							)}
 							<Dropdown>
 								<DropdownTrigger>
 									<Button
 										variant="blue"
 										leftIcon={Filter}
-										className="w-fit max-md:w-full"
+										className="flex-1 sm:w-fit md:flex-auto"
 									>
 										Filter
 									</Button>
@@ -112,8 +138,9 @@ export default function DocumentsDetails() {
 									variant="flat"
 									onSelectionChange={setFilteredType}
 								>
-									<DropdownItem key="accepted">Accepted</DropdownItem>
-									<DropdownItem key="rejected">Rejected</DropdownItem>
+									<DropdownItem key="ACCEPT">Accepted</DropdownItem>
+									<DropdownItem key="REJECT">Rejected</DropdownItem>
+									<DropdownItem key="NULL">No Status</DropdownItem>
 								</DropdownMenu>
 							</Dropdown>
 						</div>
@@ -121,16 +148,10 @@ export default function DocumentsDetails() {
 
 					{/* Comment Fill */}
 					<div className="flex flex-col gap-[27px]">
-						{comments?.map((comment: Comment) => (
+						{filteredComments?.map((comment: Comment) => (
 							<CommentCard key={comment.id} comments={comment} />
 						))}
 					</div>
-				</div>
-
-				{/* Detail Concern */}
-				<div className="w-full pl-[2.5rem] md:w-[40%]">
-					<h1 className="font-bold text-[1.5rem]">Detail of Concern</h1>
-					<ConcernDetailModal concern={null} />
 				</div>
 			</div>
 

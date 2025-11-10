@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useState } from "react";
 import EditReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/EditReplyModal";
 import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
+import useAuthStore from "@/app/stores/useAuthStore";
+import { ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
 
 interface ReplyCardProps {
@@ -17,10 +19,11 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 		user_comment: {
 			name = "John Doe",
 			photo_profile = null,
-			role = "Contractor",
+			role = ROLE.CONTRACTOR,
 		} = {},
 	} = replies || {};
 
+	const { user } = useAuthStore();
 	const [showMenu, setShowMenu] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		edit: false,
@@ -87,22 +90,27 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 					{/* Dropdown Menu */}
 					{showMenu && (
 						<div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[120px] z-10">
-							<button
-								type="button"
-								onClick={handleEditClick}
-								className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-							>
-								<Pencil className="w-[12px] h-[12px]" />
-								Edit
-							</button>
-							<button
-								type="button"
-								onClick={handleDeleteClick}
-								className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-							>
-								<Trash className="w-[12px] h-[12px]" />
-								Delete
-							</button>
+							{(user?.role === ROLE.SUPERADMIN ||
+								replies.user_comment.id === user?.id) && (
+								<>
+									<button
+										type="button"
+										onClick={handleEditClick}
+										className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+									>
+										<Pencil className="w-[12px] h-[12px]" />
+										Edit
+									</button>
+									<button
+										type="button"
+										onClick={handleDeleteClick}
+										className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+									>
+										<Trash className="w-[12px] h-[12px]" />
+										Delete
+									</button>
+								</>
+							)}
 						</div>
 					)}
 				</div>
