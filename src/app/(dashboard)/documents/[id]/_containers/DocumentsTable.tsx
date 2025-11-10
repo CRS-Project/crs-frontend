@@ -80,7 +80,6 @@ export default function DocumentsTable({ id }: { id: string }) {
 	const { data: packageData } = useGetPackageId(formattedId);
 
 	const packageId = packageData?.data?.[0]?.id;
-	console.log(packageId);
 
 	const packageTitle = directory.title;
 	const packageDescription = directory.description;
