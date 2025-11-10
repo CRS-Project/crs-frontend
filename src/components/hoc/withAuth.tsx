@@ -7,9 +7,11 @@ import Loading from "@/app/loading";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { getToken, removeToken } from "@/lib/cookies";
 import api from "@/service/api";
+import type { ApiResponse } from "@/types/api";
+import type { UserResponse } from "@/types/login";
 import type { User } from "@/types/user";
 
-const ROLE = ["admin", "writer"] as const;
+const ROLE = ["SUPER ADMIN", "CONTRACTOR", "REVIEWER"] as const;
 
 type Role = (typeof ROLE)[number];
 
@@ -17,14 +19,13 @@ export interface WithAuthProps {
 	user: User;
 }
 
-const ADMIN_ROUTE = "/dashboard";
-const WRITER_ROUTE = "/dashboard";
+const DEFAULT_ROUTE = "/home";
 const LOGIN_ROUTE = "/login";
 
 export enum RouteRole {
 	public,
-	writer,
 	admin,
+	user,
 }
 
 export const isRole = (p: Role): p is Role => ROLE.includes(p as Role);
@@ -33,25 +34,14 @@ const hasAccess = (
 	userRole: Role,
 	routeRole: keyof typeof RouteRole,
 ): boolean => {
-	if (userRole === "admin") return true;
+	if (userRole === "SUPER ADMIN") return true;
 
 	switch (userRole) {
-		case "writer":
-			return routeRole === "writer" || routeRole === "public";
+		case "CONTRACTOR":
+			return routeRole === "user" || routeRole === "public";
 
 		default:
 			return false;
-	}
-};
-
-const getDefaultRoute = (role: Role): string => {
-	switch (role) {
-		case "admin":
-			return ADMIN_ROUTE;
-		case "writer":
-			return WRITER_ROUTE;
-		default:
-			return LOGIN_ROUTE;
 	}
 };
 
@@ -90,17 +80,14 @@ export default function withAuth<T>(
 			if (!user) {
 				const loadUser = async () => {
 					try {
-						const res = await api.get<User>("/user/me");
+						const res = await api.get<ApiResponse<UserResponse>>("/v1/auth/me");
 
 						if (!res.data) {
 							toast.error("Sesi login tidak valid");
 							throw new Error("Sesi login tidak valid");
 						}
 
-						login({
-							...res.data,
-							token,
-						});
+						login({ ...res.data.data.personal_info, token: token });
 					} catch (_err) {
 						await removeToken();
 					} finally {
@@ -130,7 +117,7 @@ export default function withAuth<T>(
 				if (isAuthenticated && user) {
 					// Handle login route redirect
 					if (pathName === LOGIN_ROUTE) {
-						router.replace(getDefaultRoute(user.role as Role));
+						router.replace(DEFAULT_ROUTE);
 						return;
 					}
 
@@ -139,10 +126,10 @@ export default function withAuth<T>(
 						if (redirect) {
 							router.replace(redirect as string);
 						} else {
-							router.replace(getDefaultRoute(user.role as Role));
+							router.replace(DEFAULT_ROUTE);
 						}
 					} else if (!hasAccess(user.role as Role, routeRole)) {
-						router.replace(getDefaultRoute(user.role as Role));
+						router.replace(DEFAULT_ROUTE);
 					}
 				} else if (routeRole !== "public") {
 					router.replace(`${LOGIN_ROUTE}?redirect=${pathName}`);

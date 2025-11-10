@@ -47,21 +47,21 @@ const directoryData = [
 	{
 		title: "FPSO ITS",
 		description: "Floating Production, Storage, and Offloading",
-		linkHref: "/admin/documents/fpso-its",
+		linkHref: "/documents/fpso-its",
 	},
 	{
 		title: "OLNG ITS",
 		description: "Onshore LNG (Liquefied Natural Gas)",
-		linkHref: "/admin/documents/olng-its",
+		linkHref: "/documents/olng-its",
 	},
 	{
 		title: "FPSO ITB",
 		description: "Floating Production, Storage, and Offloading",
-		linkHref: "/admin/documents/fpso-itb",
+		linkHref: "/documents/fpso-itb",
 	},
 	{
 		title: "OLNG ITB",
 		description: "Onshore LNG (Liquefied Natural Gas)",
-		linkHref: "/admin/documents/olng-itb",
+		linkHref: "/documents/olng-itb",
 	},
 ];
