@@ -12,9 +12,8 @@ const montserrat = Montserrat({
 });
 
 const siteConfig = {
-	title: "Next Template",
-	description:
-		"A Next.js 15 starter template with TypeScript, Tailwind CSS v4, and built-in tools for efficient development.",
+	title: "CRS",
+	description: "Comment Resolution Sheet Apps - Inpex Abadi OLNG Development",
 	url: process.env.SITE_URL || "https://example.com",
 };
 
