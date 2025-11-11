@@ -14,8 +14,6 @@ export function useConcernTableQuery(id: string) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [debouncedSearch, setDebouncedSearch] = React.useState(search);
 
-	const formattedId = id.replace(/-/g, " ");
-
 	React.useEffect(() => {
 		const timer = setTimeout(() => {
 			setDebouncedSearch(search);
@@ -64,15 +62,18 @@ export function useConcernTableQuery(id: string) {
 		error,
 		isFetching,
 	} = useQuery<PaginatedApiResponse<Concern[]>>({
-		queryKey: ["concern", formattedId, queryParams],
+		queryKey: ["concern", id, queryParams],
 		queryFn: async () => {
-			const filters: string[] = [formattedId];
-			const filterBy: string[] = ["search"];
+			const filters: string[] = [];
+			const filterBy: string[] = [];
 
 			if (debouncedSearch.trim()) {
 				filters.push(debouncedSearch.trim());
 				filterBy.push("search");
 			}
+
+			filters.push(id);
+			filterBy.push("package_id");
 
 			const res = await api.get(`/v1/area-of-concern-group`, {
 				params: {
@@ -81,7 +82,6 @@ export function useConcernTableQuery(id: string) {
 					filter_by: filterBy.join(","),
 				},
 			});
-			console.log(res.data);
 			return res.data;
 		},
 		staleTime: 5 * 60 * 1000, // 5 minutes
