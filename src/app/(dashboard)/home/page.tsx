@@ -36,6 +36,7 @@ export default function HomePage() {
 						title={item.title}
 						description={item.description}
 						linkHref={item.linkHref}
+						value="Area of Concern"
 					/>
 				))}
 			</div>

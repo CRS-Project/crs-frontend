@@ -19,16 +19,16 @@ export default function SummaryCard({
 }: SummaryCardProps) {
 	return (
 		<Card
-			className={clsxm("w-[280px] px-6 py-4 rounded-lg lg:gap-2", [
+			className={clsxm("w-[280px] px-6 py-4 rounded-lg", [
 				variant === "primary" && ["bg-blue-500 text-white"],
 				variant === "white" && ["bg-white text-primary-1000"],
 			])}
 		>
-			<CardHeader className="flex justify-between">
+			<CardHeader className="flex justify-between p-1">
 				<span className="text-base font-semibold">{title}</span>
 				{Icon && <Icon size={20} />}
 			</CardHeader>
-			<CardBody className="text-2xl sm:text-4xl lg:text-5xl font-semibold overflow-visible">
+			<CardBody className="text-2xl sm:text-4xl lg:text-5xl font-semibold overflow-visible p-1">
 				{value}
 			</CardBody>
 		</Card>

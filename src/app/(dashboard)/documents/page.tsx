@@ -16,6 +16,7 @@ export default function AdminDocumentPage() {
 					title={item.title}
 					description={item.description}
 					linkHref={item.linkHref}
+					value="Check Documents"
 				/>
 			))}
 		</div>
