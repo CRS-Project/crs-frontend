@@ -21,7 +21,7 @@ export default function ProfilePage() {
 					height={1000}
 				/>
 				<Link
-					href="/"
+					href="/home"
 					className="absolute top-8 left-8 max-md:top-2 max-md:left-4"
 				>
 					<MoveLeft size={36} className="text-white" />

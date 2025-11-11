@@ -24,6 +24,14 @@ import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
 import type { User } from "@/types/user";
+import {
+	type Discipline,
+	useGetAllDisciplineQuery,
+} from "../_hooks/useGetAllDisciplineQuery";
+import {
+	type Package,
+	useGetAllPackageQuery,
+} from "../_hooks/useGetAllPackageQuery";
 import { useUsersTableQuery } from "../_hooks/useUsersTableQuery";
 import CreateUserModal from "./CreateUserModal";
 import DeleteUserModal from "./DeleteUserModal";
@@ -58,6 +66,29 @@ export default function UsersTable() {
 			per_page: 10,
 		},
 	});
+
+	const { data: packages, isPending: isLoadingPackages } =
+		useGetAllPackageQuery();
+	const { data: disciplines, isPending: isLoadingDisciplines } =
+		useGetAllDisciplineQuery();
+
+	const packageOptions = React.useMemo(() => {
+		return (
+			packages?.data?.map((pkg: Package) => ({
+				value: pkg.id,
+				label: pkg.name,
+			})) || []
+		);
+	}, [packages]);
+
+	const disciplineOptions = React.useMemo(() => {
+		return (
+			disciplines?.data?.map((disc: Discipline) => ({
+				value: disc.id,
+				label: disc.name,
+			})) || []
+		);
+	}, [disciplines]);
 
 	const {
 		currentPage,
@@ -240,20 +271,31 @@ export default function UsersTable() {
 					onPageChange={handlePageChange}
 				/>
 
+				<CreateUserModal
+					isOpen={isOpen.create}
+					onClose={() => setIsOpen({ ...isOpen, create: false })}
+					packageOptions={packageOptions}
+					disciplineOptions={disciplineOptions}
+					isLoadingPackages={isLoadingPackages}
+					isLoadingDisciplines={isLoadingDisciplines}
+				/>
+
 				<UserDetailModal
 					user={selectedUser}
 					isOpen={isOpen.detail}
 					onClose={() => setIsOpen({ ...isOpen, detail: false })}
 				/>
-				<CreateUserModal
-					isOpen={isOpen.create}
-					onClose={() => setIsOpen({ ...isOpen, create: false })}
-				/>
+
 				<EditUserModal
 					user={selectedUser}
 					isOpen={isOpen.edit}
 					onClose={() => setIsOpen({ ...isOpen, edit: false })}
+					packageOptions={packageOptions}
+					disciplineOptions={disciplineOptions}
+					isLoadingPackages={isLoadingPackages}
+					isLoadingDisciplines={isLoadingDisciplines}
 				/>
+
 				<DeleteUserModal
 					user={selectedUser}
 					isOpen={isOpen.delete}

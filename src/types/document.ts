@@ -1,20 +1,52 @@
 export type Document = {
 	id: string;
-	document_name: string;
-	package: string;
+	company_document_number: string;
+	document_title: string;
+	document_serial_number: string;
+	document_url?: string;
+	document_file?: File;
+	document_type: string;
+	document_category: string;
+	contractor_document_number: string;
+	ctr_number: string;
+	wbs: string;
 	discipline: string;
+	sub_discipline: string;
+	package: string;
+	status: string;
 };
 
 export type CreateDocumentRequest = {
-	document_name: string;
-	package_id: string;
-	discipline_id: string;
+	company_document_number: string;
+	document_title: string;
+	document_serial_number: string;
+	document_url?: string;
+	document_file?: File;
+	document_type: string;
+	document_category: string;
+	contractor_document_number: string;
+	ctr_number: string;
+	wbs: string;
+	discipline: string;
+	sub_discipline: string;
+	package: string;
+	status: string;
 };
 
 export type EditDocumentRequest = {
-	document_name?: string;
-	package_id?: string;
-	discipline_id?: string;
+	document_title?: string;
+	document_serial_number?: string;
+	document_url?: string;
+	document_file?: File;
+	document_type?: string;
+	document_category?: string;
+	company_document_number?: string;
+	contractor_document_number?: string;
+	ctr_number?: string;
+	wbs?: string;
+	discipline?: string;
+	sub_discipline?: string;
+	status?: string;
 };
 
 export type ImportDocumentRequest = {
@@ -24,3 +56,5 @@ export type ImportDocumentRequest = {
 export type WithToken = {
 	token: string;
 };
+
+export type DocumentPageParams = Promise<{ id: string }>;

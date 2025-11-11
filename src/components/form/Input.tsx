@@ -109,7 +109,7 @@ export default function Input({
 						readOnly={readOnly}
 						disabled={readOnly}
 						className={clsxm(
-							"h-full w-full rounded-md border border-gray-500 px-3 py-2.5 caret-gray-900",
+							"h-full w-full rounded-md border border-gray-500 px-3 py-2.5",
 							[LeftIcon && "pl-9", RightIcon && "pr-9"],
 							"focus:outline-1 focus:outline-gray-900 focus:ring-inset",
 							"text-sm",

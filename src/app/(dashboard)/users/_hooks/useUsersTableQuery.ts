@@ -42,6 +42,7 @@ export function useUsersTableQuery() {
 		const params: PaginationQueryParams = {
 			page: currentPage,
 			take: perPage,
+			filter_by: "search",
 		};
 
 		if (debouncedSearch.trim()) {

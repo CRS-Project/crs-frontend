@@ -7,6 +7,16 @@ export type User = {
 	photo_profile: string | null;
 	package: string;
 	discipline: string;
+	package_id: string;
+	discipline_id: string | null;
+	discipline_number: number;
+	role: string;
+};
+
+export type UserComment = {
+	id: string;
+	name: string;
+	photo_profile: string | null;
 	role: string;
 };
 
@@ -17,9 +27,10 @@ export type CreateUserRequest = {
 	initial: string;
 	institution: string;
 	role: string;
+	discipline_number: number;
+	photo_profile: string;
 	package_id: string;
-	discipline_id: string;
-	//   photo_profile: File;
+	discipline_id?: string;
 };
 
 export type EditUserRequest = {
@@ -29,9 +40,10 @@ export type EditUserRequest = {
 	initial?: string;
 	institution?: string;
 	role?: string;
+	discipline_number?: number;
+	photo_profile?: string;
 	package_id?: string;
 	discipline_id?: string;
-	//   photo_profile?: File;
 };
 export type WithToken = {
 	token: string;

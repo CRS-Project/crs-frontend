@@ -3,28 +3,40 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
 import { Plus, X } from "lucide-react";
+import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
+import UploadFile from "@/components/form/UploadFile";
 import type { CreateUserRequest } from "@/types/user";
 import { useCreateUserMutation } from "../_hooks/useCreateUserMutation";
 
 interface CreateUserModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	packageOptions: { value: string; label: string }[];
+	disciplineOptions: { value: string; label: string }[];
+	isLoadingPackages: boolean;
+	isLoadingDisciplines: boolean;
 }
 
 export default function CreateUserModal({
 	isOpen,
 	onClose,
+	packageOptions = [],
+	disciplineOptions = [],
+	isLoadingPackages = false,
+	isLoadingDisciplines = false,
 }: CreateUserModalProps) {
 	const methods = useForm<CreateUserRequest>({
 		mode: "onTouched",
 	});
 
-	const { handleSubmit, reset } = methods;
+	const { handleSubmit, reset, watch } = methods;
+
+	const role = watch("role");
 
 	const { mutate, isPending } = useCreateUserMutation({
 		onSuccess: () => {
@@ -87,6 +99,7 @@ export default function CreateUserModal({
 								id="package_id"
 								label="Package"
 								options={packageOptions}
+								isLoading={isLoadingPackages}
 								placeholder="Select User Package"
 								validation={{ required: "Package wajib diisi!" }}
 							/>
@@ -116,11 +129,28 @@ export default function CreateUserModal({
 								placeholder="Input Institution"
 								validation={{ required: "Institution wajib diisi!" }}
 							/>
+							{role === "REVIEWER" && (
+								<SelectInput
+									id="discipline_id"
+									label="Discipline"
+									placeholder="Input Discipline"
+									options={disciplineOptions}
+									isLoading={isLoadingDisciplines}
+									validation={
+										role === "REVIEWER"
+											? { required: "Discipline wajib diisi!" }
+											: undefined
+									}
+								/>
+							)}
 							<Input
-								id="discipline_id"
-								label="Discipline"
-								placeholder="Input Discipline"
-								validation={{ required: "Discipline wajib diisi!" }}
+								id="discipline_number"
+								label="Number Discipline"
+								placeholder="Input Number Discipline User"
+								validation={{
+									required: "Number Discipline wajib diisi!",
+									valueAsNumber: true,
+								}}
 							/>
 							<Input
 								id="password"
@@ -130,18 +160,19 @@ export default function CreateUserModal({
 								helperText="Password must be 8 character, mix uppercase and lowercase"
 								validation={{ required: "Password wajib diisi!" }}
 							/>
-							{/* <UploadFile
-                id="profile_picture"
-                label="Profile Picture"
-                maxSize={2000000}
-                accept={{
-                  "image/*": [".jpg", ".jpeg", ".png"],
-                  "application/pdf": [".pdf"],
-                }}
-                maxFiles={1}
-                helperText="Max. size picture 1mb"
-                validation={{ required: "Profile picture wajib diisi!" }}
-              /> */}
+							<UploadFile
+								id="photo_profile"
+								label="Profile Picture"
+								maxSize={1000 * 1024}
+								accept={{
+									"image/*": [".jpg", ".jpeg", ".png"],
+									"application/pdf": [".pdf"],
+								}}
+								maxFiles={1}
+								uploadToApi
+								helperText="Max. size picture 1mb"
+								validation={{ required: "Profile picture wajib diisi!" }}
+							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button
@@ -173,10 +204,6 @@ export default function CreateUserModal({
 }
 
 const roleOptions = [
-	{ value: "CONTRACTOR", label: "Contractor" },
-	{ value: "REVIEWER", label: "Reviewer" },
-];
-const packageOptions = [
 	{ value: "CONTRACTOR", label: "Contractor" },
 	{ value: "REVIEWER", label: "Reviewer" },
 ];

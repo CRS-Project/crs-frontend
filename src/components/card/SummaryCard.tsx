@@ -24,11 +24,11 @@ export default function SummaryCard({
 				variant === "white" && ["bg-white text-blue-500"],
 			])}
 		>
-			<CardHeader className="flex justify-between">
+			<CardHeader className="flex justify-between p-1">
 				<span className="text-base font-semibold">{title}</span>
 				{Icon && <Icon size={20} />}
 			</CardHeader>
-			<CardBody className="text-2xl sm:text-4xl lg:text-5xl font-semibold overflow-visible">
+			<CardBody className="text-2xl sm:text-4xl lg:text-5xl font-semibold overflow-visible p-1">
 				{value}
 			</CardBody>
 		</Card>

@@ -9,6 +9,7 @@ import {
 	type RegisterOptions,
 	useFormContext,
 } from "react-hook-form";
+import toast from "react-hot-toast";
 import ErrorMessage from "@/components/form/ErrorMessage";
 import FilePreview from "@/components/form/FilePreview";
 import HelperText from "@/components/form/HelperText";
@@ -119,7 +120,18 @@ export default function UploadFile({
 			clearErrors(id);
 
 			if (uploadToApi && acceptedFiles.length > 0) {
-				uploadFile(acceptedFiles[0]);
+				const fileToUpload = acceptedFiles[0];
+
+				uploadMutation
+					.mutateAsync(fileToUpload)
+					.then((res) => {
+						if (res?.data?.url) {
+							setValue(id, res.data.url);
+						}
+					})
+					.catch((err) => {
+						toast.error(err.message || "Upload failed");
+					});
 			}
 
 			if (onFileUpload) {
@@ -135,9 +147,9 @@ export default function UploadFile({
 			maxSize,
 			setError,
 			setValue,
-			uploadFile,
 			uploadToApi,
 			onFileUpload,
+			uploadMutation,
 		],
 	);
 
@@ -147,6 +159,7 @@ export default function UploadFile({
 		if (uploadToApi) {
 			const storageKey = `file_${id}`;
 			sessionStorage.removeItem(storageKey);
+			setValue(id, "");
 		}
 
 		URL.revokeObjectURL(fileToDelete.preview);

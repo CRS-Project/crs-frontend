@@ -2,13 +2,16 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { File, X } from "lucide-react";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
+import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
+import UploadFile from "@/components/form/UploadFile";
+import ButtonLink from "@/components/links/ButtonLink";
 import type { EditUserRequest, User } from "@/types/user";
 import { useEditUserMutation } from "../../_hooks/useEditUserMutation";
 import { useDeleteUserMutation } from "../_hooks/useDeleteUserMutation";
@@ -18,15 +21,23 @@ interface EditUserModalProps {
 	user: User | null;
 	isOpen: boolean;
 	onClose: () => void;
+	packageOptions: { value: string; label: string }[];
+	disciplineOptions: { value: string; label: string }[];
+	isLoadingPackages: boolean;
+	isLoadingDisciplines: boolean;
 }
 
 export default function EditUserModal({
 	isOpen,
 	onClose,
 	user,
+	packageOptions = [],
+	disciplineOptions = [],
+	isLoadingPackages = false,
+	isLoadingDisciplines = false,
 }: EditUserModalProps) {
 	const { data } = useGetUserByIDQuery(user?.id ?? "");
-	const methods = useForm<User>({
+	const methods = useForm<EditUserRequest>({
 		mode: "onTouched",
 		defaultValues: data?.data,
 	});
@@ -37,7 +48,9 @@ export default function EditUserModal({
 		}
 	}, [data, methods]);
 
-	const { handleSubmit, reset } = methods;
+	const { handleSubmit, reset, watch } = methods;
+
+	const role = watch("role");
 
 	const { mutate, isPending } = useEditUserMutation({
 		onSuccess: () => {
@@ -105,6 +118,7 @@ export default function EditUserModal({
 								id="package_id"
 								label="Package"
 								options={packageOptions}
+								isLoading={isLoadingPackages}
 								placeholder="Select User Package"
 								validation={{ required: "Package wajib diisi!" }}
 							/>
@@ -118,7 +132,6 @@ export default function EditUserModal({
 								id="initial"
 								label="Initial"
 								placeholder="Input Initial Account"
-								helperText="Example: CRS"
 								validation={{ required: "Initial wajib diisi!" }}
 							/>
 							<Input
@@ -134,11 +147,28 @@ export default function EditUserModal({
 								placeholder="Input Institution"
 								validation={{ required: "Institution wajib diisi!" }}
 							/>
+							{role === "REVIEWER" && (
+								<SelectInput
+									id="discipline_id"
+									label="Discipline"
+									placeholder="Input Discipline"
+									options={disciplineOptions}
+									isLoading={isLoadingDisciplines}
+									validation={
+										role === "REVIEWER"
+											? { required: "Discipline wajib diisi!" }
+											: undefined
+									}
+								/>
+							)}
 							<Input
-								id="discipline_id"
-								label="Discipline"
-								placeholder="Input Discipline"
-								validation={{ required: "Discipline wajib diisi!" }}
+								id="discipline_number"
+								label="Number Discipline"
+								placeholder="Input Number Discipline User"
+								validation={{
+									required: "Number Discipline wajib diisi!",
+									valueAsNumber: true,
+								}}
 							/>
 							<Input
 								id="password"
@@ -148,18 +178,29 @@ export default function EditUserModal({
 								helperText="Password must be 8 character, mix uppercase and lowercase"
 								validation={{ required: "Password wajib diisi!" }}
 							/>
-							{/* <UploadFile
-                id="profile_picture"
-                label="Profile Picture"
-                maxSize={2000000}
-                accept={{
-                  "image/*": [".jpg", ".jpeg", ".png"],
-                  "application/pdf": [".pdf"],
-                }}
-                maxFiles={1}
-                helperText="Max. size picture 1mb"
-                validation={{ required: "Profile picture wajib diisi!" }}
-              /> */}
+
+							<LabelText required>Profile Picture</LabelText>
+							<ButtonLink
+								href={`https://${user?.photo_profile ?? ""}`}
+								className="w-full"
+								variant="secondary"
+								leftIcon={File}
+							>
+								Open File
+							</ButtonLink>
+							<UploadFile
+								id="photo_profile"
+								label=""
+								maxSize={1000 * 1024}
+								accept={{
+									"image/*": [".jpg", ".jpeg", ".png"],
+									"application/pdf": [".pdf"],
+								}}
+								maxFiles={1}
+								uploadToApi
+								helperText="Max. size picture 1mb"
+								validation={{ required: "Profile picture wajib diisi!" }}
+							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button
@@ -200,10 +241,6 @@ export default function EditUserModal({
 }
 
 const roleOptions = [
-	{ value: "CONTRACTOR", label: "Contractor" },
-	{ value: "REVIEWER", label: "Reviewer" },
-];
-const packageOptions = [
 	{ value: "CONTRACTOR", label: "Contractor" },
 	{ value: "REVIEWER", label: "Reviewer" },
 ];
