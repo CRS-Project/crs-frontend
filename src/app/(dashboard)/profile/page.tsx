@@ -11,6 +11,7 @@ import EditUserModal from "./_containers/EditUserModal";
 export default function ProfilePage() {
 	const [isOpen, setIsOpen] = React.useState(false);
 	const { user } = useAuthStore();
+
 	return (
 		<div className="p-8 max-md:p-0 max-xl:p-4">
 			<div className="w-full relative h-fit">
@@ -27,7 +28,11 @@ export default function ProfilePage() {
 					<MoveLeft size={36} className="text-white" />
 				</Link>
 				<Image
-					src={user?.photo_profile ?? "/images/user.png"}
+					src={
+						user?.photo_profile
+							? `https://${user?.photo_profile}`
+							: "/images/user.png"
+					}
 					alt="propic"
 					width={1000}
 					height={1000}

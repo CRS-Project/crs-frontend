@@ -21,9 +21,7 @@ interface EditUserModalProps {
 	user: User | null;
 	isOpen: boolean;
 	onClose: () => void;
-	packageOptions: { value: string; label: string }[];
 	disciplineOptions: { value: string; label: string }[];
-	isLoadingPackages: boolean;
 	isLoadingDisciplines: boolean;
 }
 
@@ -31,13 +29,11 @@ export default function EditUserModal({
 	isOpen,
 	onClose,
 	user,
-	packageOptions = [],
 	disciplineOptions = [],
-	isLoadingPackages = false,
 	isLoadingDisciplines = false,
 }: EditUserModalProps) {
 	const { data } = useGetUserByIDQuery(user?.id ?? "");
-	const methods = useForm<EditUserRequest>({
+	const methods = useForm<User>({
 		mode: "onTouched",
 		defaultValues: data?.data,
 	});
@@ -66,8 +62,23 @@ export default function EditUserModal({
 		},
 	});
 
-	const onSubmit: SubmitHandler<EditUserRequest> = (data) => {
-		mutate(data);
+	const onSubmit: SubmitHandler<User> = (formData) => {
+		const filteredData: EditUserRequest = {
+			name: formData.name ?? data.name,
+			email: formData.email ?? data.email,
+			initial: formData.initial ?? data.initial,
+			photo_profile: formData.photo_profile ?? data.photo_profile,
+			institution: formData.institution ?? user?.institution ?? "",
+			discipline_number:
+				formData.discipline_number ?? user?.discipline_number ?? 0,
+		};
+
+		if (user?.role === "REVIEWER") {
+			filteredData.discipline_id =
+				formData.discipline_id ?? user?.discipline_id ?? "";
+		}
+
+		mutate(filteredData);
 	};
 
 	return (
@@ -107,21 +118,6 @@ export default function EditUserModal({
 
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
-							<SelectInput
-								id="role"
-								label="Role"
-								options={roleOptions}
-								placeholder="Select User Role"
-								validation={{ required: "Role wajib diisi!" }}
-							/>
-							<SelectInput
-								id="package_id"
-								label="Package"
-								options={packageOptions}
-								isLoading={isLoadingPackages}
-								placeholder="Select User Package"
-								validation={{ required: "Package wajib diisi!" }}
-							/>
 							<Input
 								id="name"
 								label="Full Name"
@@ -170,13 +166,19 @@ export default function EditUserModal({
 									valueAsNumber: true,
 								}}
 							/>
+							<SelectInput
+								id="role"
+								label="Role"
+								options={roleOptions}
+								placeholder="Select User Role"
+								disabled
+								readOnly
+							/>
 							<Input
-								id="password"
-								type="password"
-								label="Password"
-								placeholder="Input Password Account"
-								helperText="Password must be 8 character, mix uppercase and lowercase"
-								validation={{ required: "Password wajib diisi!" }}
+								id="package"
+								label="Package"
+								placeholder="Select User Package"
+								readOnly
 							/>
 
 							<LabelText required>Profile Picture</LabelText>

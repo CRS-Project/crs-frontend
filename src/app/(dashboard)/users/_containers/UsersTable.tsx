@@ -290,9 +290,7 @@ export default function UsersTable() {
 					user={selectedUser}
 					isOpen={isOpen.edit}
 					onClose={() => setIsOpen({ ...isOpen, edit: false })}
-					packageOptions={packageOptions}
 					disciplineOptions={disciplineOptions}
-					isLoadingPackages={isLoadingPackages}
 					isLoadingDisciplines={isLoadingDisciplines}
 				/>
 

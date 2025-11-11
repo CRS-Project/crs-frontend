@@ -82,7 +82,11 @@ const AppHeader: React.FC = () => {
 							href="/profile"
 						>
 							<Image
-								src="/images/user.png"
+								src={
+									user?.photo_profile
+										? `https://${user?.photo_profile}`
+										: "/images/user.png"
+								}
 								alt="User"
 								width={20}
 								height={20}
