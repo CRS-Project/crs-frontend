@@ -1,6 +1,6 @@
 "use client";
 
-import { MoveLeft, MoveUpRight } from "lucide-react";
+import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import useAuthStore from "@/app/stores/useAuthStore";

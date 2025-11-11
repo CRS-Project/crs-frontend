@@ -21,6 +21,7 @@ import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import withAuth from "@/components/hoc/withAuth";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
 import type { User } from "@/types/user";
@@ -38,7 +39,7 @@ import DeleteUserModal from "./DeleteUserModal";
 import EditUserModal from "./EditUserModal";
 import UserDetailModal from "./UserDetailModal";
 
-export default function UsersTable() {
+function UsersTable() {
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
@@ -392,6 +393,8 @@ function getUserTableColumns(
 		},
 	];
 }
+
+export default withAuth(UsersTable, "admin");
 
 function getColumnKey(column: ColumnDef<User>): string | undefined {
 	if ("accessorKey" in column && typeof column.accessorKey === "string") {

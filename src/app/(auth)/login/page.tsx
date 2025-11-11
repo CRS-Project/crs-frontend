@@ -4,10 +4,11 @@ import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
+import withAuth from "@/components/hoc/withAuth";
 import type { LoginRequest } from "@/types/login";
 import useLoginMutation from "./_hooks/useLoginMutation";
 
-export default function LoginPage() {
+function LoginPage() {
 	const methods = useForm<LoginRequest>({
 		mode: "onChange",
 	});
@@ -78,3 +79,5 @@ export default function LoginPage() {
 		</>
 	);
 }
+
+export default withAuth(LoginPage, "public");
