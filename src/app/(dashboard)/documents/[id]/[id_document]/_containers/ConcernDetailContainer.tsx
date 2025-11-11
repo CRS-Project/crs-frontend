@@ -4,13 +4,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
 import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
-import type { Concern } from "@/types/concern";
+import type { AreaOfConcern } from "@/types/concern";
 
 interface ConcernDetailModalProps {
-	concern: Concern | undefined;
+	concern: AreaOfConcern | undefined;
 }
 
-const defaultConcernValue: Concern = {
+const defaultConcernValue: AreaOfConcern = {
 	id: "1",
 	area_of_concern_id: "Marine-1219-2132",
 	description: "01. Alignment of project execution strategy across Dual FEED",
@@ -21,7 +21,7 @@ const defaultConcernValue: Concern = {
 export default function ConcernDetailModal({
 	concern,
 }: ConcernDetailModalProps) {
-	const methods = useForm<Concern>({
+	const methods = useForm<AreaOfConcern>({
 		mode: "onTouched",
 		defaultValues: concern || defaultConcernValue,
 	});

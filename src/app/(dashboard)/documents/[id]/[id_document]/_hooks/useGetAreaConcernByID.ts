@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { get } from "@/service/call";
 import { MAIN_ENDPOINT } from "@/service/endpoint";
-import type { Concern } from "@/types/concern";
+import type { AreaOfConcern } from "@/types/concern";
 
 interface ConcernResponse {
-	data: Concern;
+	data: AreaOfConcern;
 }
 
 export const useGetAreaConcernByID = (
