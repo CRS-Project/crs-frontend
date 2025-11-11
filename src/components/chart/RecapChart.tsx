@@ -2,153 +2,138 @@
 
 import {
 	Bar,
+	BarChart,
 	CartesianGrid,
-	ComposedChart,
 	Legend,
-	Line,
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
 	YAxis,
 } from "recharts";
 
-// Blue palette
-const colors = {
-	mainBlue: "#1E88E5", // Main bright blue
-	softBlue: "#64B5F6", // Soft light blue
-	deepBlue: "#0D47A1", // Dark navy blue
-	mediumBlue: "#1565C0", // Medium dark blue
-	grayBlue: "#90A4AE", // Grayish blue for comments
-};
-
 const data = [
 	{
-		date: "31-Oct",
-		uploaded: 153,
-		reviewed: 318,
-		comments: 252,
-		pctAvailable: 31,
-		pctReviewed: 18,
+		name: "31-Oct",
+		areaConcern: 531,
+		totalDocs: 256,
+		totalComments: 832,
+		rejected: 214,
 	},
 	{
-		date: "07-Nov",
-		uploaded: 185,
-		reviewed: 308,
-		comments: 308,
-		pctAvailable: 34,
-		pctReviewed: 20,
+		name: "02-Nov",
+		areaConcern: 540,
+		totalDocs: 270,
+		totalComments: 860,
+		rejected: 220,
 	},
 	{
-		date: "13-Nov",
-		uploaded: 196,
-		reviewed: 331,
-		comments: 331,
-		pctAvailable: 35,
-		pctReviewed: 22,
+		name: "04-Nov",
+		areaConcern: 553,
+		totalDocs: 284,
+		totalComments: 880,
+		rejected: 230,
 	},
 	{
-		date: "15-Nov",
-		uploaded: 227,
-		reviewed: 349,
-		comments: 393,
-		pctAvailable: 39,
-		pctReviewed: 25,
+		name: "07-Nov",
+		areaConcern: 560,
+		totalDocs: 300,
+		totalComments: 900,
+		rejected: 250,
 	},
 	{
-		date: "19-Nov",
-		uploaded: 252,
-		reviewed: 436,
-		comments: 449,
-		pctAvailable: 44,
-		pctReviewed: 28,
+		name: "10-Nov",
+		areaConcern: 575,
+		totalDocs: 310,
+		totalComments: 920,
+		rejected: 260,
 	},
 	{
-		date: "23-Nov",
-		uploaded: 284,
-		reviewed: 487,
-		comments: 511,
-		pctAvailable: 48,
-		pctReviewed: 30,
+		name: "13-Nov",
+		areaConcern: 590,
+		totalDocs: 320,
+		totalComments: 950,
+		rejected: 270,
 	},
 	{
-		date: "25-Nov",
-		uploaded: 294,
-		reviewed: 777,
-		comments: 515,
-		pctAvailable: 70,
-		pctReviewed: 38,
+		name: "16-Nov",
+		areaConcern: 603,
+		totalDocs: 330,
+		totalComments: 960,
+		rejected: 275,
 	},
 	{
-		date: "27-Nov",
-		uploaded: 297,
-		reviewed: 777,
-		comments: 515,
-		pctAvailable: 70,
-		pctReviewed: 40,
+		name: "19-Nov",
+		areaConcern: 620,
+		totalDocs: 340,
+		totalComments: 980,
+		rejected: 290,
+	},
+	{
+		name: "23-Nov",
+		areaConcern: 631,
+		totalDocs: 356,
+		totalComments: 1002,
+		rejected: 310,
+	},
+	{
+		name: "27-Nov",
+		areaConcern: 645,
+		totalDocs: 370,
+		totalComments: 1025,
+		rejected: 325,
 	},
 ];
 
 export default function RecapChart() {
 	return (
-		<ResponsiveContainer width="100%" height={600} className="w-full h-auto">
-			<ComposedChart data={data} margin={{ top: 30, right: 50, left: 20 }}>
-				{/* GRID */}
-				<CartesianGrid stroke="#E3F2FD" strokeDasharray="3 3" />
+		<div className="w-full">
+			<div style={{ width: "100%", height: 520 }}>
+				<ResponsiveContainer width="100%" height="100%">
+					<BarChart
+						data={data}
+						margin={{ top: 20, right: 60, left: 20, bottom: 20 }}
+						barGap={30} // jarak antar bar dalam satu grup
+						barCategoryGap="40%" // jarak antar grup bar
+					>
+						<CartesianGrid
+							stroke="#e6eef8"
+							strokeDasharray="4 4"
+							vertical={false}
+						/>
 
-				<XAxis dataKey="date" tick={{ fill: colors.deepBlue }} />
-				<YAxis yAxisId="left" tick={{ fill: colors.deepBlue }} />
-				<YAxis
-					yAxisId="right"
-					orientation="right"
-					stroke={colors.mediumBlue}
-					tick={{ fill: colors.mediumBlue }}
-					tickFormatter={(v: number | string) => `${v}%`}
-				/>
+						<XAxis dataKey="name" />
+						<YAxis />
 
-				<Tooltip />
-				<Legend />
+						<Tooltip />
+						<Legend verticalAlign="bottom" height={36} />
 
-				{/* BAR CHARTS */}
-				<Bar
-					yAxisId="left"
-					dataKey="uploaded"
-					name="Total Uploaded Docs"
-					fill={colors.mainBlue}
-				/>
-				<Bar
-					yAxisId="left"
-					dataKey="reviewed"
-					name="Total Reviewed Docs"
-					fill={colors.softBlue}
-				/>
-				<Bar
-					yAxisId="left"
-					dataKey="comments"
-					name="Total Comments"
-					fill={colors.grayBlue}
-				/>
-
-				{/* LINE CHARTS */}
-				<Line
-					yAxisId="right"
-					type="monotone"
-					dataKey="pctAvailable"
-					name="Percentage Docs Availability"
-					stroke={colors.mediumBlue}
-					strokeWidth={3}
-					dot={{ r: 4, fill: colors.mediumBlue }}
-				/>
-
-				<Line
-					yAxisId="right"
-					type="monotone"
-					dataKey="pctReviewed"
-					name="Percentage Reviewed Docs"
-					stroke={colors.deepBlue}
-					strokeWidth={3}
-					dot={{ r: 4, fill: colors.deepBlue }}
-				/>
-			</ComposedChart>
-		</ResponsiveContainer>
+						<Bar
+							dataKey="areaConcern"
+							name="Area of Concern"
+							fill="#64B5F6"
+							barSize={20}
+						/>
+						<Bar
+							dataKey="totalDocs"
+							name="Total Documents"
+							fill="#1E88E5"
+							barSize={20}
+						/>
+						<Bar
+							dataKey="totalComments"
+							name="Total Comments"
+							fill="#90A4AE"
+							barSize={20}
+						/>
+						<Bar
+							dataKey="rejected"
+							name="Rejected Comments"
+							fill="#1565C0"
+							barSize={20}
+						/>
+					</BarChart>
+				</ResponsiveContainer>
+			</div>
+		</div>
 	);
 }

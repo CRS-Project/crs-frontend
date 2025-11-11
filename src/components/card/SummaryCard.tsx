@@ -19,9 +19,9 @@ export default function SummaryCard({
 }: SummaryCardProps) {
 	return (
 		<Card
-			className={clsxm("w-[280px] px-6 py-4 rounded-lg", [
+			className={clsxm("min-w-[280px] w-full px-6 py-4 rounded-lg lg:gap-2", [
 				variant === "primary" && ["bg-blue-500 text-white"],
-				variant === "white" && ["bg-white text-primary-1000"],
+				variant === "white" && ["bg-white text-blue-500"],
 			])}
 		>
 			<CardHeader className="flex justify-between p-1">

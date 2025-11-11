@@ -13,7 +13,7 @@ import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
-import type { EditUserRequest, User } from "@/types/user";
+import type { EditUserRequest } from "@/types/user";
 import { useEditUserMutation } from "../../_hooks/useEditUserMutation";
 
 interface EditUserModalProps {

@@ -70,7 +70,6 @@ export default function UploadFile({
 	const [files, setFiles] = React.useState<FileWithPreview[]>([]);
 
 	const uploadMutation = useUploadFileMutation(id, label);
-	const uploadFile = uploadMutation.mutate;
 	const isPending = uploadToApi ? uploadMutation.isPending : false;
 
 	React.useEffect(() => {
