@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRight, ChevronDown, Play } from "lucide-react";
+import { ArrowRight, ChevronDown, NotebookPen, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,6 +39,11 @@ const AppSidebar: React.FC = () => {
 				path: "/data",
 			},
 			{
+				icon: <NotebookPen />,
+				name: "Area of Concern",
+				path: "/concern",
+			},
+			{
 				icon: <Documents className="w-fit h-fit" />,
 				name: "Documents",
 				path: "/documents",
@@ -61,14 +66,16 @@ const AppSidebar: React.FC = () => {
 					(link) =>
 						link.name === "Home" ||
 						link.name === "Data" ||
-						link.name === "Documents",
+						link.name === "Documents" ||
+						link.name === "Area of Concern",
 				);
 			case "REVIEWER":
 				return navItems.filter(
 					(link) =>
 						link.name === "Home" ||
 						link.name === "Data" ||
-						link.name === "Documents",
+						link.name === "Documents" ||
+						link.name === "Area of Concern",
 				);
 			default:
 				return [];
