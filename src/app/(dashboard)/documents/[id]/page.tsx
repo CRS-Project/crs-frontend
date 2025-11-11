@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 	description: "Document Details Page",
 };
 
-export default async function DocumentDetails({
+export default async function DocumentDetailsPage({
 	params,
 }: {
 	params: DocumentPageParams;

@@ -2,7 +2,6 @@
 
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { X } from "lucide-react";
-import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";

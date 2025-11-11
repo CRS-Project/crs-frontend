@@ -93,9 +93,7 @@ export default function EditDocumentModal({
 							className="w-8 h-8 rounded-full"
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
-						<h2 className="text-2xl font-bold text-[#52525B]">
-							Edit New Document
-						</h2>
+						<h2 className="text-2xl font-bold text-[#52525B]">Edit Document</h2>
 					</div>
 
 					<FormProvider {...methods}>
