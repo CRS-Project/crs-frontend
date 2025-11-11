@@ -8,17 +8,27 @@ import type { EditConcernRequest } from "@/types/concern";
 interface useEditConcernMutationProps {
 	onSuccess?: () => void;
 	id: string;
+	packageId: string;
 }
 
 export function useEditConcernMutation({
 	onSuccess,
 	id,
+	packageId,
 }: useEditConcernMutationProps) {
 	const queryClient = useQueryClient();
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: EditConcernRequest) => {
-			const response = await api.put(`/v1/area-of-concern-group/${id}`, data);
+			const payload = {
+				...data,
+				package_id: packageId,
+			};
+
+			const response = await api.put(
+				`/v1/area-of-concern-group/${id}`,
+				payload,
+			);
 			return response.data;
 		},
 		onSuccess: () => {

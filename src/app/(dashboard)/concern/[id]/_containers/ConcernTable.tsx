@@ -27,8 +27,10 @@ import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
 import type { Concern } from "@/types/concern";
+import type { UserDiscipline } from "@/types/userDiscipline";
 import { useGetPackageById } from "../../../_hooks/useGetPackageById";
 import { useConcernTableQuery } from "../_hooks/useConcernTableQuery";
+import { useGetUserDiscipline } from "../_hooks/useGetUserDiscipline";
 import ConcernDetailModal from "./ConcernDetailModal";
 import CreateConcernModal from "./CreateConcernModal";
 import DeleteConcernModal from "./DeleteConcernModal";
@@ -38,8 +40,14 @@ export default function ConcernTable({ id }: { id: string }) {
 	const {
 		data: packageData,
 		isLoading: isLoadingPackage,
-		error,
+		error: packageError,
 	} = useGetPackageById(id);
+
+	const {
+		data: userDisciplineData,
+		isLoading: isLoadingUserDiscipline,
+		error: userDisciplineError,
+	} = useGetUserDiscipline();
 
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
@@ -116,11 +124,16 @@ export default function ConcernTable({ id }: { id: string }) {
 		[handlePerPageChangeValue],
 	);
 
-	if (isLoadingPackage) {
+	if (isLoadingPackage || isLoadingUserDiscipline) {
 		return <Loading />;
 	}
 
-	if (error || !packageData || packageData.length === 0) {
+	if (
+		packageError ||
+		!packageData ||
+		userDisciplineError ||
+		!userDisciplineData
+	) {
 		notFound();
 	}
 
@@ -128,6 +141,12 @@ export default function ConcernTable({ id }: { id: string }) {
 	const packageName = packageData?.data?.name || "No Name Available";
 	const packageDescription =
 		packageData?.data?.description || "No Description Available";
+
+	const userDisciplineOptions: { id: string; name: string }[] =
+		userDisciplineData?.data?.map((d: UserDiscipline) => ({
+			id: d.id,
+			name: d.name,
+		})) ?? [];
 
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
@@ -145,8 +164,8 @@ export default function ConcernTable({ id }: { id: string }) {
 					</div>
 				</div>
 			</div>
-			<div className="flex justify-between">
-				<div className="flex gap-4">
+			<div className="flex flex-col xl:flex-row justify-between">
+				<div className="flex flex-col md:flex-row gap-4">
 					<SummaryCard
 						title="Total Area of Concern"
 						value="531"
@@ -154,7 +173,7 @@ export default function ConcernTable({ id }: { id: string }) {
 					/>
 					<SummaryCard title="Total Comments" value="256" variant="white" />
 				</div>
-				<div className="w-full flex gap-4 flex-row items-end md:justify-end">
+				<div className="mt-4 w-full flex gap-4 flex-row items-end md:justify-end">
 					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 						<Button
 							rightIcon={Plus}
@@ -257,11 +276,14 @@ export default function ConcernTable({ id }: { id: string }) {
 					isOpen={isOpen.create}
 					onClose={() => setIsOpen({ ...isOpen, create: false })}
 					packageId={packageId ?? ""}
+					userDiscipline={userDisciplineOptions}
 				/>
 				<EditConcernModal
 					concern={selectedConcern}
 					isOpen={isOpen.edit}
 					onClose={() => setIsOpen({ ...isOpen, edit: false })}
+					packageId={packageId ?? ""}
+					userDiscipline={userDisciplineOptions}
 				/>
 				<DeleteConcernModal
 					concern={selectedConcern}
