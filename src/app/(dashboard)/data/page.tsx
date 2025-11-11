@@ -1,11 +1,14 @@
 import { MoveUpRight } from "lucide-react";
 import SummaryCard from "@/components/card/SummaryCard";
 import RecapChart from "@/components/chart/RecapChart";
+import ReviewRecapChart from "@/components/chart/ReviewRecapChart";
 
 export default function DataPage() {
 	return (
 		<div className="flex flex-col w-full py-4 px-4 md:px-8">
-			<h1 className="font-bold text-3xl">Statistics Documents & Comments</h1>
+			<h1 className="font-bold text-3xl mb-2">
+				Statistics Documents & Comments
+			</h1>
 			<RecapChart />
 			<div className="my-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 justify-center">
 				<SummaryCard
@@ -45,7 +48,8 @@ export default function DataPage() {
 					icon={MoveUpRight}
 				/>
 			</div>
-			<h1 className="font-bold text-3xl">Statistics Comment Users</h1>
+			<h1 className="font-bold text-3xl mb-2">Statistics Comment Users</h1>
+			<ReviewRecapChart />
 		</div>
 	);
 }

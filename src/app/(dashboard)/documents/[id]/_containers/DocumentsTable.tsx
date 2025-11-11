@@ -20,14 +20,14 @@ import {
 import { notFound } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useGetPackageById } from "@/app/(dashboard)/_hooks/useGetPackageById";
+import Loading from "@/app/loading";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
-import { getDocumentDirectory } from "@/constants/document";
 import type { Document } from "@/types/document";
 import { useDocumentsTableQuery } from "../_hooks/useDocumentsTableQuery";
-import { useGetPackageId } from "../_hooks/useGetPackageId";
 import CreateDocumentModal from "./CreateDocumentModal";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import DocumentDetailModal from "./DocumentDetailModal";
@@ -35,18 +35,23 @@ import EditDocumentModal from "./EditDocumentModal";
 import ImportDocumentModal from "./ImportDocumentModal";
 
 export default function DocumentsTable({ id }: { id: string }) {
-	const directory = getDocumentDirectory(id);
-	const formattedId = id.replace(/-/g, " ");
-
-	if (!directory) {
-		notFound();
-	}
+	const {
+		data: packageData,
+		isLoading: isLoadingPackage,
+		error,
+	} = useGetPackageById(id);
 
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
 	const [visibleColumns, setVisibleColumns] = React.useState<any>(
-		new Set(["id", "document_title", "document_type", "package", "status"]),
+		new Set([
+			"company_document_number",
+			"document_title",
+			"document_type",
+			"package",
+			"status",
+		]),
 	);
 	const [isOpen, setIsOpen] = React.useState({
 		detail: false,
@@ -77,13 +82,6 @@ export default function DocumentsTable({ id }: { id: string }) {
 		setSorting,
 	} = useDocumentsTableQuery(id);
 
-	const { data: packageData } = useGetPackageId(formattedId);
-
-	const packageId = packageData?.data?.[0]?.id;
-
-	const packageTitle = directory.title;
-	const packageDescription = directory.description;
-
 	const documentTableColumns = React.useMemo(
 		() => getDocumentTableColumns(isOpen, setIsOpen, setSelectedDocument),
 		[isOpen],
@@ -108,7 +106,13 @@ export default function DocumentsTable({ id }: { id: string }) {
 	const handleColumnVisibilityChange = React.useCallback((keys: any) => {
 		if (keys === "all") {
 			setVisibleColumns(
-				new Set(["id", "document_title", "document_type", "package", "status"]),
+				new Set([
+					"company_document_number",
+					"document_title",
+					"document_type",
+					"package",
+					"status",
+				]),
 			);
 			return;
 		}
@@ -125,6 +129,19 @@ export default function DocumentsTable({ id }: { id: string }) {
 		[handlePerPageChangeValue],
 	);
 
+	if (isLoadingPackage) {
+		return <Loading />;
+	}
+
+	if (error || !packageData || packageData.length === 0) {
+		notFound();
+	}
+
+	const packageId = packageData?.data?.id;
+	const packageName = packageData?.data?.name || "No Name Available";
+	const packageDescription =
+		packageData?.data?.description || "No Description Available";
+
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
 			<div className="flex flex-col gap-4 xl:flex-row">
@@ -132,7 +149,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 					<div className="flex flex-col md:flex-row gap-4">
 						<div className="space-y-2 w-full">
 							<h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-								{packageTitle}
+								{packageName}
 							</h2>
 							<p className="text-sm text-white font-medium md:text-base">
 								{packageDescription}
@@ -197,7 +214,9 @@ export default function DocumentsTable({ id }: { id: string }) {
 								variant="flat"
 								onSelectionChange={handleColumnVisibilityChange}
 							>
-								<DropdownItem key="id">Document Number</DropdownItem>
+								<DropdownItem key="company_document_number">
+									Document Number
+								</DropdownItem>
 								<DropdownItem key="document_title">Document Title</DropdownItem>
 								<DropdownItem key="document_type">Doc Type</DropdownItem>
 								<DropdownItem key="package">Package</DropdownItem>
@@ -295,7 +314,7 @@ function getDocumentTableColumns(
 ): ColumnDef<Document>[] {
 	return [
 		{
-			accessorKey: "id",
+			accessorKey: "company_document_number",
 			header: "DOCUMENT NUMBER",
 			enableColumnFilter: false,
 		},

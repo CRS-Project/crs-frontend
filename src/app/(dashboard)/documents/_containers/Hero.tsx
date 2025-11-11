@@ -33,8 +33,8 @@ export default function Hero() {
 						key={item.id}
 						title={item.name}
 						description={item.description}
-						linkHref={`/concern/${item.id}`}
-						value="Check Area of Concern"
+						linkHref={`/documents/${item.id}`}
+						value="Check Documents"
 					/>
 				),
 			)}
