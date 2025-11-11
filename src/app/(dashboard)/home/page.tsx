@@ -47,7 +47,7 @@ export default function HomePage() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full pt-8">
 							{packages.map((item: Package) => (
 								<DirectoryMenu
-									key={item.name}
+									key={item.id}
 									title={item.name}
 									description={item.description}
 									linkHref={`/concern/${item.id}`}
