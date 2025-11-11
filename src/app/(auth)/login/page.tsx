@@ -40,7 +40,7 @@ export default function LoginPage() {
 		<>
 			<div className="flex flex-col justify-center items-center">
 				<h2 className="text-[36px] font-bold">WELCOME BACK</h2>
-				<p className="font-light text-[15.5px]">Sign in to start using CSR</p>
+				<p className="font-light text-[15.5px]">Sign in to start using CRS</p>
 			</div>
 			<FormProvider {...methods}>
 				<form className="space-y-4 mt-[22px]" onSubmit={handleSubmit(onSubmit)}>
