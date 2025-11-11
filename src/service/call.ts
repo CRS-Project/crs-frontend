@@ -1,5 +1,3 @@
-"use server";
-
 import type { AxiosError, AxiosResponse } from "axios";
 import { removeToken } from "@/lib/cookies";
 import api from "./api";

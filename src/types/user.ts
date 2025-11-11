@@ -13,6 +13,13 @@ export type User = {
 	role: string;
 };
 
+export type UserComment = {
+	id: string;
+	name: string;
+	photo_profile: string | null;
+	role: string;
+};
+
 export type CreateUserRequest = {
 	name: string;
 	email: string;
