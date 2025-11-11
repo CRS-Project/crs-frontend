@@ -1,50 +1,51 @@
 "use client";
 
-import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import useAuthStore from "@/app/stores/useAuthStore";
 import DirectoryMenu from "@/components/card/DirectoryMenu";
 import SummaryCard from "@/components/card/SummaryCard";
-import RecapChart from "@/components/chart/RecapChart";
+import { useGetAocCommentCardQuery } from "../_hooks/useGetAocCommentCardQuery";
 import { type Package, useGetMyPackageQuery } from "./_hooks/page";
 
 export default function HomePage() {
 	const { user } = useAuthStore();
 	const { data, isPending } = useGetMyPackageQuery();
+	const { data: cardData } = useGetAocCommentCardQuery(user?.package_id || "");
 
 	const packages = data?.data || [];
 
 	return (
-		<div className="flex flex-col w-full py-4 px-4 md:px-8">
-			<div className="flex flex-col lg:flex-row">
-				<div className="flex flex-col gap-2 items-center sm:items-start">
+		<div className="flex flex-col w-full py-4 px-4 md:px-8 md:mb-8">
+			{user?.role !== "SUPER ADMIN" && (
+				<div className="my-8 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
+					<SummaryCard
+						title="Total Area Of Concern"
+						value={cardData?.data?.total_area_of_concern || 0}
+						variant="primary"
+					/>
 					<SummaryCard
 						title="Total Documents"
-						value="531"
-						variant="primary"
-						icon={MoveUpRight}
+						value={cardData?.data?.total_documents || 0}
+						variant="white"
 					/>
 					<SummaryCard
 						title="Total Comments"
-						value="832"
+						value={cardData?.data?.total_comments || 0}
 						variant="white"
-						icon={MoveUpRight}
 					/>
 					<SummaryCard
-						title="Total Reviewed Docs"
-						value="256"
+						title="Total Comment Rejected"
+						value={cardData?.data?.total_comment_rejected || 0}
 						variant="white"
-						icon={MoveUpRight}
 					/>
 				</div>
-				<RecapChart />
-			</div>
+			)}
 
 			{user?.role === "SUPER ADMIN"
 				? !isPending &&
 					packages.length > 0 && (
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full pt-8">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 							{packages.map((item: Package) => (
 								<DirectoryMenu
 									key={item.id}

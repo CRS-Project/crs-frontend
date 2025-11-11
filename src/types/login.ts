@@ -19,6 +19,7 @@ export type UserResponse = {
 		role: string;
 	};
 	user_discipline_info: {
+		id: string;
 		discipline: string;
 		number: number;
 		initial: string;

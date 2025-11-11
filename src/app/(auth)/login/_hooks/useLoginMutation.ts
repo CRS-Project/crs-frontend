@@ -47,7 +47,7 @@ export default function useLoginMutation() {
 
 					discipline: data.user_discipline_info.discipline,
 					discipline_number: data.user_discipline_info.number,
-					discipline_id: null,
+					discipline_id: data.user_discipline_info.id,
 				};
 
 				login({ ...flattenedUser, token });

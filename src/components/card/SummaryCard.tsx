@@ -6,7 +6,7 @@ const CardVariant = ["primary", "white"] as const;
 
 interface SummaryCardProps {
 	title: string;
-	value: string;
+	value: string | number;
 	variant: (typeof CardVariant)[number];
 	icon?: LucideIcon;
 }

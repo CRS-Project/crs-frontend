@@ -165,18 +165,6 @@ function UsersTable() {
 							{totalData}
 						</p>
 					</div>
-					<div className="py-[18px] px-6 rounded-lg flex flex-col justify-center text-[#A1A1AA]">
-						<p className="font-semibold text-[15px] max-md:text-sm">
-							Users FPSO
-						</p>
-						<p className="font-semibold text-5xl max-md:text-3xl">832</p>
-					</div>
-					<div className="py-[18px] px-6 max-md:p-4 rounded-lg flex flex-col justify-center text-[#A1A1AA]">
-						<p className="font-semibold text-[15px] max-md:text-sm">
-							Users ONLG
-						</p>
-						<p className="font-semibold text-5xl max-md:text-3xl">256</p>
-					</div>
 				</div>
 				<Button
 					rightIcon={Plus}
