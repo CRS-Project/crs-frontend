@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
 		});
 		return config;
 	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "api.crsapps.cloud",
+				port: "",
+				pathname: "/**",
+			},
+		],
+	},
 };
 
 export default nextConfig;

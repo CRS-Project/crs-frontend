@@ -89,7 +89,26 @@ export default function withAuth<T>(
 							throw new Error("Sesi login tidak valid");
 						}
 
-						login({ ...res.data.data.personal_info, token: token });
+						const data = res.data.data;
+
+						const flattenedUser: User = {
+							id: data.personal_info.id,
+							name: data.personal_info.name,
+							email: data.personal_info.email,
+							initial: data.personal_info.initial,
+							institution: data.personal_info.institution,
+							photo_profile: data.personal_info.photo_profile,
+							role: data.personal_info.role,
+
+							package: data.package_access?.name ?? "",
+							package_id: data.package_access?.id ?? null,
+
+							discipline: data.user_discipline_info.discipline,
+							discipline_number: data.user_discipline_info.number,
+							discipline_id: null,
+						};
+
+						login({ ...flattenedUser, token: token });
 					} catch (_err) {
 						await removeToken();
 					} finally {

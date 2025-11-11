@@ -2,7 +2,7 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, File, X } from "lucide-react";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import ForgetPasswordPage from "@/app/(auth)/forgot-password/page";
@@ -13,7 +13,8 @@ import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
-import type { EditUserRequest } from "@/types/user";
+import ButtonLink from "@/components/links/ButtonLink";
+import type { EditUserRequest, User } from "@/types/user";
 import { useEditUserMutation } from "../../_hooks/useEditUserMutation";
 
 interface EditUserModalProps {
@@ -27,7 +28,7 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 		"EDIT",
 	);
 
-	const methods = useForm<EditUserRequest>({
+	const methods = useForm<User>({
 		mode: "onTouched",
 	});
 
@@ -57,18 +58,20 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 		id: user?.id ?? "",
 	});
 
-	const onSubmit: SubmitHandler<EditUserRequest> = (data) => {
-		const filteredData = {
-			name: data.name,
-			email: data.email,
-			initial: data.initial,
-			role: user?.role ?? "",
-			photo_profile: data.photo_profile,
-			package_id: user?.package_id ?? "",
-			discipline_id: user?.discipline_id ?? "",
+	const onSubmit: SubmitHandler<User> = (formData) => {
+		const filteredData: EditUserRequest = {
+			name: formData.name ?? user?.name ?? "",
+			email: formData.email ?? user?.email ?? "",
+			initial: formData.initial ?? user?.initial ?? "",
+			photo_profile: formData.photo_profile ?? user?.photo_profile ?? "",
 			institution: user?.institution ?? "",
 			discipline_number: user?.discipline_number ?? 0,
 		};
+
+		if (user?.role === "REVIEWER") {
+			filteredData.discipline_id =
+				formData.discipline_id ?? user?.discipline_id ?? "";
+		}
 
 		mutate(filteredData);
 	};
@@ -153,9 +156,18 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 								>
 									Reset Password
 								</Button>
+								<LabelText required>Profile Picture</LabelText>
+								<ButtonLink
+									href={`https://${user?.photo_profile ?? ""}`}
+									className="w-full"
+									variant="secondary"
+									leftIcon={File}
+								>
+									Open File
+								</ButtonLink>
 								<UploadFile
 									id="photo_profile"
-									label="Profile Picture"
+									label=""
 									maxSize={1000 * 1024}
 									accept={{
 										"image/*": [".jpg", ".jpeg", ".png"],
