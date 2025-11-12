@@ -16,7 +16,7 @@ interface CreateConcernModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	packageId: string;
-	userDiscipline: { id: string; name: string }[];
+	userDiscipline: string[];
 }
 
 export default function CreateConcernModal({
@@ -106,13 +106,13 @@ export default function CreateConcernModal({
 						<FormProvider {...methods}>
 							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 								<SelectInput
-									id="user_discipline_id"
+									id="user_discipline"
 									label="Discipline"
 									placeholder="Input Discipline"
 									validation={{ required: "Discipline wajib diisi!" }}
 									options={userDiscipline.map((d) => ({
-										value: d.id,
-										label: d.name,
+										value: d,
+										label: d,
 									}))}
 								/>
 								<TextArea
@@ -184,13 +184,13 @@ export default function CreateConcernModal({
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
 							<SelectInput
-								id="user_discipline_id"
+								id="user_discipline"
 								label="Discipline"
 								placeholder="Input Discipline"
 								validation={{ required: "Discipline wajib diisi!" }}
 								options={userDiscipline.map((d) => ({
-									value: d.id,
-									label: d.name,
+									value: d,
+									label: d,
 								}))}
 							/>
 							<TextArea
