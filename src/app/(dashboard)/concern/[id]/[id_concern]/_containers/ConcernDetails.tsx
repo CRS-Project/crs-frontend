@@ -117,17 +117,15 @@ export default function DocumentsDetails() {
 							>
 								Download Data Concern
 							</Button>
-							{user?.role !== ROLE.CONTRACTOR && (
-								<Button
-									rightIcon={PlusIcon}
-									size="lg"
-									variant="white"
-									className="w-full sm:w-auto lg:px-8 text-blue-500 font-semibold"
-									onClick={() => setIsOpen({ ...isOpen, create: true })}
-								>
-									Create Area Of Concern
-								</Button>
-							)}
+							<Button
+								rightIcon={PlusIcon}
+								size="lg"
+								variant="white"
+								className="w-full sm:w-auto lg:px-8 text-blue-500 font-semibold"
+								onClick={() => setIsOpen({ ...isOpen, create: true })}
+							>
+								Create Area Of Concern
+							</Button>
 						</div>
 					</div>
 					<Image
