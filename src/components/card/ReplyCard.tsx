@@ -1,8 +1,8 @@
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import EditReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/EditReplyModal";
-import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
+import EditReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/EditReplyModal";
+import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
@@ -14,7 +14,7 @@ interface ReplyCardProps {
 
 export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 	const {
-		comment = "Lorem ipsum dolor sit amet consectetur. Egestas sit pellentesque varius vestibulum purus enim vulputate posuere ullamcorper. In venenatis risus diam suspendisse pharetra fringilla euismod. Fames elit cursus at praesent viverra dui. Ultrices arcu amet non urna.",
+		comment = "Lorem ipsum dolor sit amet consectetur. Egestas sit pellentesque varius vestibulum purus enim vulputate posuere ullamcorper. Ultrices arcu amet non urna.",
 		comment_at = "15.19 • 09 Nov 2025",
 		user_comment: {
 			name = "John Doe",
@@ -92,10 +92,7 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 				</div>
 
 				{/* Menu Button */}
-				<div
-					ref={ref}
-					className="relative flex-shrink-0 cursor-pointer cursor-pointer"
-				>
+				<div ref={ref} className="relative flex-shrink-0 cursor-pointer">
 					{(user?.role === ROLE.SUPERADMIN ||
 						replies.user_comment.name === user?.name) && (
 						<button

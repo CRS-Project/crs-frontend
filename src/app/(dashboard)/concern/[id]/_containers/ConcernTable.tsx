@@ -17,6 +17,7 @@ import {
 	Search,
 	Trash2,
 } from "lucide-react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -151,9 +152,9 @@ export default function ConcernTable({ id }: { id: string }) {
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
 			<div className="flex flex-col gap-4 xl:flex-row">
-				<div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8">
+				<div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8 relative">
 					<div className="flex flex-col md:flex-row gap-4">
-						<div className="space-y-2 w-full">
+						<div className="space-y-2 w-full relative">
 							<h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
 								{packageName}
 							</h2>
@@ -162,6 +163,13 @@ export default function ConcernTable({ id }: { id: string }) {
 							</p>
 						</div>
 					</div>
+					<Image
+						width={100}
+						height={100}
+						src="/images/dashboard/pixel-rectorat.png"
+						className="absolute bottom-0 right-0 top-0 h-full w-auto"
+						alt="Background Header"
+					/>
 				</div>
 			</div>
 			<div className="flex flex-col xl:flex-row justify-between">
@@ -259,6 +267,7 @@ export default function ConcernTable({ id }: { id: string }) {
 					isLoading={isLoading}
 					sorting={sorting}
 					setSorting={setSorting}
+					redirection={`/concern/${id}`}
 				/>
 
 				<ServerPagination

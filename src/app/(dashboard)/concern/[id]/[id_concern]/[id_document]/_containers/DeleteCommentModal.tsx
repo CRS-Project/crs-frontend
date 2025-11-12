@@ -19,10 +19,10 @@ export default function DeleteCommentModal({
 	onClose,
 	comment,
 }: DeleteCommentModalProps) {
-	const { id, id_document } = useParams();
+	const { id_concern, id_document } = useParams();
 
 	const mutation = useDeleteCommentMutation({
-		area_of_concern_group_id: id as string,
+		area_of_concern_group_id: id_concern as string,
 		area_of_concern_id: id_document as string,
 		comment_id: comment?.id as string,
 		onSuccess: () => {

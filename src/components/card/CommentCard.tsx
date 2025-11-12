@@ -1,11 +1,11 @@
 import { EllipsisVertical, Eye, Pencil, Reply, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import CommentDetailModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/CommentDetailModal";
-import EditCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/EditCommentModal";
-import CreateReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/CreateReplyModal";
-import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
-import UpdateStatusModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/UpdateStatusModal";
+import CommentDetailModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/CommentDetailModal";
+import EditCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/EditCommentModal";
+import CreateReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/CreateReplyModal";
+import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
+import UpdateStatusModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/UpdateStatusModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { COMMENT_STATUS, ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
@@ -163,17 +163,17 @@ export default function CommentCard({
 								</button>
 								{comments?.status === null && (
 									<>
-										{user?.role === ROLE.SUPERADMIN ||
-											(comments.user_comment.name === user?.name && (
-												<button
-													type="button"
-													onClick={handleEditClick}
-													className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
-												>
-													<Pencil className="w-[12px] h-[12px]" />
-													Edit
-												</button>
-											))}
+										{(user?.role === ROLE.SUPERADMIN ||
+											comments.user_comment.name === user?.name) && (
+											<button
+												type="button"
+												onClick={handleEditClick}
+												className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer"
+											>
+												<Pencil className="w-[12px] h-[12px]" />
+												Edit
+											</button>
+										)}
 										<button
 											type="button"
 											onClick={handleReplyClick}
@@ -184,17 +184,17 @@ export default function CommentCard({
 										</button>
 									</>
 								)}
-								{user?.role === ROLE.SUPERADMIN ||
-									(comments.user_comment.name === user?.name && (
-										<button
-											type="button"
-											onClick={handleDeleteClick}
-											className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
-										>
-											<Trash className="w-[12px] h-[12px]" />
-											Delete
-										</button>
-									))}
+								{(user?.role === ROLE.SUPERADMIN ||
+									comments.user_comment.name === user?.name) && (
+									<button
+										type="button"
+										onClick={handleDeleteClick}
+										className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
+									>
+										<Trash className="w-[12px] h-[12px]" />
+										Delete
+									</button>
+								)}
 							</div>
 						)}
 					</div>
