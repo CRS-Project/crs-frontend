@@ -22,11 +22,13 @@ import { notFound } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Loading from "@/app/loading";
+import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
 import SummaryCard from "@/components/card/SummaryCard";
 import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
+import { ROLE } from "@/lib/data";
 import type { Concern } from "@/types/concern";
 import type { UserDiscipline } from "@/types/userDiscipline";
 import { useGetPackageById } from "../../../_hooks/useGetPackageById";
@@ -39,6 +41,7 @@ import DeleteConcernModal from "./DeleteConcernModal";
 import EditConcernModal from "./EditConcernModal";
 
 export default function ConcernTable({ id }: { id: string }) {
+	const { user } = useAuthStore();
 	const {
 		data: packageData,
 		isLoading: isLoadingPackage,
@@ -90,8 +93,14 @@ export default function ConcernTable({ id }: { id: string }) {
 	} = useConcernTableQuery(id);
 
 	const concernTableColumns = React.useMemo(
-		() => getConcernTableColumns(isOpen, setIsOpen, setSelectedConcern),
-		[isOpen],
+		() =>
+			getConcernTableColumns(
+				user?.role || "",
+				isOpen,
+				setIsOpen,
+				setSelectedConcern,
+			),
+		[isOpen, user?.role],
 	);
 
 	const filteredColumns = React.useMemo(() => {
@@ -188,7 +197,11 @@ export default function ConcernTable({ id }: { id: string }) {
 						variant="white"
 					/>
 				</div>
-				<div className="mt-4 w-full flex gap-4 flex-row items-end md:justify-end">
+				<div
+					className={`mt-4 w-full flex gap-4 flex-row items-end md:justify-end ${
+						user?.role === ROLE.REVIEWER && "hidden"
+					}`}
+				>
 					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 						<Button
 							rightIcon={Plus}
@@ -202,7 +215,7 @@ export default function ConcernTable({ id }: { id: string }) {
 					</div>
 				</div>
 			</div>
-			<div className="mt-8 w-full">
+			<div className="mt-8 w-full mb-8">
 				<div className="flex justify-between max-md:flex-col max-md:gap-2">
 					<div className="w-1/2 max-md:w-full">
 						<FormProvider {...methods}>
@@ -312,6 +325,7 @@ export default function ConcernTable({ id }: { id: string }) {
 }
 
 function getConcernTableColumns(
+	role: string,
 	isOpen: {
 		detail: boolean;
 		create: boolean;
@@ -330,7 +344,7 @@ function getConcernTableColumns(
 	>,
 	setSelectedConcern: React.Dispatch<React.SetStateAction<Concern | null>>,
 ): ColumnDef<Concern>[] {
-	return [
+	const baseColumns: ColumnDef<Concern>[] = [
 		{
 			accessorKey: "user_discipline",
 			header: "DISCIPLINE",
@@ -341,43 +355,49 @@ function getConcernTableColumns(
 			header: "REVIEW FOCUS",
 			enableColumnFilter: false,
 		},
-		{
+	];
+
+	if (role !== ROLE.REVIEWER) {
+		baseColumns.push({
 			accessorKey: "action",
 			header: "ACTION",
 			enableColumnFilter: false,
 			enableSorting: false,
-			cell: ({ row }) => {
-				return (
-					<span className="flex items-center gap-2">
-						<Eye
-							onClick={() => {
-								setIsOpen({ ...isOpen, detail: true });
-								setSelectedConcern(row.original);
-							}}
-							size={20}
-							className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
-						/>
-						<PencilLine
-							onClick={() => {
-								setIsOpen({ ...isOpen, edit: true });
-								setSelectedConcern(row.original);
-							}}
-							size={20}
-							className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
-						/>
-						<Trash2
-							onClick={() => {
-								setIsOpen({ ...isOpen, delete: true });
-								setSelectedConcern(row.original);
-							}}
-							size={20}
-							className="text-[#C20E4D] cursor-pointer hover:text-[#C20E4D]/80"
-						/>
-					</span>
-				);
-			},
-		},
-	];
+			cell: ({ row }) => (
+				<span className="flex items-center gap-2">
+					<Eye
+						onClick={(e) => {
+							e.stopPropagation();
+							setIsOpen({ ...isOpen, detail: true });
+							setSelectedConcern(row.original);
+						}}
+						size={20}
+						className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
+					/>
+					<PencilLine
+						onClick={(e) => {
+							e.stopPropagation();
+							setIsOpen({ ...isOpen, edit: true });
+							setSelectedConcern(row.original);
+						}}
+						size={20}
+						className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
+					/>
+					<Trash2
+						onClick={(e) => {
+							e.stopPropagation();
+							setIsOpen({ ...isOpen, delete: true });
+							setSelectedConcern(row.original);
+						}}
+						size={20}
+						className="text-[#C20E4D] cursor-pointer hover:text-[#C20E4D]/80"
+					/>
+				</span>
+			),
+		});
+	}
+
+	return baseColumns;
 }
 
 function getColumnKey(column: ColumnDef<Concern>): string | undefined {
