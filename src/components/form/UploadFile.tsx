@@ -21,7 +21,7 @@ import Button from "../button/Button";
 export type UploadFileProps = {
 	id: string;
 	label?: string;
-	helperText?: string;
+	helperText?: React.ReactNode;
 	hideError?: boolean;
 	validation?: RegisterOptions;
 	accept?: Accept;
