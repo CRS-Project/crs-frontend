@@ -99,7 +99,11 @@ export default function CommentCard({
 							<Image
 								width={50}
 								height={50}
-								src={photo_profile}
+								src={
+									comments?.user_comment.photo_profile
+										? `https://${comments?.user_comment.photo_profile}`
+										: "/images/user.png"
+								}
 								alt={`${name} photo_profile`}
 								className="w-full h-full object-cover"
 							/>

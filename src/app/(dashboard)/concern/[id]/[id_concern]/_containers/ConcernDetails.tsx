@@ -14,6 +14,7 @@ import {
   PlusIcon,
   Search,
 } from "lucide-react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -87,7 +88,7 @@ export default function DocumentsDetails() {
     <div className="space-y-6 px-8 max-md:px-4">
       {/* Banner */}
       <div className="flex flex-col gap-4 xl:flex-row">
-        <div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8">
+        <div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8 relative overflow-hidden">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="space-y-2 w-full">
               <Button
@@ -106,7 +107,7 @@ export default function DocumentsDetails() {
                 {highlightedTitle}
               </p>
             </div>
-            <div className="w-full flex gap-4 flex-row items-end md:justify-end">
+            <div className="w-full flex gap-4 flex-row items-end md:justify-end z-10">
               <Button
                 rightIcon={Download}
                 size="lg"
@@ -131,6 +132,13 @@ export default function DocumentsDetails() {
               )}
             </div>
           </div>
+          <Image
+            width={100}
+            height={100}
+            src="/images/dashboard/pixel-rectorat.png"
+            className="absolute bottom-0 right-0 top-0 h-full w-auto"
+            alt="Background Header"
+          />
         </div>
       </div>
 
@@ -188,7 +196,7 @@ export default function DocumentsDetails() {
               <AreaOfConcernCard
                 key={concern.id}
                 concern={concern}
-                linkHref={`/concern/${id}/${id_concern}/area/${concern.id}`}
+                linkHref={`/concern/${id}/${id_concern}/${concern.id}`}
                 packageId={id as string}
               />
             ))}

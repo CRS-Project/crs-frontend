@@ -56,10 +56,11 @@ export default function DocumentsDetails() {
 		return <Loading />;
 	}
 
-	const highlightedPackage = concern?.area_of_concern_id || "Marine-1219-2132";
+	const highlightedPackage =
+		concern?.area_of_concern_id || "Area of Concern Unavailable";
 	const highlightedTitle =
 		concern?.description ||
-		"01. Alignment of project execution strategy across Dual FEED";
+		"No description available for this area of concern.";
 
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
