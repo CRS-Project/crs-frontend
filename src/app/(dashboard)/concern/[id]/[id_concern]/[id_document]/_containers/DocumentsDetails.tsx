@@ -24,16 +24,16 @@ import ConcernDetailModal from "./ConcernDetailContainer";
 
 export default function DocumentsDetails() {
 	const router = useRouter();
-	const { id, id_document } = useParams();
+	const { id_concern, id_document } = useParams();
 	const { user } = useAuthStore();
 
 	const { data: concern } = useGetAreaConcernByID(
-		id as string,
+		id_concern as string,
 		id_document as string,
 	);
 
 	const { data: comments, isLoading } = useFetchComments(
-		id as string,
+		id_concern as string,
 		id_document as string,
 	);
 
