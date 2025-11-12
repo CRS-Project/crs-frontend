@@ -7,8 +7,7 @@ User-agent: *
 Disallow: /sandbox
 
 # Host
-Host: https://example.com
+Host: 'https://maselacrsapps.com/' # Site URL
 
 # Sitemaps
-Sitemap: https://example.com/sitemap.xml
-Sitemap: undefined/sitemap.xml
+Sitemap: 'https://maselacrsapps.com/' # Site URL/sitemap.xml
