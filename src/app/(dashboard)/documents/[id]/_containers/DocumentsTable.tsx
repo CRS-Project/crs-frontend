@@ -22,10 +22,12 @@ import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useGetPackageById } from "@/app/(dashboard)/_hooks/useGetPackageById";
 import Loading from "@/app/loading";
+import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
 import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
+import { ROLE } from "@/lib/data";
 import type { Document } from "@/types/document";
 import { useDocumentsTableQuery } from "../_hooks/useDocumentsTableQuery";
 import CreateDocumentModal from "./CreateDocumentModal";
@@ -35,6 +37,7 @@ import EditDocumentModal from "./EditDocumentModal";
 import ImportDocumentModal from "./ImportDocumentModal";
 
 export default function DocumentsTable({ id }: { id: string }) {
+	const { user } = useAuthStore();
 	const {
 		data: packageData,
 		isLoading: isLoadingPackage,
@@ -83,8 +86,14 @@ export default function DocumentsTable({ id }: { id: string }) {
 	} = useDocumentsTableQuery(id);
 
 	const documentTableColumns = React.useMemo(
-		() => getDocumentTableColumns(isOpen, setIsOpen, setSelectedDocument),
-		[isOpen],
+		() =>
+			getDocumentTableColumns(
+				user?.role || "",
+				isOpen,
+				setIsOpen,
+				setSelectedDocument,
+			),
+		[isOpen, user?.role],
 	);
 
 	const filteredColumns = React.useMemo(() => {
@@ -155,7 +164,11 @@ export default function DocumentsTable({ id }: { id: string }) {
 								{packageDescription}
 							</p>
 						</div>
-						<div className="w-full flex gap-4 flex-row items-end md:justify-end">
+						<div
+							className={`w-full flex gap-4 flex-row items-end md:justify-end ${
+								user?.role === ROLE.REVIEWER && "hidden"
+							}`}
+						>
 							<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 								<Button
 									variant="white"
@@ -294,6 +307,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 }
 
 function getDocumentTableColumns(
+	role: string,
 	isOpen: {
 		detail: boolean;
 		create: boolean;
@@ -312,7 +326,7 @@ function getDocumentTableColumns(
 	>,
 	setSelectedDocument: React.Dispatch<React.SetStateAction<Document | null>>,
 ): ColumnDef<Document>[] {
-	return [
+	const baseColumns: ColumnDef<Document>[] = [
 		{
 			accessorKey: "company_document_number",
 			header: "DOCUMENT NUMBER",
@@ -339,7 +353,10 @@ function getDocumentTableColumns(
 			header: "STATUS",
 			enableColumnFilter: false,
 		},
-		{
+	];
+
+	if (role !== ROLE.REVIEWER) {
+		baseColumns.push({
 			accessorKey: "action",
 			header: "ACTION",
 			enableColumnFilter: false,
@@ -374,8 +391,9 @@ function getDocumentTableColumns(
 					</span>
 				);
 			},
-		},
-	];
+		});
+	}
+	return baseColumns;
 }
 
 function getColumnKey(column: ColumnDef<Document>): string | undefined {
