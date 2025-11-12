@@ -7,16 +7,18 @@ import type { ImportDocumentRequest } from "@/types/document";
 
 interface useImportDocumentMutationProps {
 	onSuccess?: () => void;
+	packageId: string;
 }
 
 export function useImportDocumentMutation({
 	onSuccess,
+	packageId,
 }: useImportDocumentMutationProps) {
 	const queryClient = useQueryClient();
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: ImportDocumentRequest) => {
-			const response = await api.post("/v1/document", data);
+			const response = await api.post(`/v1/document/bulk/${packageId}`, data);
 			return response.data;
 		},
 		onSuccess: () => {

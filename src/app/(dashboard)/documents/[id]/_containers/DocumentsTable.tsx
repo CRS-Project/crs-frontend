@@ -300,6 +300,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 				<ImportDocumentModal
 					isOpen={isOpen.import}
 					onClose={() => setIsOpen({ ...isOpen, import: false })}
+					packageId={packageId ?? ""}
 				/>
 			</div>
 		</div>

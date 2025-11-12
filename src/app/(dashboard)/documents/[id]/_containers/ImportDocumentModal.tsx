@@ -2,6 +2,7 @@
 
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { X } from "lucide-react";
+import Link from "next/link";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
@@ -12,11 +13,13 @@ import { useImportDocumentMutation } from "../_hooks/useImportDocumentMutation";
 interface ImportDocumentModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	packageId: string;
 }
 
 export default function ImportDocumentModal({
 	isOpen,
 	onClose,
+	packageId,
 }: ImportDocumentModalProps) {
 	const methods = useForm<ImportDocumentRequest>({
 		mode: "onTouched",
@@ -29,6 +32,7 @@ export default function ImportDocumentModal({
 			onClose();
 			reset();
 		},
+		packageId,
 	});
 
 	const onSubmit: SubmitHandler<ImportDocumentRequest> = (data) => {
@@ -70,7 +74,7 @@ export default function ImportDocumentModal({
 							<FormProvider {...methods}>
 								<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 									<UploadFile
-										id="file"
+										id="FileSheet"
 										label="Upload Document"
 										maxSize={10000000}
 										accept={{
@@ -79,7 +83,18 @@ export default function ImportDocumentModal({
 											"application/vnd.ms-excel": [".xls"],
 										}}
 										maxFiles={1}
-										helperText="Max. size picture 10mb, file type Excel"
+										helperText={
+											<>
+												Max. size picture 10mb, file type Excel,{" "}
+												<Link
+													className="text-blue-600 underline font-semibold"
+													target="_blank"
+													href="https://docs.google.com/spreadsheets/d/1wSENSTLdVw6i7y4IJidPP4Ylc2kKvLD3/edit?usp=sharing&ouid=106139707180062575407&rtpof=true&sd=true"
+												>
+													Download Template
+												</Link>
+											</>
+										}
 										validation={{ required: "File is required" }}
 									/>
 
