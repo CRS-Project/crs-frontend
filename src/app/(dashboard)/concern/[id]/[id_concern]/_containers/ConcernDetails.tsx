@@ -218,7 +218,7 @@ export default function DocumentsDetails() {
       <CreateAreaOfConcernModal
         isOpen={isOpen.create}
         onClose={() => setIsOpen({ ...isOpen, create: false })}
-        concernGroupId={id as string}
+        concernGroupId={id_concern as string}
       />
     </div>
   );
