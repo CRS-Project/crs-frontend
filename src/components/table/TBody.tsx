@@ -1,17 +1,31 @@
 import { flexRender, type RowData, type Table } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import type * as React from "react";
 import clsxm from "@/lib/clsxm";
 
 type TBodyProps<T extends RowData> = {
 	table: Table<T>;
 	isLoading: boolean;
+	redirection?: string;
 } & React.ComponentPropsWithoutRef<"div">;
 
 export default function TBody<T extends RowData>({
 	table,
 	isLoading,
+	redirection,
 	...rest
 }: TBodyProps<T>) {
+	const router = useRouter();
+
+	const handleRowClick = (row: T) => {
+		if (redirection) {
+			const baseRedirect = redirection.endsWith("/")
+				? redirection.slice(0, -1)
+				: redirection;
+			router.push(`${baseRedirect}/${(row as any).id}`);
+		}
+	};
+
 	return (
 		<tbody {...rest}>
 			{isLoading ? (
@@ -33,7 +47,9 @@ export default function TBody<T extends RowData>({
 						className={clsxm(
 							"hover:bg-gray-50",
 							index % 2 === 0 ? "bg-white" : "bg-gray-50/30",
+							redirection ? "cursor-pointer" : "",
 						)}
+						onClick={() => handleRowClick(row.original)}
 					>
 						{row.getVisibleCells().map((cell) => (
 							<td key={cell.id} className="px-4 py-3">

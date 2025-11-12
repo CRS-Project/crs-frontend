@@ -7,7 +7,8 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import { ArrowLeft, Download, Filter, Plus } from "lucide-react";
+import { ArrowLeft, Filter, Plus } from "lucide-react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
 import Loading from "@/app/loading";
@@ -64,7 +65,7 @@ export default function DocumentsDetails() {
 		<div className="space-y-6 px-8 max-md:px-4">
 			{/* Banner */}
 			<div className="flex flex-col gap-4 xl:flex-row">
-				<div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8">
+				<div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8 relative overflow-hidden">
 					<div className="flex flex-col md:flex-row gap-4">
 						<div className="space-y-2 w-full">
 							<Button
@@ -83,18 +84,14 @@ export default function DocumentsDetails() {
 								{highlightedTitle}
 							</p>
 						</div>
-						<div className="w-full flex gap-4 flex-row items-end md:justify-end">
-							<Button
-								rightIcon={Download}
-								size="lg"
-								variant="white"
-								className="w-full sm:w-auto lg:px-8 text-blue-500 font-semibold"
-								onClick={() => {}}
-							>
-								Download Data Concern
-							</Button>
-						</div>
 					</div>
+					<Image
+						width={100}
+						height={100}
+						src="/images/dashboard/pixel-rectorat.png"
+						className="absolute bottom-0 right-0 top-0 h-full w-auto"
+						alt="Background Header"
+					/>
 				</div>
 			</div>
 

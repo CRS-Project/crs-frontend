@@ -2,62 +2,50 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Send, X } from "lucide-react";
 import { useParams } from "next/navigation";
-import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import CommentCard from "@/components/card/CommentCard";
 import TextArea from "@/components/form/TextArea";
-import type { Comment, EditCommentRequest } from "@/types/comment";
-import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
+import type { Comment, CreateReplyRequest } from "@/types/comment";
+import { useCreateReplyMutation } from "../../_hooks/useCreateReplyMutation";
 
-interface EditReplyModalProps {
-	parentComment: Comment | null;
-	reply: Comment | null;
+interface CreateReplyModalProps {
+	isCloseComment: boolean;
 	isOpen: boolean;
 	onClose: () => void;
+	comment: Comment;
 }
 
-export default function EditReplyModal({
+export default function CreateReplyModal({
+	isCloseComment,
+	comment,
 	isOpen,
 	onClose,
-	parentComment,
-	reply,
-}: EditReplyModalProps) {
-	const { id, id_document } = useParams();
+}: CreateReplyModalProps) {
+	const { id_concern, id_document } = useParams();
 
-	const methods = useForm<EditCommentRequest>({
+	const methods = useForm<CreateReplyRequest>({
 		mode: "onSubmit",
-		defaultValues: {
-			document_id: "",
-			section: reply?.section ?? "",
-			comment: reply?.comment ?? "",
-			baseline: reply?.baseline ?? "",
-		},
 	});
-
-	React.useEffect(() => {
-		if (reply) {
-			methods.reset();
-		}
-	}, [reply, methods]);
 
 	const { handleSubmit, reset } = methods;
 
-	const mutation = useEditCommentMutation({
-		area_of_concern_group_id: id as string,
+	const mutation = useCreateReplyMutation({
+		area_of_concern_group_id: id_concern as string,
 		area_of_concern_id: id_document as string,
-		comment_id: reply?.id as string,
+		comment_id: comment?.id as string,
 		onSuccess: () => {
 			onClose();
 			reset();
 		},
 	});
 
-	const onSubmit: SubmitHandler<EditCommentRequest> = async (data) => {
-		data.document_id = reply?.document_id || "";
+	const onSubmit: SubmitHandler<CreateReplyRequest> = async (data) => {
+		data.is_close_out_comment = isCloseComment;
+		data.document_id = comment?.document_id;
 		mutation.mutate(data);
 	};
 
@@ -93,24 +81,26 @@ export default function EditReplyModal({
 							className="w-8 h-8 rounded-full"
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
-						<h2 className="text-2xl font-bold text-[#52525B]">Edit Reply</h2>
+						<h2 className="text-2xl font-bold text-[#52525B]">
+							{isCloseComment ? "Close of Comment" : "Reply Comment"}
+						</h2>
 					</div>
 
-					{/* Show parent comment in preview mode */}
-					{parentComment && (
-						<div className="my-4">
-							<CommentCard comments={parentComment} isPreview={true} />
-						</div>
-					)}
-
+					<div className="mt-6">
+						<CommentCard comments={comment as Comment} isPreview={true} />
+					</div>
 					<FormProvider {...methods}>
-						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
+						<form onSubmit={handleSubmit(onSubmit)} className="mt-3 space-y-2">
 							<TextArea
 								className="h-[91px]"
 								id="comment"
-								label="Reply Text"
-								placeholder="Input Reply Text"
-								validation={{ required: "Reply Text is required!" }}
+								label={isCloseComment ? "Close Comment" : "Comment"}
+								placeholder={
+									isCloseComment
+										? "Input your close comment"
+										: "Input your reply comment"
+								}
+								validation={{ required: "Comment Text is required!" }}
 							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
@@ -121,11 +111,16 @@ export default function EditReplyModal({
 										onClose();
 										reset();
 									}}
+									className="justify-center"
 								>
 									Cancel
 								</Button>
-								<Button className="col-span-2" type="submit" size="lg">
-									Save Update Reply
+								<Button
+									className="col-span-2 justify-center"
+									type="submit"
+									rightIcon={Send}
+								>
+									Send
 								</Button>
 							</div>
 						</form>

@@ -1,11 +1,11 @@
 import { EllipsisVertical, Eye, Pencil, Reply, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import CommentDetailModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/CommentDetailModal";
-import EditCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_commentModals/EditCommentModal";
-import CreateReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/CreateReplyModal";
-import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
-import UpdateStatusModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/UpdateStatusModal";
+import CommentDetailModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/CommentDetailModal";
+import EditCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/EditCommentModal";
+import CreateReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/CreateReplyModal";
+import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
+import UpdateStatusModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/UpdateStatusModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { COMMENT_STATUS, ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";

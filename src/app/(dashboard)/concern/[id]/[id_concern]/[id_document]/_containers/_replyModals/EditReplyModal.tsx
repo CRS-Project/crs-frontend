@@ -2,46 +2,62 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion } from "framer-motion";
-import { Send, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useParams } from "next/navigation";
+import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
-import Input from "@/components/form/Input";
-import SelectInput from "@/components/form/SelectInput";
+import CommentCard from "@/components/card/CommentCard";
 import TextArea from "@/components/form/TextArea";
-import type { CreateCommentRequest } from "@/types/comment";
-import { useCreateCommentMutation } from "../../_hooks/useCreateCommentMutation";
-import { useGetDocument } from "../../_hooks/useGetDocument";
+import type { Comment, EditCommentRequest } from "@/types/comment";
+import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
 
-interface CreateCommentModalProps {
+interface EditReplyModalProps {
+	parentComment: Comment | null;
+	reply: Comment | null;
 	isOpen: boolean;
 	onClose: () => void;
 }
 
-export default function CreateCommentModal({
+export default function EditReplyModal({
 	isOpen,
 	onClose,
-}: CreateCommentModalProps) {
-	const { data: documentIDs } = useGetDocument();
-	const { id, id_document } = useParams();
+	parentComment,
+	reply,
+}: EditReplyModalProps) {
+	const { id_concern, id_document } = useParams();
 
-	const methods = useForm<CreateCommentRequest>({
-		mode: "onTouched",
+	const methods = useForm<EditCommentRequest>({
+		mode: "onSubmit",
+		defaultValues: {
+			document_id: "",
+			section: reply?.section ?? "",
+			comment: reply?.comment ?? "",
+			baseline: reply?.baseline ?? "",
+		},
 	});
+
+	React.useEffect(() => {
+		if (reply) {
+			methods.reset();
+		}
+	}, [reply, methods]);
 
 	const { handleSubmit, reset } = methods;
 
-	const mutation = useCreateCommentMutation({
-		area_of_concern_group_id: id as string,
+	const mutation = useEditCommentMutation({
+		area_of_concern_group_id: id_concern as string,
 		area_of_concern_id: id_document as string,
+		comment_id: reply?.id as string,
 		onSuccess: () => {
 			onClose();
 			reset();
 		},
 	});
 
-	const onSubmit: SubmitHandler<CreateCommentRequest> = async (data) => {
+	const onSubmit: SubmitHandler<EditCommentRequest> = async (data) => {
+		data.document_id = reply?.document_id || "";
 		mutation.mutate(data);
 	};
 
@@ -77,46 +93,24 @@ export default function CreateCommentModal({
 							className="w-8 h-8 rounded-full"
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
-						<h2 className="text-2xl font-bold text-[#52525B]">Add Comment</h2>
+						<h2 className="text-2xl font-bold text-[#52525B]">Edit Reply</h2>
 					</div>
+
+					{/* Show parent comment in preview mode */}
+					{parentComment && (
+						<div className="my-4">
+							<CommentCard comments={parentComment} isPreview={true} />
+						</div>
+					)}
 
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
 							<TextArea
 								className="h-[91px]"
 								id="comment"
-								label="Comment Text"
-								placeholder="Comment Text"
-								validation={{ required: "Comment Text is required!" }}
-							/>
-							<TextArea
-								className="h-[91px]"
-								id="baseline"
-								label="Baseline/Justification/Reference"
-								placeholder="Input Baseline/Justification/Reference"
-								validation={{ required: "Baseline is required!" }}
-							/>
-							<SelectInput
-								id="document_id"
-								label="Document ID"
-								options={
-									documentIDs
-										? documentIDs.map(
-												(doc: { id: string; document_title: string }) => ({
-													value: doc.id,
-													label: doc.document_title,
-												}),
-											)
-										: []
-								}
-								placeholder="Select Document ID"
-								validation={{ required: "Document ID is required!" }}
-							/>
-							<Input
-								id="section"
-								label="Section Document"
-								placeholder="Input Section Document"
-								validation={{ required: "Section Document is required!" }}
+								label="Reply Text"
+								placeholder="Input Reply Text"
+								validation={{ required: "Reply Text is required!" }}
 							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
@@ -127,17 +121,11 @@ export default function CreateCommentModal({
 										onClose();
 										reset();
 									}}
-									className="justify-center"
 								>
 									Cancel
 								</Button>
-								<Button
-									className="col-span-2 justify-center"
-									type="submit"
-									isLoading={mutation.isPending}
-									rightIcon={Send}
-								>
-									Send
+								<Button className="col-span-2" type="submit" size="lg">
+									Save Update Reply
 								</Button>
 							</div>
 						</form>

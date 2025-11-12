@@ -1,4 +1,4 @@
-import type { Consolidator } from "./consolidator";
+import type { Consolidator, ConsolidatorUser } from "./consolidator";
 
 export type AreaOfConcern = {
 	id: string;
@@ -13,6 +13,22 @@ export type Concern = {
 	review_focus: string;
 	package: string;
 	user_discipline: string;
+};
+
+export type CreateAreaOfConcernRequest = {
+	area_of_concern_id: string;
+	description: string;
+	consolidators: ConsolidatorUser[];
+	consolidator_select?: string;
+	package_id: string;
+};
+
+export type EditAreaOfConcernRequest = {
+	area_of_concern_id: string;
+	description: string;
+	consolidators: ConsolidatorUser[];
+	consolidator_select?: string;
+	package_id: string;
 };
 
 export type CreateConcernRequest = {

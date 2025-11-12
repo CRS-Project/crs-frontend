@@ -1,8 +1,8 @@
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import EditReplyModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/_replyModals/EditReplyModal";
-import DeleteCommentModal from "@/app/(dashboard)/documents/[id]/[id_document]/_containers/DeleteCommentModal";
+import EditReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/EditReplyModal";
+import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";

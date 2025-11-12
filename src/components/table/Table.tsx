@@ -14,6 +14,7 @@ type TableProps<T extends object> = {
 	isLoading?: boolean;
 	sorting?: SortingState;
 	setSorting?: React.Dispatch<React.SetStateAction<SortingState>>;
+	redirection?: string;
 } & React.ComponentPropsWithoutRef<"div">;
 
 export default function Table<T extends object>({
@@ -22,6 +23,7 @@ export default function Table<T extends object>({
 	isLoading = false,
 	sorting,
 	setSorting,
+	redirection,
 	...rest
 }: TableProps<T>) {
 	const table = useReactTable({
@@ -43,7 +45,11 @@ export default function Table<T extends object>({
 			<div className="overflow-x-auto">
 				<table className="w-full min-w-full">
 					<THead table={table} sortable={true} />
-					<TBody table={table} isLoading={isLoading} />
+					<TBody
+						table={table}
+						isLoading={isLoading}
+						redirection={redirection}
+					/>
 				</table>
 			</div>
 		</div>

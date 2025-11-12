@@ -20,8 +20,21 @@ export const MAIN_ENDPOINT = {
 	Document: {
 		FetchDocuments: "/v1/document",
 	},
+	Concern: {
+		FetchConcernsById: "/v1/area-of-concern-group/:area_of_concern_group_id",
+	},
 	AreaOfConcern: {
 		FetchAreaOfConcerns:
 			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id",
+		CreateAreaOfConcern:
+			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern",
+		EditAreaOfConcern:
+			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id",
+		DeleteAreaOfConcern:
+			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id",
+	},
+	User: {
+		FetchUsersByPackageAndRole:
+			"/v1/user?filter=Reviewer,:id&filter_by=role,package_id",
 	},
 };

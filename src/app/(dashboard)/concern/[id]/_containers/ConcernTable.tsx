@@ -267,6 +267,7 @@ export default function ConcernTable({ id }: { id: string }) {
 					isLoading={isLoading}
 					sorting={sorting}
 					setSorting={setSorting}
+					redirection={`/concern/${id}`}
 				/>
 
 				<ServerPagination
