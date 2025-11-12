@@ -28,7 +28,7 @@ export type CreateUserRequest = {
 	institution: string;
 	role: string;
 	discipline_number: number;
-	photo_profile: string;
+	photo_profile?: string;
 	package_id: string;
 	discipline_id?: string;
 };
@@ -37,7 +37,7 @@ export type EditUserRequest = {
 	name: string;
 	email: string;
 	initial: string;
-	photo_profile: string;
+	photo_profile?: string;
 	institution: string;
 	discipline_number: number;
 	discipline_id?: string;

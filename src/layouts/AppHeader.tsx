@@ -1,18 +1,30 @@
 "use client";
-import { Logs, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { LogOut, Logs, User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import useAuthStore from "@/app/stores/useAuthStore";
+import Button from "@/components/button/Button";
 import { useSidebar } from "@/context/SidebarContext";
 
 const AppHeader: React.FC = () => {
 	const [today, setToday] = useState("");
 	const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 	const { user } = useAuthStore();
+	const logout = useAuthStore((s) => s.logout);
+	const router = useRouter();
+
+	const handleLogout = () => {
+		logout();
+		router.push("/login");
+	};
 
 	const inputRef = useRef<HTMLInputElement>(null);
+	const menuRef = useRef<HTMLDivElement | null>(null);
+	const [menuOpen, setMenuOpen] = useState(false);
 
 	const handleToggle = () => {
 		if (window.innerWidth >= 1024) {
@@ -56,6 +68,25 @@ const AppHeader: React.FC = () => {
 		};
 	}, []);
 
+	// close menu when clicking/tapping outside
+	useEffect(() => {
+		function handleOutside(e: MouseEvent | TouchEvent) {
+			if (!menuOpen) return;
+			const target = e.target as Node | null;
+			if (menuRef.current && target && !menuRef.current.contains(target)) {
+				setMenuOpen(false);
+			}
+		}
+
+		document.addEventListener("mousedown", handleOutside);
+		document.addEventListener("touchstart", handleOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleOutside);
+			document.removeEventListener("touchstart", handleOutside);
+		};
+	}, [menuOpen]);
+
 	return (
 		<header className="sticky top-0 flex w-full bg-white border-gray-200 z-[999]">
 			<div className="flex flex-col items-center justify-between grow lg:px-8 lg:py-6 lg:flex-row">
@@ -77,23 +108,63 @@ const AppHeader: React.FC = () => {
 								Hello, {user?.name ?? "Super Admin ITS"}!
 							</h1>
 						</div>
-						<Link
-							className="hidden rounded-xl px-4 transition-colors duration-200 hover:bg-gray-50 sm:flex gap-2 items-center text-gray-700 text-base"
-							href="/profile"
-						>
-							<Image
-								src={
-									user?.photo_profile
-										? `https://${user?.photo_profile}`
-										: "/images/user.png"
+						<motion.div
+							ref={menuRef}
+							className="relative group flex items-center hover:bg-gray-100 rounded-lg"
+							onClick={() => setMenuOpen((s) => !s)}
+							tabIndex={0}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									setMenuOpen((s) => !s);
 								}
-								alt="User"
-								width={20}
-								height={20}
-								className="w-12 h-12 rounded-full"
-							/>
-							<p>{user?.name ?? "Super Admin ITS"}</p>
-						</Link>
+								if (e.key === "Escape") {
+									setMenuOpen(false);
+								}
+							}}
+							aria-expanded={menuOpen}
+						>
+							<h3 className="hidden pointer-events-none rounded-xl px-4 sm:flex gap-2 items-center text-gray-700 text-base">
+								<Image
+									src={
+										user?.photo_profile
+											? `https://${user?.photo_profile}`
+											: "/images/user.png"
+									}
+									alt="User"
+									width={20}
+									height={20}
+									className="w-12 h-12 rounded-full"
+								/>
+								<p>{user?.name ?? "Super Admin ITS"}</p>
+							</h3>
+
+							<motion.div
+								className={`${
+									menuOpen ? "flex" : "hidden"
+								} group-hover:flex absolute right-0 top-full flex-col items-center gap-2 bg-white border rounded-lg shadow-md p-2 z-50`}
+								onClick={(e) => e.stopPropagation()}
+							>
+								<Link
+									href="/profile"
+									onClick={(e) => e.stopPropagation()}
+									className="flex items-center gap-2 px-3 py-1 rounded text-sm text-gray-700 hover:bg-gray-100"
+								>
+									<User className="w-4 h-4" />
+									<span>Profile</span>
+								</Link>
+								<Button
+									onClick={() => {
+										handleLogout();
+										setMenuOpen(false);
+									}}
+									className="flex items-center gap-2 px-3 py-1 rounded text-sm hover:text-red-600 text-red-600 bg-red-50 hover:bg-red-100"
+								>
+									<LogOut className="w-4 h-4" />
+									<span>Logout</span>
+								</Button>
+							</motion.div>
+						</motion.div>
 					</div>
 				</div>
 			</div>
