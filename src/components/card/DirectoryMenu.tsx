@@ -14,10 +14,10 @@ export default function DirectoryMenu({
 	value,
 }: DirectoryMenuProps) {
 	return (
-		<div className="px-6 py-4 border rounded-lg bg-blue-600 text-white flex gap-14 flex-col">
+		<div className="px-6 py-5 border rounded-lg bg-blue-600 text-white flex gap-14 flex-col justify-between">
 			<div>
-				<h1 className="font-bold text-[64px]">{title}</h1>
-				<p className="font-semibold text-[16px]">{description}</p>
+				<h1 className="font-bold text-[64px] leading-[1]">{title}</h1>
+				<p className="font-semibold text-[16px] mt-2">{description}</p>
 			</div>
 			<Link
 				href={linkHref}

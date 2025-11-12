@@ -170,9 +170,7 @@ export default function CreateUserModal({
 								maxFiles={1}
 								uploadToApi
 								helperText="Max. size picture 1mb"
-								validation={{ required: "Profile picture wajib diisi!" }}
 							/>
-
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button
 									variant="secondary"

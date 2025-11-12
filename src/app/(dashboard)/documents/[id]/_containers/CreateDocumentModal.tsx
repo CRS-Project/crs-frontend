@@ -10,7 +10,7 @@ import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
-import { STATUS_DOCUMENT_OPTIONS } from "@/constants/document";
+import { categoryOptions, STATUS_DOCUMENT_OPTIONS } from "@/constants/document";
 import type { CreateDocumentRequest } from "@/types/document";
 import { useCreateDocumentMutation } from "../_hooks/useCreateDocumentMutation";
 import { useDocumentUpload } from "../_hooks/useDocumentUpload";
@@ -130,26 +130,18 @@ export default function CreateDocumentModal({
 										required: "Document Serial Number wajib diisi!",
 									}}
 								/>
-								<UploadFile
-									id="document_file"
-									maxSize={10485760}
-									accept={{
-										"application/pdf": [".pdf"],
-									}}
-									maxFiles={1}
-									helperText="Max. size docs 10mb, file type PDF"
-								/>
 								<Input
 									id="document_type"
 									label="Document Type"
 									placeholder="Input Document Type"
 									validation={{ required: "Document Type wajib diisi!" }}
 								/>
-								<Input
+								<SelectInput
 									id="document_category"
 									label="Document Category"
 									placeholder="Input Document Category"
 									validation={{ required: "Document Category wajib diisi!" }}
+									options={categoryOptions}
 								/>
 								<Input
 									id="company_document_number"
@@ -197,6 +189,16 @@ export default function CreateDocumentModal({
 									placeholder="Input Status Document"
 									validation={{ required: "Status Document wajib diisi!" }}
 									options={STATUS_DOCUMENT_OPTIONS}
+								/>
+								<UploadFile
+									id="document_file"
+									label="PDF Document"
+									maxSize={10485760}
+									accept={{
+										"application/pdf": [".pdf"],
+									}}
+									maxFiles={1}
+									helperText="Max. size docs 10mb, file type PDF"
 								/>
 								<div className="grid grid-cols-3 py-4 gap-3">
 									<Button
@@ -275,26 +277,18 @@ export default function CreateDocumentModal({
 								placeholder="Input Document Serial Number"
 								validation={{ required: "Document Serial Number wajib diisi!" }}
 							/>
-							<UploadFile
-								id="document_file"
-								maxSize={10485760}
-								accept={{
-									"application/pdf": [".pdf"],
-								}}
-								maxFiles={1}
-								helperText="Max. size docs 10mb, file type PDF"
-							/>
 							<Input
 								id="document_type"
 								label="Document Type"
 								placeholder="Input Document Type"
 								validation={{ required: "Document Type wajib diisi!" }}
 							/>
-							<Input
+							<SelectInput
 								id="document_category"
 								label="Document Category"
 								placeholder="Input Document Category"
 								validation={{ required: "Document Category wajib diisi!" }}
+								options={categoryOptions}
 							/>
 							<Input
 								id="company_document_number"
@@ -342,6 +336,16 @@ export default function CreateDocumentModal({
 								placeholder="Input Status Document"
 								validation={{ required: "Status Document wajib diisi!" }}
 								options={STATUS_DOCUMENT_OPTIONS}
+							/>
+							<UploadFile
+								id="document_file"
+								label="PDF Document"
+								maxSize={10485760}
+								accept={{
+									"application/pdf": [".pdf"],
+								}}
+								maxFiles={1}
+								helperText="Max. size docs 10mb, file type PDF"
 							/>
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button
