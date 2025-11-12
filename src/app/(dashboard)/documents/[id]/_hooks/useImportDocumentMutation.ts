@@ -17,8 +17,17 @@ export function useImportDocumentMutation({
 	const queryClient = useQueryClient();
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: async (data: ImportDocumentRequest) => {
-			const response = await api.post(`/v1/document/bulk/${packageId}`, data);
+		mutationFn: async (formData: FormData) => {
+			const response = await api.post(
+				`/v1/document/bulk/${packageId}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				},
+			);
+
 			return response.data;
 		},
 		onSuccess: () => {

@@ -4,6 +4,7 @@ import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import UploadFile from "@/components/form/UploadFile";
@@ -36,7 +37,18 @@ export default function ImportDocumentModal({
 	});
 
 	const onSubmit: SubmitHandler<ImportDocumentRequest> = (data) => {
-		mutate(data);
+		const fileField = (data as any).FileSheet;
+		const file = Array.isArray(fileField) ? fileField[0] : fileField;
+
+		if (!file) {
+			toast.error("Please select a file");
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append("FileSheet", file, file.name);
+
+		mutate(formData);
 	};
 
 	return (
