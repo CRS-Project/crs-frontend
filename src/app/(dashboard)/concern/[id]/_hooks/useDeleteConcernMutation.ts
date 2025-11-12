@@ -18,6 +18,7 @@ export function useDeleteConcernMutation({
 		onSuccess: () => {
 			toast.success(`Concern berhasil dihapus!`);
 			queryClient.invalidateQueries({ queryKey: ["concern"] });
+			queryClient.invalidateQueries({ queryKey: ["concern-stats"] });
 			if (onSuccess) onSuccess();
 		},
 		onError: (err) => {

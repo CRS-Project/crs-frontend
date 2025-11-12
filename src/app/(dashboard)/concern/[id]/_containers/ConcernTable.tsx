@@ -31,6 +31,7 @@ import type { Concern } from "@/types/concern";
 import type { UserDiscipline } from "@/types/userDiscipline";
 import { useGetPackageById } from "../../../_hooks/useGetPackageById";
 import { useConcernTableQuery } from "../_hooks/useConcernTableQuery";
+import { useGetConcernStatsQuery } from "../_hooks/useGetConcernStatsQuery";
 import { useGetUserDiscipline } from "../_hooks/useGetUserDiscipline";
 import ConcernDetailModal from "./ConcernDetailModal";
 import CreateConcernModal from "./CreateConcernModal";
@@ -49,6 +50,8 @@ export default function ConcernTable({ id }: { id: string }) {
 		isLoading: isLoadingUserDiscipline,
 		error: userDisciplineError,
 	} = useGetUserDiscipline();
+
+	const { data: statsData } = useGetConcernStatsQuery(id);
 
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
@@ -176,10 +179,14 @@ export default function ConcernTable({ id }: { id: string }) {
 				<div className="flex flex-col md:flex-row gap-4">
 					<SummaryCard
 						title="Total Area of Concern"
-						value="531"
+						value={statsData?.data?.total_area_of_concern_group || 0}
 						variant="primary"
 					/>
-					<SummaryCard title="Total Comments" value="256" variant="white" />
+					<SummaryCard
+						title="Total Comments"
+						value={statsData?.data?.total_comment || 0}
+						variant="white"
+					/>
 				</div>
 				<div className="mt-4 w-full flex gap-4 flex-row items-end md:justify-end">
 					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">

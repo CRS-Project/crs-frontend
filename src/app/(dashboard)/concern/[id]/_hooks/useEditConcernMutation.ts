@@ -34,6 +34,7 @@ export function useEditConcernMutation({
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["concern"] });
 			queryClient.invalidateQueries({ queryKey: ["concern", id] });
+			queryClient.invalidateQueries({ queryKey: ["concern-stats"] });
 			toast.success("Berhasil mengedit concern!");
 			if (onSuccess) onSuccess();
 		},

@@ -28,6 +28,7 @@ export function useCreateConcernMutation({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["concern"] });
+			queryClient.invalidateQueries({ queryKey: ["concern-stats"] });
 			toast.success("Berhasil membuat concern baru!");
 			if (onSuccess) onSuccess();
 		},
