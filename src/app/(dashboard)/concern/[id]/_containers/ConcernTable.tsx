@@ -155,11 +155,76 @@ export default function ConcernTable({ id }: { id: string }) {
 	const packageDescription =
 		packageData?.data?.description || "No Description Available";
 
-	const userDisciplineOptions: { id: string; name: string }[] =
-		userDisciplineData?.data?.map((d: UserDiscipline) => ({
-			id: d.id,
-			name: d.name,
-		})) ?? [];
+	let userDisciplineOptions: string[] = [];
+	if (
+		packageId === "f49c3147-a8af-4c22-9aab-d7b8d663e6e2" ||
+		packageId === "e6f49ed5-9eee-42c9-8677-45d84bb04eb5"
+	) {
+		userDisciplineOptions = [
+			"N - Naval, Hull & Mooring Engineering",
+			"M - Mechanical Engineering",
+			"B - Project Development & Execution Management",
+			"E - Electrical Engineering",
+			"F - Process Safety Engineering",
+			"H - Health, Safety, Security & Environment (HSSE)",
+			"J - Instrumentation & Controls",
+			"L - Material Selection & Corrosion Control",
+			"P - Process Engineering",
+			"Q - Quality Management",
+			"R - Commissioning & Startup",
+			"X - Piping Engineering",
+			"T - Telecommunication, IT & Information Management",
+			"S - Structural Engineering, Construction and Installation (Topside)",
+		];
+	} else if (packageId === "28e976aa-231a-4e71-af7e-8e6830819e89") {
+		userDisciplineOptions = [
+			"Project Management & Control",
+			"Quality & HSSE",
+			"Engineering Management",
+			"Process & Flow Assurance",
+			"Pipeline Route & Layout",
+			"Mechanical / Structural Design",
+			"Materials & Corrosion",
+			"Installation & Constructability",
+			"Pre-commissioning & Operation",
+			"Specifications & Standards",
+		];
+	} else if (
+		packageId === "f831510d-fc86-45f4-ab06-094a939ae29a" ||
+		packageId === "4661a21a-c28a-4560-aed3-c3f553288d99"
+	) {
+		userDisciplineOptions = [
+			"B - Project Development & Execution Management",
+			"H - Health, Safety, Security & Environment (HSSE)",
+			"Q - Quality Management",
+			"C - Civil Engineering",
+			"P - Process Engineering",
+			"F - Process Safety Engineering",
+			"L - Material Selection & Corrosion Control",
+			"M - Mechanical Engineering",
+			"X - Piping Engineering",
+			"E - Electrical Engineering",
+			"J - Instrumentation & Controls",
+			"T - Telecommunication, IT & Information Management",
+		];
+	} else if (packageId === "0889d5ac-09be-4d33-bc9f-baa249914dbb") {
+		userDisciplineOptions = [
+			"Project Development and Execution Management",
+			"Quality & HSSE Management",
+			"Engineering Management",
+			"Field Layout & System Configuration",
+			"Process & Instrumentation",
+			"Mechanical / Structural Design",
+			"Flow Assurance & Integrity",
+			"Materials & Corrosion",
+			"Control Systems & Umbilicals",
+			"Cost & Schedule Engineering",
+			"Instrumentation and Control Engineering",
+			"Installation & Commissioning",
+			"Specifications & Standards",
+			"Reports & Studies",
+		];
+	}
 
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
