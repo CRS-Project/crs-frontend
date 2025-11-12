@@ -3,7 +3,6 @@ import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import api from "@/service/api";
 import type { ApiError } from "@/types/api";
-import type { ImportDocumentRequest } from "@/types/document";
 
 interface useImportDocumentMutationProps {
 	onSuccess?: () => void;
