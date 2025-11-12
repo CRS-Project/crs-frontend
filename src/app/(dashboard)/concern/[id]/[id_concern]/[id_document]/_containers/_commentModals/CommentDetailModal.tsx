@@ -102,9 +102,12 @@ export default function CommentDetailModal({
 								options={
 									documentIDs
 										? documentIDs.map(
-												(doc: { id: string; document_title: string }) => ({
+												(doc: {
+													id: string;
+													company_document_number: string;
+												}) => ({
 													value: doc.id,
-													label: doc.document_title,
+													label: doc.company_document_number,
 												}),
 											)
 										: []
