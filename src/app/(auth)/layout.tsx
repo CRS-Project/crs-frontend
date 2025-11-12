@@ -1,10 +1,37 @@
-"use client";
-
+import type { Metadata } from "next";
 import Image from "next/image";
 
 interface AuthenticationLayoutProps {
 	children: React.ReactNode;
 }
+
+const siteConfig = {
+	title: "CRS - Comment Resolution Sheet",
+	description: "Comment Resolution Sheet Apps - Inpex Abadi OLNG Development",
+	url: process.env.SITE_URL || "https://example.com",
+};
+
+export const metadata: Metadata = {
+	metadataBase: new URL(siteConfig.url),
+	title: {
+		default: siteConfig.title,
+		template: `%s - ${siteConfig.title}`,
+	},
+	description: siteConfig.description,
+	twitter: {
+		card: "summary_large_image",
+	},
+	robots: { index: true, follow: true },
+	icons: {
+		icon: "/icon.png",
+	},
+	authors: [
+		{
+			name: siteConfig.title,
+			url: siteConfig.url,
+		},
+	],
+};
 
 export default function AuthenticationLayout({
 	children,

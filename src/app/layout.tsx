@@ -12,7 +12,7 @@ const montserrat = Montserrat({
 });
 
 const siteConfig = {
-	title: "CRS",
+	title: "CRS - Comment Resolution Sheet",
 	description: "Comment Resolution Sheet Apps - Inpex Abadi OLNG Development",
 	url: process.env.SITE_URL || "https://example.com",
 };
@@ -28,6 +28,9 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 	},
 	robots: { index: true, follow: true },
+	icons: {
+		icon: "/icon.png",
+	},
 	authors: [
 		{
 			name: siteConfig.title,
