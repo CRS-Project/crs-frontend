@@ -65,7 +65,11 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 							<Image
 								width={50}
 								height={50}
-								src={photo_profile}
+								src={
+									replies?.user_comment.photo_profile
+										? `https://${replies?.user_comment.photo_profile}`
+										: "/images/user.png"
+								}
 								alt={`${name} avatar`}
 								className="w-full h-full object-cover"
 							/>
