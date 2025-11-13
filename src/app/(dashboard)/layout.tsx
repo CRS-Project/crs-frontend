@@ -11,6 +11,7 @@ import Backdrop from "@/layouts/Backdrop";
 function AdminLayout({ children }: { children: React.ReactNode }) {
 	const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 	const pathname = usePathname();
+	const showSidebar = pathname !== "/profile";
 
 	const mainContentMargin = isMobileOpen
 		? "ml-0"
@@ -19,16 +20,22 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 			: "lg:ml-[88px]";
 
 	return (
-		<div className="min-h-screen xl:flex">
-			<AppSidebar />
-			<Backdrop />
-			<div
-				className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
-			>
-				{pathname !== "/profile" && <AppHeader />}
-				<div className="mx-auto">{children}</div>
-			</div>
-		</div>
+		<>
+			{showSidebar ? (
+				<div className="min-h-screen xl:flex">
+					<AppSidebar />
+					<Backdrop />
+					<div
+						className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
+					>
+						<AppHeader />
+						<div className="mx-auto">{children}</div>
+					</div>
+				</div>
+			) : (
+				<div>{children}</div>
+			)}
+		</>
 	);
 }
 

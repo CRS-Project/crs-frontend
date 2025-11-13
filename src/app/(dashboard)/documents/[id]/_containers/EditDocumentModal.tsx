@@ -73,8 +73,9 @@ export default function EditDocumentModal({
 
 	const sheetRef = React.useRef<HTMLDivElement | null>(null);
 	const dragControls = useDragControls();
-	if (isMobile) {
-		return isOpen ? (
+
+	return isMobile ? (
+		isOpen ? (
 			<>
 				<motion.div
 					className="fixed inset-0 z-[2000] bg-black/40"
@@ -236,10 +237,8 @@ export default function EditDocumentModal({
 					</div>
 				</motion.div>
 			</>
-		) : null;
-	}
-
-	return (
+		) : null
+	) : (
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}

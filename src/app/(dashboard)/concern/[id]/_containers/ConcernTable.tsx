@@ -30,7 +30,6 @@ import ServerPagination from "@/components/table/ServerPagination";
 import Table from "@/components/table/Table";
 import { ROLE } from "@/lib/data";
 import type { Concern } from "@/types/concern";
-import type { UserDiscipline } from "@/types/userDiscipline";
 import { useGetPackageById } from "../../../_hooks/useGetPackageById";
 import { useConcernTableQuery } from "../_hooks/useConcernTableQuery";
 import { useGetConcernStatsQuery } from "../_hooks/useGetConcernStatsQuery";

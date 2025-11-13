@@ -5,6 +5,7 @@ import { useState } from "react";
 import RecapChart from "@/app/(dashboard)/data/_components/RecapChart";
 import ReviewRecapChart from "@/app/(dashboard)/data/_components/ReviewRecapChart";
 import useAuthStore from "@/app/stores/useAuthStore";
+import DirectoryMenu from "@/components/card/DirectoryMenu";
 import SummaryCard from "@/components/card/SummaryCard";
 import { useGetAocCommentCardQuery } from "../_hooks/useGetAocCommentCardQuery";
 import { type Package, useGetMyPackageQuery } from "../home/_hooks/page";
@@ -28,22 +29,13 @@ export default function DataPage() {
 			{user?.role === "SUPER ADMIN" && selectedPackage === null && (
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:mb-8">
 					{data?.data?.map((item: Package) => (
-						<div
-							className="px-6 py-4 border rounded-lg bg-blue-600 text-white flex gap-14 flex-col"
+						<DirectoryMenu
 							key={item.id}
-						>
-							<div>
-								<h1 className="font-bold text-[64px]">{item.name}</h1>
-								<p className="font-semibold text-[16px]">{item.description}</p>
-							</div>
-							<button
-								type="button"
-								onClick={() => setSelectedPackage(item)}
-								className="w-full bg-white cursor-pointer rounded-lg text-sm text-blue-600 px-4 py-2 text-center font-semibold hover:bg-gray-100 transition-all duration-200 ease-in-out"
-							>
-								Check Documents
-							</button>
-						</div>
+							title={item.name}
+							description={item.description}
+							linkHref={`/documents/${item.id}`}
+							value="Check Documents"
+						/>
 					))}
 				</div>
 			)}

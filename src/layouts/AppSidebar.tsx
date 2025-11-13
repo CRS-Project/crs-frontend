@@ -2,7 +2,7 @@
 import { ArrowRight, ChevronDown, NotebookPen, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useAuthStore from "@/app/stores/useAuthStore";
@@ -23,6 +23,8 @@ type NavItem = {
 const AppSidebar: React.FC = () => {
 	const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
 	const { user } = useAuthStore();
+	const logoutFn = useAuthStore((s) => s.logout);
+	const router = useRouter();
 
 	const pathname = usePathname();
 
@@ -310,22 +312,63 @@ const AppSidebar: React.FC = () => {
 					</nav>
 				</div>
 			</div>
-			{(isExpanded || isHovered || isMobileOpen) && (
-				<div
-					className={`flex flex-col items-center overflow-x-hidden overflow-y-auto gap-2 md:gap-4 px-4 py-5 w-[232px] bg-primary-1000 rounded-lg`}
-				>
-					<h2 className="text-white font-bold text-base md:text-lg">
-						How To Use This App?
-					</h2>
+			<div className="flex flex-col gap-2">
+				{isMobileOpen && (
+					<div className="mt-4 w-full px-3">
+						<div className="flex items-center gap-3 p-2 rounded-lg bg-white">
+							<Image
+								src={
+									user?.photo_profile
+										? `https://${user?.photo_profile}`
+										: "/images/user.png"
+								}
+								alt="User"
+								width={40}
+								height={40}
+								className="w-10 h-10 rounded-full"
+							/>
+							<div className="flex-1">
+								<p className="text-sm font-medium text-gray-700">
+									{user?.name ?? "Super Admin ITS"}
+								</p>
+								<div className="flex gap-2 mt-1">
+									<Link
+										href="/profile"
+										className="text-sm text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+									>
+										Profile
+									</Link>
+									<Button
+										onClick={() => {
+											logoutFn();
+											router.push("/login");
+										}}
+										className="text-sm text-red-600 px-2 py-1 rounded bg-red-50 hover:bg-red-100"
+									>
+										Logout
+									</Button>
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+				{(isExpanded || isHovered || isMobileOpen) && (
+					<div
+						className={`flex flex-col items-center overflow-x-hidden overflow-y-auto gap-2 md:gap-4 px-4 py-5 w-[232px] bg-blue-500 rounded-lg`}
+					>
+						<h2 className="text-white font-bold text-base md:text-lg">
+							How To Use This App?
+						</h2>
 
-					<Button rightIcon={ArrowRight} variant="white" className="w-full">
-						Guidebook
-					</Button>
-					<Button rightIcon={Play} variant="primary" className="w-full">
-						Video Tutorial
-					</Button>
-				</div>
-			)}
+						<Button rightIcon={ArrowRight} variant="white" className="w-full">
+							Guidebook
+						</Button>
+						<Button rightIcon={Play} variant="primary" className="w-full">
+							Video Tutorial
+						</Button>
+					</div>
+				)}
+			</div>
 		</aside>
 	);
 };

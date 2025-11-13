@@ -23,7 +23,7 @@ export default function ProfilePage() {
 				/>
 				<Link
 					href="/home"
-					className="absolute top-8 left-8 max-md:top-2 max-md:left-4"
+					className="hidden md:block absolute top-8 left-8 max-md:top-2 max-md:left-4"
 				>
 					<MoveLeft size={36} className="text-white" />
 				</Link>
@@ -53,7 +53,7 @@ export default function ProfilePage() {
 						<h3 className="text-lg font-semibold">Profile Information</h3>
 						<Button
 							rightIcon={Pencil}
-							className="px-8"
+							className="px-8 hidden md:flex"
 							size="lg"
 							onClick={() => setIsOpen(true)}
 						>
@@ -68,6 +68,14 @@ export default function ProfilePage() {
 						<ProfileRow title="Discipline" value={user?.discipline ?? "-"} />
 						<ProfileRow title="Institution" value={user?.institution ?? "-"} />
 					</div>
+					<Button
+						rightIcon={Pencil}
+						className="my-4 flex md:hidden"
+						size="lg"
+						onClick={() => setIsOpen(true)}
+					>
+						Edit
+					</Button>
 				</div>
 			</div>
 			<EditUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
