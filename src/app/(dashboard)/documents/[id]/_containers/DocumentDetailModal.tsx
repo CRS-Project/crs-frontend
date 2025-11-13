@@ -50,8 +50,8 @@ export default function DocumentDetailModal({
 	const sheetRef = React.useRef<HTMLDivElement | null>(null);
 	const dragControls = useDragControls();
 
-	if (isMobile) {
-		return isOpen ? (
+	return isMobile ? (
+		isOpen ? (
 			<>
 				<motion.div
 					className="fixed inset-0 z-[2000] bg-black/40"
@@ -92,7 +92,7 @@ export default function DocumentDetailModal({
 					</div>
 					<div className="px-4 py-6">
 						<FormProvider {...methods}>
-							<div className="space-y-4">
+							<div className="mb-2 space-y-2">
 								<Input
 									id="id"
 									label="Document Number"
@@ -201,16 +201,14 @@ export default function DocumentDetailModal({
 								/>
 							</div>
 						</FormProvider>
-						<Button size="lg" onClick={onClose} className="w-full">
+						<Button size="lg" onClick={onClose} className="w-full mt-4 md:mt-0">
 							Cancel
 						</Button>
 					</div>
 				</motion.div>
 			</>
-		) : null;
-	}
-
-	return (
+		) : null
+	) : (
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}

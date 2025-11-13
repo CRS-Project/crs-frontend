@@ -1,8 +1,9 @@
 "use client";
 
 import { Modal, ModalContent } from "@heroui/modal";
-import { motion } from "framer-motion";
+import { motion, useDragControls } from "framer-motion";
 import { Plus, X } from "lucide-react";
+import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
@@ -37,6 +38,18 @@ export default function CreateUserModal({
 
 	const role = watch("role");
 
+	const [isMobile, setIsMobile] = React.useState(false);
+	React.useEffect(() => {
+		const check = () =>
+			setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+		check();
+		window.addEventListener("resize", check);
+		return () => window.removeEventListener("resize", check);
+	}, []);
+
+	const sheetRef = React.useRef<HTMLDivElement | null>(null);
+	const dragControls = useDragControls();
+
 	const { mutate, isPending } = useCreateUserMutation({
 		onSuccess: () => {
 			onClose();
@@ -48,7 +61,168 @@ export default function CreateUserModal({
 		mutate(data);
 	};
 
-	return (
+	return isMobile ? (
+		isOpen ? (
+			<>
+				<motion.div
+					className="fixed inset-0 z-[2000] bg-black/40"
+					onClick={() => {
+						onClose();
+						reset();
+					}}
+				/>
+				<motion.div
+					drag="y"
+					dragControls={dragControls}
+					dragListener={false}
+					dragConstraints={{ top: 0, bottom: 0 }}
+					onDragEnd={(_e, info) => {
+						if (info.offset.y > 120 || info.velocity.y > 800) {
+							onClose();
+							reset();
+						}
+					}}
+					initial={{ y: "100%" }}
+					animate={{ y: 0 }}
+					exit={{ y: "100%" }}
+					transition={{ type: "spring", damping: 25, stiffness: 300 }}
+					ref={sheetRef}
+					className="fixed bottom-0 left-0 right-0 z-[2001] rounded-t-2xl bg-white shadow-xl max-h-[85vh] overflow-auto"
+				>
+					<div className="px-4 py-3">
+						<div
+							className="mx-auto h-0.5 w-12 bg-slate-200 rounded mb-3"
+							onPointerDown={(e) => dragControls.start(e as any)}
+						/>
+						<div className="flex items-center justify-between">
+							<h3 className="text-lg font-semibold">Create New User</h3>
+							<IconButton
+								variant="ghost"
+								onClick={() => {
+									onClose();
+									reset();
+								}}
+								icon={X}
+								className="w-8 h-8 rounded-full"
+								iconClassName="w-6 h-6 text-[#3F3F46]"
+							/>
+						</div>
+					</div>
+					<div className="px-4 py-6">
+						<FormProvider {...methods}>
+							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+								<SelectInput
+									id="role"
+									label="Role"
+									options={roleOptions}
+									placeholder="Select User Role"
+									validation={{ required: "Role wajib diisi!" }}
+								/>
+								<SelectInput
+									id="package_id"
+									label="Package"
+									options={packageOptions}
+									isLoading={isLoadingPackages}
+									placeholder="Select User Package"
+									validation={{ required: "Package wajib diisi!" }}
+								/>
+								<Input
+									id="name"
+									label="Full Name"
+									placeholder="Input User Full Name"
+									validation={{ required: "Full Name wajib diisi!" }}
+								/>
+								<Input
+									id="initial"
+									label="Initial"
+									placeholder="Input Initial Account"
+									helperText="Example: CRS"
+									validation={{ required: "Initial wajib diisi!" }}
+								/>
+								<Input
+									id="email"
+									type="email"
+									label="Email"
+									placeholder="Input User Email"
+									validation={{ required: "Email wajib diisi!" }}
+								/>
+								<Input
+									id="institution"
+									label="Institution"
+									placeholder="Input Institution"
+									validation={{ required: "Institution wajib diisi!" }}
+								/>
+								{role === "REVIEWER" && (
+									<SelectInput
+										id="discipline_id"
+										label="Discipline"
+										placeholder="Input Discipline"
+										options={disciplineOptions}
+										isLoading={isLoadingDisciplines}
+										validation={
+											role === "REVIEWER"
+												? { required: "Discipline wajib diisi!" }
+												: undefined
+										}
+									/>
+								)}
+								<Input
+									id="discipline_number"
+									label="Number Discipline"
+									placeholder="Input Number Discipline User"
+									validation={{
+										required: "Number Discipline wajib diisi!",
+										valueAsNumber: true,
+									}}
+								/>
+								<Input
+									id="password"
+									type="password"
+									label="Password"
+									placeholder="Input Password Account"
+									helperText="Password must be 8 character, mix uppercase and lowercase"
+									validation={{ required: "Password wajib diisi!" }}
+								/>
+								<UploadFile
+									id="photo_profile"
+									label="Profile Picture"
+									maxSize={1000 * 1024}
+									accept={{
+										"image/*": [".jpg", ".jpeg", ".png"],
+										"application/pdf": [".pdf"],
+									}}
+									maxFiles={1}
+									uploadToApi
+									helperText="Max. size picture 1mb"
+								/>
+								<div className="grid grid-cols-3 py-8 gap-3">
+									<Button
+										variant="secondary"
+										size="lg"
+										onClick={() => {
+											onClose();
+											reset();
+										}}
+										disabled={isPending}
+									>
+										Cancel
+									</Button>
+									<Button
+										className="col-span-2"
+										rightIcon={Plus}
+										type="submit"
+										isLoading={isPending}
+									>
+										Create New User
+									</Button>
+								</div>
+							</form>
+						</FormProvider>
+					</div>
+				</motion.div>
+			</>
+		) : null
+	) : (
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}

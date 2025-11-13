@@ -9,7 +9,7 @@
 		"start": "next start",
 		"lint": "npx @biomejs/biome lint .",
 		"lint:write": "npx @biomejs/biome lint --write .",
-		"lint:error": "npx @biomejs/biome lint .",
+		"lint:error": "npx @biomejs/biome lint . --max-diagnostics 30",
 		"format": "npx @biomejs/biome format .",
 		"format:write": "npx @biomejs/biome format --write .",
 		"check": "npx @biomejs/biome check .",
