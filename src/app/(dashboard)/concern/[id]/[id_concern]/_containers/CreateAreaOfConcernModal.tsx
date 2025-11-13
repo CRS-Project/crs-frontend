@@ -215,7 +215,11 @@ export default function CreateAreaOfConcernModal({
 									>
 										Cancel
 									</Button>
-									<Button className="col-span-2 justify-center" type="submit">
+									<Button
+										className="col-span-2 justify-center"
+										type="submit"
+										isLoading={mutation.isPending}
+									>
 										Create Area of Concern
 									</Button>
 								</div>
