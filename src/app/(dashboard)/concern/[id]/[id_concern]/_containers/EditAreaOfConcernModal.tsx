@@ -249,6 +249,7 @@ export default function EditAreaOfConcernModal({
 										type="submit"
 										size="lg"
 										disabled={isPending}
+										isLoading={isPending}
 									>
 										{isPending ? "Saving..." : "Save Update"}
 									</Button>

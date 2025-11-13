@@ -112,7 +112,7 @@ export default function DocumentsDetails() {
 								rightIcon={Download}
 								size="lg"
 								variant="white"
-								className="w-full sm:w-auto lg:px-8 text-blue-500 font-semibold"
+								className="w-fit sm:w-auto text-blue-500 font-semibold"
 								onClick={() => {
 									router.push(`/pdf_generated/${id_concern}`);
 								}}
@@ -124,7 +124,7 @@ export default function DocumentsDetails() {
 									rightIcon={PlusIcon}
 									size="lg"
 									variant="white"
-									className="w-full sm:w-auto lg:px-8 text-blue-500 font-semibold"
+									className="w-fit sm:w-auto text-blue-500 font-semibold"
 									onClick={() => setIsOpen({ ...isOpen, create: true })}
 								>
 									Create Area Of Concern
@@ -145,7 +145,7 @@ export default function DocumentsDetails() {
 			<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-0 mb-10">
 				<div className="w-full lg:col-span-7 lg:pr-[2.5rem] lg:border-r-1 lg:order-1 order-2">
 					<div className="flex justify-between items-center mb-4 max-md:flex-col max-md:gap-2">
-						<h1 className="font-bold text-[1.5rem] text-left">
+						<h1 className="font-bold text-[1.5rem] text-left w-full">
 							Area of Concern
 						</h1>
 						<div className="flex items-center gap-3 w-full max-md:flex-col">
