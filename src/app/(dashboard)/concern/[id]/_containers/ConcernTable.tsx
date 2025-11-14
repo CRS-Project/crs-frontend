@@ -243,7 +243,7 @@ export default function ConcernTable({ id }: { id: string }) {
 						width={100}
 						height={100}
 						src="/images/dashboard/pixel-rectorat.png"
-						className="absolute bottom-0 right-0 top-0 h-full w-auto"
+						className="absolute bottom-0 right-0 top-0 h-full w-auto hidden md:block"
 						alt="Background Header"
 					/>
 				</div>

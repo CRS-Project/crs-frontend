@@ -5,6 +5,7 @@ import EditReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_docu
 import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { ROLE } from "@/lib/data";
+import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 
 interface ReplyCardProps {
@@ -87,7 +88,9 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 					{/* Author Info and Badges */}
 					<div className="flex-1">
 						<div className="flex items-center gap-2 flex-wrap">
-							<h3 className="text-gray-900 font-semibold text-base">{name}</h3>
+							<h3 className="text-gray-900 font-semibold text-base">
+								{trimText(name, 20)}
+							</h3>
 							<span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded">
 								{role}
 							</span>

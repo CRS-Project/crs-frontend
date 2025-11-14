@@ -8,6 +8,7 @@ import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_
 import UpdateStatusModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/UpdateStatusModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { COMMENT_STATUS, ROLE } from "@/lib/data";
+import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 import Button from "../button/Button";
 import ReplyCard from "./ReplyCard";
@@ -122,7 +123,9 @@ export default function CommentCard({
 				{/* Author Info and Badges */}
 				<div className="flex-1">
 					<div className="flex items-center gap-2 flex-wrap">
-						<h3 className="text-gray-900 font-semibold text-base">{name}</h3>
+						<h3 className="text-gray-900 font-semibold text-base">
+							{trimText(name, 20)}
+						</h3>
 						<span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded">
 							{role}
 						</span>
@@ -209,7 +212,7 @@ export default function CommentCard({
 				<div className="bg-gray-100 border-l-4 border-blue-500 p-3 rounded">
 					<h4 className="text-sm font-semibold text-blue-600 mb-2">Baseline</h4>
 					<p className="text-sm text-gray-600 leading-relaxed">
-						{comments.baseline}
+						{comments.baseline ? comments.baseline : "No baseline provided."}
 					</p>
 				</div>
 			</div>
