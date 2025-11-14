@@ -94,7 +94,6 @@ export default function CreateCommentModal({
 								id="baseline"
 								label="Baseline/Justification/Reference"
 								placeholder="Input Baseline/Justification/Reference"
-								validation={{ required: "Baseline is required!" }}
 							/>
 							<SelectInput
 								id="document_id"
@@ -104,10 +103,11 @@ export default function CreateCommentModal({
 										? documentIDs.map(
 												(doc: {
 													id: string;
+													document_title: string;
 													company_document_number: string;
 												}) => ({
 													value: doc.id,
-													label: doc.company_document_number,
+													label: `${doc.company_document_number} - ${doc.document_title}`,
 												}),
 											)
 										: []
