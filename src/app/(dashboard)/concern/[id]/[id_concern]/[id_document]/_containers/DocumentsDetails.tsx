@@ -90,7 +90,7 @@ export default function DocumentsDetails() {
 						width={100}
 						height={100}
 						src="/images/dashboard/pixel-rectorat.png"
-						className="absolute bottom-0 right-0 top-0 h-full w-auto"
+						className="absolute bottom-0 right-0 top-0 h-full w-auto hidden md:block"
 						alt="Background Header"
 					/>
 				</div>
@@ -145,7 +145,7 @@ export default function DocumentsDetails() {
 					</div>
 
 					{/* Comment Fill */}
-					<div className="flex flex-col gap-[27px]">
+					<div className="flex flex-col gap-[27px] px-2">
 						{filteredComments?.map((comment: Comment) => (
 							<CommentCard key={comment.id} comments={comment} />
 						))}

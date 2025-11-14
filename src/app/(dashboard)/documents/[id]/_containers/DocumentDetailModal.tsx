@@ -111,9 +111,6 @@ export default function DocumentDetailModal({
 									id="document_serial_number"
 									label="Document Serial Number"
 									placeholder="Input Document Serial Number"
-									validation={{
-										required: "Document Serial Number wajib diisi!",
-									}}
 									readOnly
 								/>
 								{currentDocumentUrl && (
@@ -136,67 +133,49 @@ export default function DocumentDetailModal({
 									id="document_type"
 									label="Document Type"
 									placeholder="Input Document Type"
-									validation={{ required: "Document Type wajib diisi!" }}
 									readOnly
 								/>
 								<Input
 									id="document_category"
 									label="Document Category"
 									placeholder="Input Document Category"
-									validation={{ required: "Document Category wajib diisi!" }}
 									readOnly
 								/>
 								<Input
 									id="company_document_number"
 									label="Company Document Number"
 									placeholder="Input Company Document Number"
-									validation={{
-										required: "Company Document Number wajib diisi!",
-									}}
 									readOnly
 								/>
 								<Input
 									id="contractor_document_number"
 									label="Contractor Document Number"
 									placeholder="Input Contractor Document Number"
-									validation={{
-										required: "Contractor Document Number wajib diisi!",
-									}}
 									readOnly
 								/>
 								<Input
 									id="ctr_number"
 									label="CTR Number"
 									placeholder="Input CTR Number"
-									validation={{ required: "CTR Number wajib diisi!" }}
 									readOnly
 								/>
-								<Input
-									id="wbs"
-									label="WBS"
-									placeholder="Input WBS"
-									validation={{ required: "WBS wajib diisi!" }}
-									readOnly
-								/>
+								<Input id="wbs" label="WBS" placeholder="Input WBS" readOnly />
 								<Input
 									id="discipline"
 									label="Discipline"
 									placeholder="Input Discipline"
-									validation={{ required: "Discipline wajib diisi!" }}
 									readOnly
 								/>
 								<Input
 									id="sub_discipline"
 									label="SubDiscipline"
 									placeholder="Input SubDiscipline"
-									validation={{ required: "SubDiscipline wajib diisi!" }}
 									readOnly
 								/>
 								<Input
 									id="status"
 									label="Status Document"
 									placeholder="Input Status Document"
-									validation={{ required: "Status Document wajib diisi!" }}
 									readOnly
 								/>
 							</div>

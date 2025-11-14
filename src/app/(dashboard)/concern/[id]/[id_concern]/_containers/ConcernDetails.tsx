@@ -107,12 +107,12 @@ export default function DocumentsDetails() {
 								{highlightedTitle}
 							</p>
 						</div>
-						<div className="w-full flex gap-4 flex-row items-end md:justify-end z-10">
+						<div className="w-full flex gap-4 flex-col md:flex-row items-end md:justify-end z-10">
 							<Button
 								rightIcon={Download}
 								size="lg"
 								variant="white"
-								className="w-fit sm:w-auto text-blue-500 font-semibold"
+								className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
 								onClick={() => {
 									router.push(`/pdf_generated/${id_concern}`);
 								}}
@@ -124,7 +124,7 @@ export default function DocumentsDetails() {
 									rightIcon={PlusIcon}
 									size="lg"
 									variant="white"
-									className="w-fit sm:w-auto text-blue-500 font-semibold"
+									className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
 									onClick={() => setIsOpen({ ...isOpen, create: true })}
 								>
 									Create Area Of Concern
@@ -136,7 +136,7 @@ export default function DocumentsDetails() {
 						width={100}
 						height={100}
 						src="/images/dashboard/pixel-rectorat.png"
-						className="absolute bottom-0 right-0 top-0 h-full w-auto"
+						className="absolute bottom-0 right-0 top-0 h-full w-auto hidden md:block"
 						alt="Background Header"
 					/>
 				</div>

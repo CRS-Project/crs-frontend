@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal, ModalContent } from "@heroui/modal";
-import { motion } from "framer-motion";
+import { motion, useDragControls } from "framer-motion";
 import { X } from "lucide-react";
 import { useParams } from "next/navigation";
 import * as React from "react";
@@ -61,7 +61,104 @@ export default function EditReplyModal({
 		mutation.mutate(data);
 	};
 
-	return (
+	const handleClose = () => {
+		onClose();
+		reset();
+	};
+
+	const [isMobile, setIsMobile] = React.useState(false);
+	React.useEffect(() => {
+		const check = () =>
+			setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+		check();
+		window.addEventListener("resize", check);
+		return () => window.removeEventListener("resize", check);
+	}, []);
+
+	const sheetRef = React.useRef<HTMLDivElement | null>(null);
+	const dragControls = useDragControls();
+
+	return isMobile ? (
+		isOpen ? (
+			<>
+				<motion.div
+					className="fixed inset-0 z-[2000] bg-black/40"
+					onClick={handleClose}
+				/>
+				<motion.div
+					drag="y"
+					dragControls={dragControls}
+					dragListener={false}
+					dragConstraints={{ top: 0, bottom: 0 }}
+					onDragEnd={(_e, info) => {
+						if (info.offset.y > 120 || info.velocity.y > 800) {
+							handleClose();
+						}
+					}}
+					initial={{ y: "100%" }}
+					animate={{ y: 0 }}
+					exit={{ y: "100%" }}
+					transition={{ type: "spring", damping: 25, stiffness: 300 }}
+					ref={sheetRef}
+					className="fixed bottom-0 left-0 right-0 z-[2001] rounded-t-2xl bg-white shadow-xl max-h-[85vh] overflow-auto"
+				>
+					<div className="px-4 py-3">
+						<div
+							className="mx-auto h-0.5 w-12 bg-slate-200 rounded mb-3"
+							onPointerDown={(e) => dragControls.start(e as any)}
+						/>
+						<div className="flex items-center justify-between">
+							<h3 className="text-lg font-semibold">Edit Reply</h3>
+							<IconButton
+								variant="ghost"
+								onClick={handleClose}
+								icon={X}
+								className="w-8 h-8 rounded-full"
+								iconClassName="w-6 h-6 text-[#3F3F46]"
+							/>
+						</div>
+					</div>
+					<div className="px-4 py-6">
+						{parentComment && (
+							<div className="mb-4">
+								<CommentCard comments={parentComment} isPreview={true} />
+							</div>
+						)}
+
+						<FormProvider {...methods}>
+							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+								<TextArea
+									className="h-[91px]"
+									id="comment"
+									label="Reply Text"
+									placeholder="Input Reply Text"
+									validation={{ required: "Reply Text is required!" }}
+								/>
+
+								<div className="grid grid-cols-3 py-4 gap-3">
+									<Button
+										variant="secondary"
+										size="lg"
+										onClick={handleClose}
+										className="justify-center"
+									>
+										Cancel
+									</Button>
+									<Button
+										className="col-span-2 justify-center"
+										type="submit"
+										size="lg"
+									>
+										Save Update Reply
+									</Button>
+								</div>
+							</form>
+						</FormProvider>
+					</div>
+				</motion.div>
+			</>
+		) : null
+	) : (
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
@@ -85,10 +182,7 @@ export default function EditReplyModal({
 					<div className="flex gap-2 items-center">
 						<IconButton
 							variant="ghost"
-							onClick={() => {
-								onClose();
-								reset();
-							}}
+							onClick={handleClose}
 							icon={X}
 							className="w-8 h-8 rounded-full"
 							iconClassName="w-6 h-6 text-[#3F3F46]"
@@ -117,14 +211,16 @@ export default function EditReplyModal({
 								<Button
 									variant="secondary"
 									size="lg"
-									onClick={() => {
-										onClose();
-										reset();
-									}}
+									onClick={handleClose}
+									className="justify-center"
 								>
 									Cancel
 								</Button>
-								<Button className="col-span-2" type="submit" size="lg">
+								<Button
+									className="col-span-2 justify-center"
+									type="submit"
+									size="lg"
+								>
 									Save Update Reply
 								</Button>
 							</div>
