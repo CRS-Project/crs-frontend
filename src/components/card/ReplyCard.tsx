@@ -56,10 +56,10 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 	};
 
 	return (
-		<div className="rounded-lg">
+		<div className="rounded-lg w-full">
 			{/* Header Section */}
-			<div className="flex items-center gap-3 w-full justify-between">
-				<div className="flex-shrink-0 gap-2 items-center flex">
+			<div className="flex items-center gap-3 mb-3">
+				<div className="flex-shrink-0">
 					{/* Avatar */}
 					<div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
 						{photo_profile ? (
@@ -84,17 +84,16 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 							</div>
 						)}
 					</div>
-
-					{/* Author Info and Badges */}
-					<div className="flex-1">
-						<div className="flex items-center gap-2 flex-wrap">
-							<h3 className="text-gray-900 font-semibold text-base">
-								{trimText(name, 20)}
-							</h3>
-							<span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded">
-								{role}
-							</span>
-						</div>
+				</div>
+				{/* Author Info and Badges */}
+				<div className="flex-1">
+					<div className="flex items-center gap-2 flex-wrap">
+						<h3 className="text-gray-900 font-semibold text-base">
+							{trimText(name, 20)}
+						</h3>
+						<span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded">
+							{role}
+						</span>
 					</div>
 				</div>
 

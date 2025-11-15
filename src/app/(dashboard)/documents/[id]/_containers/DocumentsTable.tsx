@@ -169,7 +169,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 								user?.role === ROLE.REVIEWER && "hidden"
 							}`}
 						>
-							<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+							<div className="flex flex-col w-full md:w-auto gap-3 sm:flex-row sm:items-center">
 								<Button
 									variant="white"
 									size="lg"

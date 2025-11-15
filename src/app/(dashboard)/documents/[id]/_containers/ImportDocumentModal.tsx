@@ -110,7 +110,7 @@ export default function ImportDocumentModal({
 										validation={{ required: "File is required" }}
 									/>
 
-									<div className="grid grid-cols-2 gap-3 pb-8 mt-3">
+									<div className="flex flex-col md:grid md:grid-cols-2 gap-3 pb-8 mt-3">
 										<Button
 											onClick={() => {
 												onClose();
