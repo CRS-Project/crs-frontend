@@ -90,7 +90,7 @@ export default function CommentCard({
 	};
 
 	return (
-		<div className="rounded-lg">
+		<div className="rounded-lg w-full">
 			{/* Header Section */}
 			<div className="flex items-start gap-3 mb-3">
 				{/* Avatar */}

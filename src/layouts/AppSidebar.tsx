@@ -332,18 +332,22 @@ const AppSidebar: React.FC = () => {
 									{user?.name ?? "Super Admin ITS"}
 								</p>
 								<div className="flex gap-2 mt-1">
-									<Link
-										href="/profile"
-										className="text-sm text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+									<Button
+										onClick={() => {
+											router.push("/profile");
+										}}
+										variant="ghost"
+										className="text-sm text-gray-700"
 									>
 										Profile
-									</Link>
+									</Button>
 									<Button
 										onClick={() => {
 											logoutFn();
 											router.push("/login");
 										}}
-										className="text-sm text-red-600 px-2 py-1 rounded bg-red-50 hover:bg-red-100"
+										variant="ghost"
+										className="text-sm text-red-600"
 									>
 										Logout
 									</Button>

@@ -169,7 +169,7 @@ function UsersTable() {
 				<Button
 					rightIcon={Plus}
 					size="lg"
-					className="lg:px-8"
+					className="lg:px-8 w-full md:w-auto"
 					onClick={() => setIsOpen({ ...isOpen, create: true })}
 				>
 					Create New User
