@@ -3,6 +3,7 @@
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion, useDragControls } from "framer-motion";
 import { X } from "lucide-react";
+import { useParams } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
@@ -24,7 +25,8 @@ export default function CommentDetailModal({
 	onClose,
 	comment,
 }: CommentDetailModalProps) {
-	const { data: documentIDs } = useGetDocument();
+	const { id } = useParams();
+	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<Comment>({
 		mode: "onTouched",

@@ -26,8 +26,8 @@ export default function EditCommentModal({
 	onClose,
 	comment,
 }: EditCommentModalProps) {
-	const { id_concern, id_document } = useParams();
-	const { data: documentIDs } = useGetDocument();
+	const { id, id_concern, id_document } = useParams();
+	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<EditCommentRequest>({
 		mode: "onSubmit",

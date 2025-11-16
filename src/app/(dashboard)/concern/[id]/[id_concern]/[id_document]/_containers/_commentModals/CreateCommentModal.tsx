@@ -24,8 +24,8 @@ export default function CreateCommentModal({
 	isOpen,
 	onClose,
 }: CreateCommentModalProps) {
-	const { data: documentIDs } = useGetDocument();
-	const { id_concern, id_document } = useParams();
+	const { id, id_concern, id_document } = useParams();
+	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<CreateCommentRequest>({
 		mode: "onTouched",
