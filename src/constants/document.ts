@@ -15,5 +15,5 @@ export const categoryOptions = [
 
 export const STATUS_DOCUMENT_OPTIONS = [
 	{ value: "IFR Comment", label: "IFR Comment" },
-	{ value: "IFU Comment", label: "IFU Comment" },
+	{ value: "IFU", label: "IFU" },
 ];
