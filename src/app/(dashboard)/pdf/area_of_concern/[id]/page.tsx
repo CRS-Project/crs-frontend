@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import { useGenerateReportConcern } from "../../concern/[id]/[id_concern]/_hooks/useGenerateDataConcern";
+import { useGenerateReportConcern } from "@/app/(dashboard)/concern/[id]/[id_concern]/_hooks/useGenerateDataConcern";
 
 export default function PdfViewer() {
 	const { id } = useParams();
@@ -38,10 +38,10 @@ export default function PdfViewer() {
 	}
 
 	return (
-		<div className="w-full h-screen">
+		<div className="w-full h-screen flex justify-center items-center">
 			<iframe
 				src={data}
-				className="w-full h-full"
+				className="w-[80%] h-full"
 				title="Area of Concern PDF"
 			/>
 		</div>
