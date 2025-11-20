@@ -39,4 +39,7 @@ export const MAIN_ENDPOINT = {
 		FetchUsersByPackageAndRole:
 			"/v1/user?filter=Reviewer,:id&filter_by=role,package_id",
 	},
+	Package: {
+		GeneratePdf: "/v1/package/:package_id/generate-pdf",
+	},
 };

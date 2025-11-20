@@ -114,7 +114,7 @@ export default function DocumentsDetails() {
 								variant="white"
 								className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
 								onClick={() => {
-									router.push(`/pdf_generated/${id_concern}`);
+									router.push(`/pdf/area_of_concern/${id_concern}`);
 								}}
 							>
 								Download Data Concern

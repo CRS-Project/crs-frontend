@@ -9,6 +9,7 @@ import {
 } from "@heroui/dropdown";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
+	Download,
 	Eye,
 	Filter,
 	ListOrdered,
@@ -18,7 +19,7 @@ import {
 	Trash2,
 } from "lucide-react";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Loading from "@/app/loading";
@@ -40,6 +41,7 @@ import DeleteConcernModal from "./DeleteConcernModal";
 import EditConcernModal from "./EditConcernModal";
 
 export default function ConcernTable({ id }: { id: string }) {
+	const router = useRouter();
 	const { user } = useAuthStore();
 	const {
 		data: packageData,
@@ -238,6 +240,25 @@ export default function ConcernTable({ id }: { id: string }) {
 								{packageDescription}
 							</p>
 						</div>
+						<div
+							className={`w-full flex gap-4 flex-row items-end md:justify-end ${
+								user?.role === ROLE.REVIEWER && "hidden"
+							}`}
+						>
+							<div className="flex flex-col w-full md:w-auto gap-3 sm:flex-row sm:items-center z-20">
+								<Button
+									variant="white"
+									size="lg"
+									className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+									onClick={() => {
+										router.push(`/pdf/package/${packageId}`);
+									}}
+									rightIcon={Download}
+								>
+									Download All Data AOC
+								</Button>
+							</div>
+						</div>
 					</div>
 					<Image
 						width={100}
@@ -266,7 +287,7 @@ export default function ConcernTable({ id }: { id: string }) {
 						user?.role === ROLE.REVIEWER && "hidden"
 					}`}
 				>
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-center border">
 						<Button
 							rightIcon={Plus}
 							size="lg"
