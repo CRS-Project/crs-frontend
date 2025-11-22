@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "api.crsapps.cloud",
+				hostname: "api.maselacrsapps.com",
 				port: "",
 				pathname: "/**",
 			},
