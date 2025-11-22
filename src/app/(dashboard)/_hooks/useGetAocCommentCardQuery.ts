@@ -7,6 +7,7 @@ export type AocStats = {
 	total_documents: number;
 	total_comments: number;
 	total_comment_rejected: number;
+	total_documents_without_comment: number;
 };
 
 export function useGetAocCommentCardQuery(id: string) {

@@ -111,6 +111,11 @@ export default function DataPage() {
 							value={cardData?.data?.total_comment_rejected || 0}
 							variant="white"
 						/>
+						<SummaryCard
+							title="Total Document Without Comments"
+							value={cardData?.data?.total_documents_without_comment || 0}
+							variant="white"
+						/>
 					</div>
 					<h1 className="font-bold text-3xl mb-2">Statistics Comment Users</h1>
 					<ReviewRecapChart packageId={packageId} />
