@@ -287,7 +287,7 @@ export default function ConcernTable({ id }: { id: string }) {
 						user?.role === ROLE.REVIEWER && "hidden"
 					}`}
 				>
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-center border">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 						<Button
 							rightIcon={Plus}
 							size="lg"
