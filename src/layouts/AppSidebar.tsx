@@ -7,6 +7,7 @@ import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
+import UnstyledLink from "@/components/links/UnstyledLink";
 import { useSidebar } from "@/context/SidebarContext";
 import Data from "../../public/icons/data.svg";
 import Documents from "../../public/icons/documents.svg";
@@ -272,7 +273,7 @@ const AppSidebar: React.FC = () => {
 		<aside
 			className={`fixed flex flex-col p-6 -left-1 bg-white text-gray-900 ${
 				isMobileOpen ? "h-[calc(100vh-72.8px)]" : "h-screen"
-			} transition-all justify-between duration-300 ease-in-out z-999 border-r border-gray-200 
+			} transition-all justify-between duration-300 ease-in-out z-999 border-r border-gray-200
         ${
 					isExpanded || isMobileOpen
 						? "w-[280px]"
@@ -365,7 +366,14 @@ const AppSidebar: React.FC = () => {
 						</h2>
 
 						<Button rightIcon={ArrowRight} variant="white" className="w-full">
-							Guidebook
+							<UnstyledLink
+								href={
+									"https://drive.google.com/file/d/1aAhw7E3eE1qXirFjX-gvalnf5Q2w_D9p/view?usp=sharing"
+								}
+								target="_blank"
+							>
+								Guidebook
+							</UnstyledLink>
 						</Button>
 						<Button rightIcon={Play} variant="primary" className="w-full">
 							Video Tutorial
