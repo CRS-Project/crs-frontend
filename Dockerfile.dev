@@ -1,0 +1,34 @@
+# ===== Builder =====
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+ARG NEXT_PUBLIC_RUN_MODE
+ARG NEXT_PUBLIC_API_URL_DEV
+ARG NEXT_PUBLIC_API_URL_PROD
+ARG SITE_URL
+
+ENV NEXT_PUBLIC_RUN_MODE=$NEXT_PUBLIC_RUN_MODE
+ENV NEXT_PUBLIC_API_URL_DEV=$NEXT_PUBLIC_API_URL_DEV
+ENV NEXT_PUBLIC_API_URL_PROD=$NEXT_PUBLIC_API_URL_PROD
+ENV SITE_URL=$SITE_URL
+
+RUN pnpm build
+
+# ===== Runner =====
+FROM node:20-alpine
+WORKDIR /app
+
+RUN npm install -g pnpm
+ENV NODE_ENV=production
+
+COPY --from=builder /app ./
+
+EXPOSE 3001
+CMD ["pnpm", "start"]
