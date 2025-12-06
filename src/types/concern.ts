@@ -13,6 +13,8 @@ export type Concern = {
 	review_focus: string;
 	package: string;
 	user_discipline: string;
+	discipline_initial?: string;
+	consolidators?: Consolidator[];
 };
 
 export type CreateAreaOfConcernRequest = {
@@ -32,15 +34,19 @@ export type EditAreaOfConcernRequest = {
 };
 
 export type CreateConcernRequest = {
-	review_focus: string;
-	package: string;
 	user_discipline: string;
+	discipline_initial: string;
+	review_focus: string;
+	consolidators: ConsolidatorUser[];
+	consolidator_select?: string;
 };
 
 export type EditConcernRequest = {
-	review_focus?: string;
-	package?: string;
 	user_discipline?: string;
+	discipline_initial?: string;
+	review_focus?: string;
+	consolidators?: ConsolidatorUser[];
+	consolidator_select?: string;
 };
 
 export type ConcernPageParams = Promise<{ id: string }>;

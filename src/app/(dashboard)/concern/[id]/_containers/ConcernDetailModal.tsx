@@ -8,7 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
+import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
 import Input from "@/components/form/Input";
+import LabelText from "@/components/form/LabelText";
 import TextArea from "@/components/form/TextArea";
 import type { Concern } from "@/types/concern";
 import { useGetConcernByIDQuery } from "../_hooks/useGetConcernByIDQuery";
@@ -24,17 +26,25 @@ export default function ConcernDetailModal({
 	onClose,
 	concern,
 }: ConcernDetailModalProps) {
-	const { data } = useGetConcernByIDQuery(concern?.id ?? "");
+	const { data, isLoading, refetch } = useGetConcernByIDQuery(
+		concern?.id ?? "",
+		isOpen,
+	);
 	const methods = useForm<Concern>({
 		mode: "onTouched",
-		defaultValues: data?.data,
 	});
 
 	React.useEffect(() => {
-		if (data?.data) {
+		if (isOpen && concern?.id) {
+			refetch();
+		}
+	}, [isOpen, concern?.id, refetch]);
+
+	React.useEffect(() => {
+		if (data?.data && isOpen) {
 			methods.reset(data.data);
 		}
-	}, [data, methods]);
+	}, [data, methods, isOpen]);
 
 	// detect mobile (client-side only)
 	const [isMobile, setIsMobile] = useState(false);
@@ -80,7 +90,7 @@ export default function ConcernDetailModal({
 							onPointerDown={(e) => dragControls.start(e as any)}
 						/>
 						<div className="flex items-center justify-between">
-							<h3 className="text-lg font-semibold">Detail Concern</h3>
+							<h3 className="text-lg font-semibold">Detail Discipline Group</h3>
 							<IconButton
 								variant="ghost"
 								onClick={onClose}
@@ -98,16 +108,43 @@ export default function ConcernDetailModal({
 									label="Discipline"
 									placeholder="Discipline"
 									readOnly
-									validation={{ required: "Discipline wajib diisi!" }}
+								/>
+								<Input
+									id="discipline_initial"
+									label="Initial"
+									placeholder="Initial"
+									readOnly
 								/>
 								<TextArea
 									id="review_focus"
 									label="Review Focus"
 									placeholder="Review Focus"
 									readOnly
-									rows={8}
-									validation={{ required: "Review Focus wajib diisi!" }}
+									rows={6}
 								/>
+
+								<div className="space-y-2">
+									<LabelText>Consolidators</LabelText>
+									<div className="flex flex-wrap gap-2">
+										{data?.data?.consolidators &&
+										data.data.consolidators.length > 0 ? (
+											data.data.consolidators.map((consolidator: any) => (
+												<ConsolidatorChip
+													key={consolidator.user_id || consolidator.id}
+													name={
+														consolidator.name ||
+														consolidator.user?.name ||
+														"Unknown"
+													}
+												/>
+											))
+										) : (
+											<p className="text-sm text-gray-500">
+												No consolidators assigned
+											</p>
+										)}
+									</div>
+								</div>
 							</div>
 						</FormProvider>
 						<div className="mt-6">
@@ -153,18 +190,23 @@ export default function ConcernDetailModal({
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
 						<h2 className="text-2xl font-bold text-[#52525B]">
-							Detail Concern
+							Detail Discipline Group
 						</h2>
 					</div>
 
 					<FormProvider {...methods}>
-						<div className="my-8 space-y-2">
+						<div className="my-8 space-y-4">
 							<Input
 								id="user_discipline"
 								label="Discipline"
 								placeholder="Input Discipline"
 								readOnly
-								validation={{ required: "Discipline wajib diisi!" }}
+							/>
+							<Input
+								id="discipline_initial"
+								label="Initial"
+								placeholder="Input Initial"
+								readOnly
 							/>
 							<TextArea
 								id="review_focus"
@@ -172,8 +214,30 @@ export default function ConcernDetailModal({
 								placeholder="Input Review Focus"
 								readOnly
 								rows={6}
-								validation={{ required: "Review Focus wajib diisi!" }}
 							/>
+
+							<div className="space-y-2">
+								<LabelText>Consolidators</LabelText>
+								<div className="flex flex-wrap gap-2">
+									{data?.data?.consolidators &&
+									data.data.consolidators.length > 0 ? (
+										data.data.consolidators.map((consolidator: any) => (
+											<ConsolidatorChip
+												key={consolidator.user_id || consolidator.id}
+												name={
+													consolidator.name ||
+													consolidator.user?.name ||
+													"Unknown"
+												}
+											/>
+										))
+									) : (
+										<p className="text-sm text-gray-500">
+											No consolidators assigned
+										</p>
+									)}
+								</div>
+							</div>
 						</div>
 					</FormProvider>
 					<Button size="lg" onClick={onClose} className="w-full">

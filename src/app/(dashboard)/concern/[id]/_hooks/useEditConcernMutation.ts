@@ -21,14 +21,17 @@ export function useEditConcernMutation({
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: EditConcernRequest) => {
 			const payload = {
-				...data,
+				user_discipline: data.user_discipline,
+				discipline_initial: data.discipline_initial,
+				review_focus: data.review_focus,
+				consolidators:
+					data.consolidators?.map((c) => ({
+						user_id: c.user_id,
+					})) || [],
 				package_id: packageId,
 			};
 
-			const response = await api.put(
-				`/v1/area-of-concern-group/${id}`,
-				payload,
-			);
+			const response = await api.put(`/v1/discipline-group/${id}`, payload);
 			return response.data;
 		},
 		onSuccess: () => {

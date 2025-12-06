@@ -32,8 +32,7 @@ export const MAIN_ENDPOINT = {
 			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id",
 		DeleteAreaOfConcern:
 			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id",
-		GeneratePdf:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/generate-pdf",
+		GeneratePdf: "/v1/discipline-group/:area_of_concern_group_id/generate-pdf",
 	},
 	User: {
 		FetchUsersByPackageAndRole:
