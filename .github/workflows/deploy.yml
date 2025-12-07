@@ -29,7 +29,7 @@ jobs:
             echo "TAG=latest" >> $GITHUB_ENV
             echo "DOCKERFILE=Dockerfile.prod" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_RUN_MODE=production" >> $GITHUB_ENV
-          else if [[ "${{ github.ref_name }}" == "dev" ]]; then
+          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
             echo "TAG=dev" >> $GITHUB_ENV
             echo "DOCKERFILE=Dockerfile.dev" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_RUN_MODE=development" >> $GITHUB_ENV
@@ -60,7 +60,7 @@ jobs:
             echo "TAG=latest" >> $GITHUB_ENV
             echo "DEPLOY_DIR=/home/deploy/fe" >> $GITHUB_ENV
             echo "COMPOSE_FILE=docker-compose.prod.yml" >> $GITHUB_ENV
-          else if [[ "${{ github.ref_name }}" == "dev" ]]; then
+          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
             echo "TAG=dev" >> $GITHUB_ENV
             echo "DEPLOY_DIR=/home/deploy/fe-dev" >> $GITHUB_ENV
             echo "COMPOSE_FILE=docker-compose.dev.yml" >> $GITHUB_ENV
