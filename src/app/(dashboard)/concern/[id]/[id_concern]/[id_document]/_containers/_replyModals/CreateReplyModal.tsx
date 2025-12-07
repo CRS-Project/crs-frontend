@@ -50,7 +50,6 @@ export default function CreateReplyModal({
 
 	const onSubmit: SubmitHandler<CreateReplyRequest> = async (data) => {
 		data.is_close_out_comment = isCloseComment;
-		data.document_id = comment?.document_id;
 		mutation.mutate(data);
 	};
 

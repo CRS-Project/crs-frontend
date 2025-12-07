@@ -34,7 +34,6 @@ export default function EditReplyModal({
 	const methods = useForm<EditCommentRequest>({
 		mode: "onSubmit",
 		defaultValues: {
-			document_id: "",
 			section: reply?.section ?? "",
 			comment: reply?.comment ?? "",
 			baseline: reply?.baseline ?? "",
@@ -61,7 +60,6 @@ export default function EditReplyModal({
 	});
 
 	const onSubmit: SubmitHandler<EditCommentRequest> = async (data) => {
-		data.document_id = reply?.document_id || "";
 		mutation.mutate(data);
 	};
 
