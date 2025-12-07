@@ -10,13 +10,11 @@ import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
-import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
 import UploadFile from "@/components/form/UploadFile";
 import ButtonLink from "@/components/links/ButtonLink";
 import type { Comment, EditCommentRequest } from "@/types/comment";
 import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
-import { useGetDocument } from "../../_hooks/useGetDocument";
 
 interface EditCommentModalProps {
 	comment: Comment | null;
@@ -30,12 +28,10 @@ export default function EditCommentModal({
 	comment,
 }: EditCommentModalProps) {
 	const { id, id_concern, id_document } = useParams();
-	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<EditCommentRequest>({
 		mode: "onSubmit",
 		defaultValues: {
-			document_id: comment?.document_id ?? "",
 			section: comment?.section ?? "",
 			comment: comment?.comment ?? "",
 			baseline: comment?.baseline ?? "",
@@ -145,25 +141,6 @@ export default function EditCommentModal({
 									label="Baseline/Justification/Reference"
 									placeholder="Input Baseline/Justification/Reference"
 									validation={{ required: "Baseline is required!" }}
-								/>
-								<SelectInput
-									id="document_id"
-									label="Document ID"
-									options={
-										documentIDs
-											? documentIDs.map(
-													(doc: {
-														id: string;
-														company_document_number: string;
-													}) => ({
-														value: doc.id,
-														label: doc.company_document_number,
-													}),
-												)
-											: []
-									}
-									placeholder="Select Document ID"
-									validation={{ required: "Document ID is required!" }}
 								/>
 								<Input
 									id="section"
@@ -278,25 +255,6 @@ export default function EditCommentModal({
 								label="Baseline/Justification/Reference"
 								placeholder="Input Baseline/Justification/Reference"
 								validation={{ required: "Baseline is required!" }}
-							/>
-							<SelectInput
-								id="document_id"
-								label="Document ID"
-								options={
-									documentIDs
-										? documentIDs.map(
-												(doc: {
-													id: string;
-													company_document_number: string;
-												}) => ({
-													value: doc.id,
-													label: doc.company_document_number,
-												}),
-											)
-										: []
-								}
-								placeholder="Select Document ID"
-								validation={{ required: "Document ID is required!" }}
 							/>
 							<Input
 								id="section"

@@ -9,10 +9,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
-import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
 import type { Comment } from "@/types/comment";
-import { useGetDocument } from "../../_hooks/useGetDocument";
 
 interface CommentDetailModalProps {
 	isOpen: boolean;
@@ -26,7 +24,6 @@ export default function CommentDetailModal({
 	comment,
 }: CommentDetailModalProps) {
 	const { id } = useParams();
-	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<Comment>({
 		mode: "onTouched",
@@ -115,27 +112,6 @@ export default function CommentDetailModal({
 									placeholder="Input Baseline/Justification/Reference"
 									readOnly
 								/>
-								<SelectInput
-									id="document_id"
-									label="Document ID"
-									options={
-										documentIDs
-											? documentIDs.map(
-													(doc: {
-														id: string;
-														company_document_number: string;
-													}) => ({
-														value: doc.id,
-														label: doc.company_document_number,
-													}),
-												)
-											: []
-									}
-									placeholder="Select Document ID"
-									validation={{ required: "Document ID is required!" }}
-									readOnly
-									disabled
-								/>
 								<Input
 									id="section"
 									label="Section Document"
@@ -213,27 +189,6 @@ export default function CommentDetailModal({
 								label="Baseline/Justification/Reference"
 								placeholder="Input Baseline/Justification/Reference"
 								readOnly
-							/>
-							<SelectInput
-								id="document_id"
-								label="Document ID"
-								options={
-									documentIDs
-										? documentIDs.map(
-												(doc: {
-													id: string;
-													company_document_number: string;
-												}) => ({
-													value: doc.id,
-													label: doc.company_document_number,
-												}),
-											)
-										: []
-								}
-								placeholder="Select Document ID"
-								validation={{ required: "Document ID is required!" }}
-								readOnly
-								disabled
 							/>
 							<Input
 								id="section"
