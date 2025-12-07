@@ -48,3 +48,5 @@ export type EditConcernRequest = {
 	discipline_group_consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 };
+
+export type ConcernPageParams = Promise<{ id: string }>;

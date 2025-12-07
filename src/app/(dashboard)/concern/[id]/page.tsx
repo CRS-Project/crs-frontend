@@ -3,8 +3,8 @@ import type { ConcernPageParams } from "@/types/concern";
 import ConcernTable from "./_containers/ConcernTable";
 
 export const metadata: Metadata = {
-	title: "Concern Details",
-	description: "Concern Details Page",
+	title: "Discipline Group",
+	description: "Discipline Groups Page",
 };
 
 export default async function ConcernDetailsPage({

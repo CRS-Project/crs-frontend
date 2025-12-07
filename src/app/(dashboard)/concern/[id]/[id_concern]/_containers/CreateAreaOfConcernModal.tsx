@@ -207,15 +207,16 @@ export default function CreateAreaOfConcernModal({
 											>
 												<ConsolidatorChip
 													name={
-														consolidator.name ||
-														consolidator.discipline_group_consolidator_id
+														consolidator.name ??
+														consolidator.discipline_group_consolidator_id ??
+														""
 													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
 														removeConsolidator(
-															consolidator.discipline_group_consolidator_id ||
+															consolidator.discipline_group_consolidator_id ??
 																"",
 														)
 													}
@@ -338,15 +339,16 @@ export default function CreateAreaOfConcernModal({
 										>
 											<ConsolidatorChip
 												name={
-													consolidator.name ||
-													consolidator.discipline_group_consolidator_id
+													consolidator.name ??
+													consolidator.discipline_group_consolidator_id ??
+													""
 												}
 											/>
 											<button
 												type="button"
 												onClick={() =>
 													removeConsolidator(
-														consolidator.discipline_group_consolidator_id,
+														consolidator.discipline_group_consolidator_id ?? "",
 													)
 												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"

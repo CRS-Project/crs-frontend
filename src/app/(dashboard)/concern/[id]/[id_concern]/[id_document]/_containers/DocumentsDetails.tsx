@@ -57,8 +57,7 @@ export default function DocumentsDetails() {
 	}
 
 	const highlightedPackage =
-		concern?.document?.document_title ||
-		"Document Unavailable";
+		concern?.document?.document_title || "Document Unavailable";
 	const highlightedTitle =
 		concern?.document.document_category ||
 		"No description available for this document.";
