@@ -48,7 +48,7 @@ export default function AreaOfConcernDetailModal({
 	const sheetRef = useRef<HTMLDivElement | null>(null);
 	const dragControls = useDragControls();
 
-	const consolidators = concern?.discipline_group_consolidators || [];
+	const consolidators = concern?.consolidators || [];
 
 	if (isMobile) {
 		return isOpen ? (
@@ -105,7 +105,7 @@ export default function AreaOfConcernDetailModal({
 									<div className="flex flex-wrap gap-2">
 										{consolidators.map((consolidator) => (
 											<ConsolidatorChip
-												key={consolidator.id}
+												key={consolidator.discipline_group_consolidator_id}
 												name={consolidator.name}
 											/>
 										))}
@@ -171,7 +171,7 @@ export default function AreaOfConcernDetailModal({
 								<div className="flex flex-wrap gap-2">
 									{consolidators.map((consolidator) => (
 										<ConsolidatorChip
-											key={consolidator.id}
+											key={consolidator.discipline_group_consolidator_id}
 											name={consolidator.name}
 										/>
 									))}

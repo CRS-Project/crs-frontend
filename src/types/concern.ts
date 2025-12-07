@@ -21,14 +21,14 @@ export type Concern = {
 
 export type CreateAreaOfConcernRequest = {
 	document_id?: string;
-	discipline_group_consolidators?: ConsolidatorUser[];
+	consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 	package_id: string;
 };
 
 export type EditAreaOfConcernRequest = {
 	document_id?: string;
-	discipline_group_consolidators?: ConsolidatorUser[];
+	consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 	package_id: string;
 };

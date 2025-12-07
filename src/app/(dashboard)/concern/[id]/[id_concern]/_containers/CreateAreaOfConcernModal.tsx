@@ -60,13 +60,15 @@ export default function CreateAreaOfConcernModal({
 	const addConsolidator = () => {
 		if (
 			selectedUserId &&
-			!selectedConsolidators.find((c) => c.user_id === selectedUserId)
+			!selectedConsolidators.find(
+				(c) => c.discipline_group_consolidator_id === selectedUserId,
+			)
 		) {
 			const user = consolidatorOptions?.user.find(
 				(u: any) => u.value === selectedUserId,
 			);
 			const newConsolidator: ConsolidatorUser = {
-				user_id: String(selectedUserId),
+				discipline_group_consolidator_id: String(selectedUserId),
 				name: user?.label,
 			};
 			const updated = [...selectedConsolidators, newConsolidator];
@@ -77,7 +79,9 @@ export default function CreateAreaOfConcernModal({
 	};
 
 	const removeConsolidator = (userId: string) => {
-		const updated = selectedConsolidators.filter((c) => c.user_id !== userId);
+		const updated = selectedConsolidators.filter(
+			(c) => c.discipline_group_consolidator_id !== userId,
+		);
 		setSelectedConsolidators(updated);
 		setValue("consolidators", updated);
 	};
@@ -98,7 +102,7 @@ export default function CreateAreaOfConcernModal({
 		data.package_id = id as string;
 		data.consolidators =
 			data.consolidators?.map((c) => ({
-				user_id: c.user_id,
+				discipline_group_consolidator_id: c.discipline_group_consolidator_id,
 			})) ?? [];
 		mutation.mutate(data);
 	};
@@ -196,18 +200,24 @@ export default function CreateAreaOfConcernModal({
 										</Button>
 									</div>
 									<div className="flex flex-wrap gap-2 mt-2">
-										{selectedConsolidators.map((consolidator) => (
+										{selectedConsolidators?.map((consolidator) => (
 											<div
-												key={consolidator.user_id}
+												key={consolidator.discipline_group_consolidator_id}
 												className="relative group"
 											>
 												<ConsolidatorChip
-													name={consolidator.name || consolidator.user_id}
+													name={
+														consolidator.name ||
+														consolidator.discipline_group_consolidator_id
+													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
-														removeConsolidator(consolidator.user_id)
+														removeConsolidator(
+															consolidator.discipline_group_consolidator_id ||
+																"",
+														)
 													}
 													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 												>
@@ -322,13 +332,23 @@ export default function CreateAreaOfConcernModal({
 								</div>
 								<div className="flex flex-wrap gap-2 mt-2">
 									{selectedConsolidators.map((consolidator) => (
-										<div key={consolidator.user_id} className="relative group">
+										<div
+											key={consolidator.discipline_group_consolidator_id}
+											className="relative group"
+										>
 											<ConsolidatorChip
-												name={consolidator.name || consolidator.user_id}
+												name={
+													consolidator.name ||
+													consolidator.discipline_group_consolidator_id
+												}
 											/>
 											<button
 												type="button"
-												onClick={() => removeConsolidator(consolidator.user_id)}
+												onClick={() =>
+													removeConsolidator(
+														consolidator.discipline_group_consolidator_id,
+													)
+												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 											>
 												×

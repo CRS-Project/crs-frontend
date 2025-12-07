@@ -24,8 +24,8 @@ export function useEditConcernMutation({
 				user_discipline: data.user_discipline,
 				discipline_initial: data.discipline_initial,
 				review_focus: data.review_focus,
-				consolidators:
-					data.consolidators?.map((c) => ({
+				discipline_group_consolidators:
+					data.discipline_group_consolidators?.map((c) => ({
 						user_id: c.user_id,
 					})) || [],
 				package_id: packageId,

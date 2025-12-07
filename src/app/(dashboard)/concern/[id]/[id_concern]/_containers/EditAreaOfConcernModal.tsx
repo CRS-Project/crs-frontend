@@ -50,8 +50,10 @@ export default function EditAreaOfConcernModal({
 		mode: "onTouched",
 		defaultValues: {
 			consolidators:
-				concern?.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) ||
-				[],
+				concern?.consolidators?.map((c) => ({
+					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+					name: c.name,
+				})) || [],
 		},
 	});
 
@@ -61,13 +63,16 @@ export default function EditAreaOfConcernModal({
 				document_id: concern.document?.id || "",
 				consolidators:
 					concern.consolidators?.map((c) => ({
-						user_id: c.id,
+						discipline_group_consolidator_id:
+							c.discipline_group_consolidator_id,
 						name: c.name,
 					})) || [],
 			});
 			setSelectedConsolidators(
-				concern.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) ||
-					[],
+				concern.consolidators?.map((c) => ({
+					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+					name: c.name,
+				})) || [],
 			);
 		}
 	}, [concern, methods]);
@@ -77,20 +82,25 @@ export default function EditAreaOfConcernModal({
 	const [selectedConsolidators, setSelectedConsolidators] = React.useState<
 		ConsolidatorUser[]
 	>(
-		concern?.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) || [],
+		concern?.consolidators?.map((c) => ({
+			discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+			name: c.name,
+		})) || [],
 	);
 	const selectedUserId = watch("consolidator_select") || "";
 
 	const addConsolidator = () => {
 		if (
 			selectedUserId &&
-			!selectedConsolidators.find((c) => c.user_id === selectedUserId)
+			!selectedConsolidators.find(
+				(c) => c.discipline_group_consolidator_id === selectedUserId,
+			)
 		) {
 			const user = consolidatorOptions?.user.find(
 				(u: any) => u.value === selectedUserId,
 			);
 			const newConsolidator: ConsolidatorUser = {
-				user_id: String(selectedUserId),
+				discipline_group_consolidator_id: String(selectedUserId),
 				name: user?.label,
 			};
 			const updated = [...selectedConsolidators, newConsolidator];
@@ -101,7 +111,9 @@ export default function EditAreaOfConcernModal({
 	};
 
 	const removeConsolidator = (userId: string) => {
-		const updated = selectedConsolidators.filter((c) => c.user_id !== userId);
+		const updated = selectedConsolidators.filter(
+			(c) => c.discipline_group_consolidator_id !== userId,
+		);
 		setSelectedConsolidators(updated);
 		setValue("consolidators", updated);
 	};
@@ -111,7 +123,9 @@ export default function EditAreaOfConcernModal({
 			package_id: packageId,
 			document_id: data.document_id,
 			consolidators:
-				data.consolidators?.map((c) => ({ user_id: c.user_id })) || [],
+				data.consolidators?.map((c) => ({
+					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+				})) || [],
 		};
 
 		editAreaOfConcern(requestBody);
@@ -223,16 +237,21 @@ export default function EditAreaOfConcernModal({
 									<div className="flex flex-wrap gap-2 mt-2">
 										{selectedConsolidators.map((consolidator) => (
 											<div
-												key={consolidator.user_id}
+												key={consolidator.discipline_group_consolidator_id}
 												className="relative group"
 											>
 												<ConsolidatorChip
-													name={consolidator.name || consolidator.user_id}
+													name={
+														consolidator.name ||
+														consolidator.discipline_group_consolidator_id
+													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
-														removeConsolidator(consolidator.user_id)
+														removeConsolidator(
+															consolidator.discipline_group_consolidator_id,
+														)
 													}
 													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 												>
@@ -351,13 +370,23 @@ export default function EditAreaOfConcernModal({
 								</div>
 								<div className="flex flex-wrap gap-2 mt-2">
 									{selectedConsolidators.map((consolidator) => (
-										<div key={consolidator.user_id} className="relative group">
+										<div
+											key={consolidator.discipline_group_consolidator_id}
+											className="relative group"
+										>
 											<ConsolidatorChip
-												name={consolidator.name || consolidator.user_id}
+												name={
+													consolidator.name ||
+													consolidator.discipline_group_consolidator_id
+												}
 											/>
 											<button
 												type="button"
-												onClick={() => removeConsolidator(consolidator.user_id)}
+												onClick={() =>
+													removeConsolidator(
+														consolidator.discipline_group_consolidator_id,
+													)
+												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 											>
 												×
