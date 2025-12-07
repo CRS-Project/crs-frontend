@@ -58,24 +58,25 @@ export default function EditAreaOfConcernModal({
 	});
 
 	React.useEffect(() => {
-		if (concern) {
+		if (concern && consolidatorOptions) {
+			const mappedConsolidators =
+				concern.consolidators?.map((c) => {
+					const matchingOption = consolidatorOptions.user.find(
+						(opt: any) => opt.label === c.name,
+					);
+					return {
+						discipline_group_consolidator_id: matchingOption?.value || c.id,
+						name: c.name,
+					};
+				}) || [];
+
 			methods.reset({
 				document_id: concern.document?.id || "",
-				consolidators:
-					concern.consolidators?.map((c) => ({
-						discipline_group_consolidator_id:
-							c.discipline_group_consolidator_id,
-						name: c.name,
-					})) || [],
+				consolidators: mappedConsolidators,
 			});
-			setSelectedConsolidators(
-				concern.consolidators?.map((c) => ({
-					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
-					name: c.name,
-				})) || [],
-			);
+			setSelectedConsolidators(mappedConsolidators);
 		}
-	}, [concern, methods]);
+	}, [concern, consolidatorOptions, methods]);
 
 	const { handleSubmit, reset, setValue, watch } = methods;
 
@@ -235,22 +236,26 @@ export default function EditAreaOfConcernModal({
 										</Button>
 									</div>
 									<div className="flex flex-wrap gap-2 mt-2">
-										{selectedConsolidators.map((consolidator) => (
+										{selectedConsolidators.map((consolidator, idx) => (
 											<div
-												key={consolidator.discipline_group_consolidator_id}
+												key={
+													consolidator.discipline_group_consolidator_id || idx
+												}
 												className="relative group"
 											>
 												<ConsolidatorChip
 													name={
-														consolidator.name ||
-														consolidator.discipline_group_consolidator_id
+														consolidator.name ??
+														consolidator.discipline_group_consolidator_id ??
+														"Unknown"
 													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
 														removeConsolidator(
-															consolidator.discipline_group_consolidator_id,
+															consolidator.discipline_group_consolidator_id ||
+																"",
 														)
 													}
 													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
@@ -376,15 +381,16 @@ export default function EditAreaOfConcernModal({
 										>
 											<ConsolidatorChip
 												name={
-													consolidator.name ||
-													consolidator.discipline_group_consolidator_id
+													consolidator.name ??
+													consolidator.discipline_group_consolidator_id ??
+													"Unknown"
 												}
 											/>
 											<button
 												type="button"
 												onClick={() =>
 													removeConsolidator(
-														consolidator.discipline_group_consolidator_id,
+														consolidator.discipline_group_consolidator_id || "",
 													)
 												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
