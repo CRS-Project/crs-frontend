@@ -2,15 +2,15 @@ import { EllipsisVertical, File, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import EditReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/EditReplyModal";
+import FilePreviewModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/AttachmentPreviewModal";
 import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { ROLE } from "@/lib/data";
 import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
+import Button from "../button/Button";
 import LightboxModal from "../LightboxModal";
 import ButtonLink from "../links/ButtonLink";
-import Button from "../button/Button";
-import FilePreviewModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/AttachmentPreviewModal";
 
 interface ReplyCardProps {
 	replies: Comment;

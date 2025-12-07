@@ -43,11 +43,6 @@ const AppSidebar: React.FC = () => {
 			},
 			{
 				icon: <NotebookPen />,
-				name: "Packages",
-				path: "/concern",
-			},
-			{
-				icon: <NotebookPen />,
 				name: "Discipline Groups",
 				path: "/concern",
 			},
@@ -68,7 +63,7 @@ const AppSidebar: React.FC = () => {
 	const filterNavItems = (role: string) => {
 		switch (role) {
 			case "SUPER ADMIN":
-				return navItems.filter((link) => link.name !== "Discipline Groups");
+				return navItems;
 			case "CONTRACTOR":
 				return navItems.filter(
 					(link) =>
@@ -383,6 +378,14 @@ const AppSidebar: React.FC = () => {
 						<Button rightIcon={Play} variant="primary" className="w-full">
 							<UnstyledLink href="https://youtu.be/-3FpZI7EhKk" target="_blank">
 								Video Tutorial
+							</UnstyledLink>
+						</Button>
+						<Button rightIcon={Play} variant="white" className="w-full">
+							<UnstyledLink
+								href="https://1drv.ms/f/c/275fab05357fb5e1/IgBM_a447xSwSIMU3T8I_7O8AQSERY9KIVBvpef_xKu-2TQ?e=z0ZWoT"
+								target="_blank"
+							>
+								Resources
 							</UnstyledLink>
 						</Button>
 					</div>
