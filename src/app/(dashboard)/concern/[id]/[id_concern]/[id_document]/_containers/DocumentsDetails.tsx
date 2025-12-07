@@ -58,7 +58,6 @@ export default function DocumentsDetails() {
 
 	const highlightedPackage =
 		concern?.document?.document_title ||
-		concern?.area_of_concern_id ||
 		"Document Unavailable";
 	const highlightedTitle =
 		concern?.document.document_category ||
