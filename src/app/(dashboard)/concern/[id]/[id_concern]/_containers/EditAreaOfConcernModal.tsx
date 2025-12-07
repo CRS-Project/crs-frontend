@@ -74,12 +74,7 @@ export default function EditAreaOfConcernModal({
 				document_id: concern.document?.id || "",
 				consolidators: mappedConsolidators,
 			});
-			setSelectedConsolidators(
-				concern.consolidators?.map((c) => ({
-					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
-					name: c.name,
-				})) || [],
-			);
+			setSelectedConsolidators(mappedConsolidators);
 		}
 	}, [concern, consolidatorOptions, methods]);
 
