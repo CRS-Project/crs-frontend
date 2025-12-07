@@ -60,11 +60,11 @@ export default function DeleteAreaOfConcernModal({
 						</ModalHeader>
 						<ModalBody>
 							<h1 className="text-[#1B1B1B] font-bold text-4xl">
-								Delete Area of Concern?
+								Delete List Document?
 							</h1>
 							<p className="text-[#1B1B1B] font-semibold text-xl">
-								Are you sure you want to delete area of concern{" "}
-								<span className="text-[#920B3A]">"{concern?.description}"</span>
+								Are you sure you want to delete document list with id{" "}
+								<span className="text-[#920B3A]">"{concern?.id}"</span>
 							</p>
 							<div className="grid grid-cols-2 gap-3 pb-8 mt-3">
 								<Button

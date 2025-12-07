@@ -13,7 +13,7 @@ export function useDeleteConcernMutation({
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (id: string) => {
-			return await api.delete(`/v1/area-of-concern-group/${id}`);
+			return await api.delete(`/v1/discipline-group/${id}`);
 		},
 		onSuccess: () => {
 			toast.success(`Concern berhasil dihapus!`);

@@ -53,7 +53,7 @@ export default function DeleteConcernModal({
 								Delete Concern?
 							</h1>
 							<p className="text-[#1B1B1B] font-semibold text-xl">
-								Are you sure you want to delete concern{" "}
+								Are you sure you want to delete discipline group with name{" "}
 								<span className="text-[#920B3A]">
 									"{concern?.user_discipline}"
 								</span>

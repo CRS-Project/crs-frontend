@@ -7,17 +7,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import type { ColumnDef } from "@tanstack/react-table";
-import {
-	Download,
-	Eye,
-	Filter,
-	ListOrdered,
-	PencilLine,
-	Plus,
-	Search,
-	Trash2,
-} from "lucide-react";
+import { Download, ListOrdered, Plus, Search } from "lucide-react";
 import Image from "next/image";
 import { notFound, useRouter } from "next/navigation";
 import * as React from "react";
@@ -25,20 +15,15 @@ import { FormProvider, useForm } from "react-hook-form";
 import Loading from "@/app/loading";
 import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
+import DisciplineGroupCard from "@/components/card/DisciplineGroupCard";
 import SummaryCard from "@/components/card/SummaryCard";
 import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
-import Table from "@/components/table/Table";
 import { ROLE } from "@/lib/data";
-import type { Concern } from "@/types/concern";
 import { useGetPackageById } from "../../../_hooks/useGetPackageById";
 import { useConcernTableQuery } from "../_hooks/useConcernTableQuery";
 import { useGetConcernStatsQuery } from "../_hooks/useGetConcernStatsQuery";
-import { useGetUserDiscipline } from "../_hooks/useGetUserDiscipline";
-import ConcernDetailModal from "./ConcernDetailModal";
 import CreateConcernModal from "./CreateConcernModal";
-import DeleteConcernModal from "./DeleteConcernModal";
-import EditConcernModal from "./EditConcernModal";
 
 export default function ConcernTable({ id }: { id: string }) {
 	const router = useRouter();
@@ -49,30 +34,14 @@ export default function ConcernTable({ id }: { id: string }) {
 		error: packageError,
 	} = useGetPackageById(id);
 
-	const {
-		data: userDisciplineData,
-		isLoading: isLoadingUserDiscipline,
-		error: userDisciplineError,
-	} = useGetUserDiscipline();
-
 	const { data: statsData } = useGetConcernStatsQuery(id);
 
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
-	const [visibleColumns, setVisibleColumns] = React.useState<any>(
-		new Set(["user_discipline", "review_focus"]),
-	);
 	const [isOpen, setIsOpen] = React.useState({
-		detail: false,
 		create: false,
-		edit: false,
-		delete: false,
-		import: false,
 	});
-	const [selectedConcern, setSelectedConcern] = React.useState<Concern | null>(
-		null,
-	);
 
 	const methods = useForm({
 		defaultValues: {
@@ -82,7 +51,6 @@ export default function ConcernTable({ id }: { id: string }) {
 
 	const {
 		currentPage,
-		sorting,
 		data,
 		totalPages,
 		totalData,
@@ -90,43 +58,12 @@ export default function ConcernTable({ id }: { id: string }) {
 		handleSearchChange,
 		handlePerPageChange: handlePerPageChangeValue,
 		handlePageChange,
-		setSorting,
 	} = useConcernTableQuery(id);
-
-	const concernTableColumns = React.useMemo(
-		() =>
-			getConcernTableColumns(
-				user?.role || "",
-				isOpen,
-				setIsOpen,
-				setSelectedConcern,
-			),
-		[isOpen, user?.role],
-	);
-
-	const filteredColumns = React.useMemo(() => {
-		return concernTableColumns.filter((column) => {
-			const columnKey = getColumnKey(column);
-
-			if (columnKey === "action") return true;
-			if (!columnKey) return false;
-
-			return visibleColumns === "all" || visibleColumns.has(columnKey);
-		});
-	}, [visibleColumns, concernTableColumns]);
 
 	const selectedPerPageValue = React.useMemo(
 		() => Array.from(selectedPerPage).join(", "),
 		[selectedPerPage],
 	);
-
-	const handleColumnVisibilityChange = React.useCallback((keys: any) => {
-		if (keys === "all") {
-			setVisibleColumns(new Set(["user_discipline", "review_focus"]));
-			return;
-		}
-		setVisibleColumns(keys);
-	}, []);
 
 	const handlePerPageChange = React.useCallback(
 		(keys: any) => {
@@ -138,16 +75,11 @@ export default function ConcernTable({ id }: { id: string }) {
 		[handlePerPageChangeValue],
 	);
 
-	if (isLoadingPackage || isLoadingUserDiscipline) {
+	if (isLoadingPackage) {
 		return <Loading />;
 	}
 
-	if (
-		packageError ||
-		!packageData ||
-		userDisciplineError ||
-		!userDisciplineData
-	) {
+	if (packageError || !packageData) {
 		notFound();
 	}
 
@@ -155,77 +87,6 @@ export default function ConcernTable({ id }: { id: string }) {
 	const packageName = packageData?.data?.name || "No Name Available";
 	const packageDescription =
 		packageData?.data?.description || "No Description Available";
-
-	let userDisciplineOptions: string[] = [];
-	if (
-		packageId === "f49c3147-a8af-4c22-9aab-d7b8d663e6e2" ||
-		packageId === "e6f49ed5-9eee-42c9-8677-45d84bb04eb5"
-	) {
-		userDisciplineOptions = [
-			"N - Naval, Hull & Mooring Engineering",
-			"M - Mechanical Engineering",
-			"B - Project Development & Execution Management",
-			"E - Electrical Engineering",
-			"F - Process Safety Engineering",
-			"H - Health, Safety, Security & Environment (HSSE)",
-			"J - Instrumentation & Controls",
-			"L - Material Selection & Corrosion Control",
-			"P - Process Engineering",
-			"Q - Quality Management",
-			"R - Commissioning & Startup",
-			"X - Piping Engineering",
-			"T - Telecommunication, IT & Information Management",
-			"S - Structural Engineering, Construction and Installation (Topside)",
-		];
-	} else if (packageId === "28e976aa-231a-4e71-af7e-8e6830819e89") {
-		userDisciplineOptions = [
-			"Project Management & Control",
-			"Quality & HSSE",
-			"Engineering Management",
-			"Process & Flow Assurance",
-			"Pipeline Route & Layout",
-			"Mechanical / Structural Design",
-			"Materials & Corrosion",
-			"Installation & Constructability",
-			"Pre-commissioning & Operation",
-			"Specifications & Standards",
-		];
-	} else if (
-		packageId === "f831510d-fc86-45f4-ab06-094a939ae29a" ||
-		packageId === "4661a21a-c28a-4560-aed3-c3f553288d99"
-	) {
-		userDisciplineOptions = [
-			"B - Project Development & Execution Management",
-			"H - Health, Safety, Security & Environment (HSSE)",
-			"Q - Quality Management",
-			"C - Civil Engineering",
-			"P - Process Engineering",
-			"F - Process Safety Engineering",
-			"L - Material Selection & Corrosion Control",
-			"M - Mechanical Engineering",
-			"X - Piping Engineering",
-			"E - Electrical Engineering",
-			"J - Instrumentation & Controls",
-			"T - Telecommunication, IT & Information Management",
-		];
-	} else if (packageId === "0889d5ac-09be-4d33-bc9f-baa249914dbb") {
-		userDisciplineOptions = [
-			"Project Development and Execution Management",
-			"Quality & HSSE Management",
-			"Engineering Management",
-			"Field Layout & System Configuration",
-			"Process & Instrumentation",
-			"Mechanical / Structural Design",
-			"Flow Assurance & Integrity",
-			"Materials & Corrosion",
-			"Control Systems & Umbilicals",
-			"Cost & Schedule Engineering",
-			"Instrumentation and Control Engineering",
-			"Installation & Commissioning",
-			"Specifications & Standards",
-			"Reports & Studies",
-		];
-	}
 
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
@@ -255,7 +116,7 @@ export default function ConcernTable({ id }: { id: string }) {
 									}}
 									rightIcon={Download}
 								>
-									Download All Data AOC
+									Download Data Discipline Group
 								</Button>
 							</div>
 						</div>
@@ -272,8 +133,8 @@ export default function ConcernTable({ id }: { id: string }) {
 			<div className="flex flex-col xl:flex-row justify-between">
 				<div className="flex flex-col md:flex-row gap-4">
 					<SummaryCard
-						title="Total Area of Concern"
-						value={statsData?.data?.total_area_of_concern_group || 0}
+						title="Total Discipline"
+						value={statsData?.data?.total_discipline_group || 0}
 						variant="primary"
 					/>
 					<SummaryCard
@@ -295,7 +156,7 @@ export default function ConcernTable({ id }: { id: string }) {
 							className="w-full sm:w-auto lg:px-8 text-white font-medium"
 							onClick={() => setIsOpen({ ...isOpen, create: true })}
 						>
-							Create Area of Concern
+							Create Discipline Group
 						</Button>
 					</div>
 				</div>
@@ -316,29 +177,6 @@ export default function ConcernTable({ id }: { id: string }) {
 					</div>
 
 					<div className="flex items-center gap-3 max-md:w-full max-md:justify-end">
-						<Dropdown>
-							<DropdownTrigger>
-								<Button
-									variant="secondary"
-									leftIcon={Filter}
-									className="w-fit max-md:w-full"
-								>
-									Columns
-								</Button>
-							</DropdownTrigger>
-							<DropdownMenu
-								disallowEmptySelection
-								aria-label="Column visibility"
-								closeOnSelect={false}
-								selectedKeys={visibleColumns}
-								selectionMode="multiple"
-								variant="flat"
-								onSelectionChange={handleColumnVisibilityChange}
-							>
-								<DropdownItem key="user_discipline">Discipline</DropdownItem>
-								<DropdownItem key="review_focus">Review Focus</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
 						<Dropdown>
 							<DropdownTrigger>
 								<Button leftIcon={ListOrdered} className="w-fit max-md:w-full">
@@ -366,14 +204,20 @@ export default function ConcernTable({ id }: { id: string }) {
 					{totalData} total data
 				</p>
 
-				<Table
-					data={data}
-					columns={filteredColumns}
-					isLoading={isLoading}
-					sorting={sorting}
-					setSorting={setSorting}
-					redirection={`/concern/${id}`}
-				/>
+				{isLoading ? (
+					<Loading />
+				) : (
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+						{data.map((concern) => (
+							<DisciplineGroupCard
+								key={concern.id}
+								concern={concern}
+								packageId={packageId ?? ""}
+								areaOfConcernId={id}
+							/>
+						))}
+					</div>
+				)}
 
 				<ServerPagination
 					currentPage={currentPage}
@@ -381,113 +225,12 @@ export default function ConcernTable({ id }: { id: string }) {
 					onPageChange={handlePageChange}
 				/>
 
-				<ConcernDetailModal
-					concern={selectedConcern}
-					isOpen={isOpen.detail}
-					onClose={() => setIsOpen({ ...isOpen, detail: false })}
-				/>
 				<CreateConcernModal
 					isOpen={isOpen.create}
-					onClose={() => setIsOpen({ ...isOpen, create: false })}
+					onClose={() => setIsOpen((prev) => ({ ...prev, create: false }))}
 					packageId={packageId ?? ""}
-					userDiscipline={userDisciplineOptions}
-				/>
-				<EditConcernModal
-					concern={selectedConcern}
-					isOpen={isOpen.edit}
-					onClose={() => setIsOpen({ ...isOpen, edit: false })}
-					packageId={packageId ?? ""}
-					userDiscipline={userDisciplineOptions}
-				/>
-				<DeleteConcernModal
-					concern={selectedConcern}
-					isOpen={isOpen.delete}
-					onClose={() => setIsOpen({ ...isOpen, delete: false })}
 				/>
 			</div>
 		</div>
 	);
-}
-
-function getConcernTableColumns(
-	role: string,
-	isOpen: {
-		detail: boolean;
-		create: boolean;
-		edit: boolean;
-		delete: boolean;
-		import: boolean;
-	},
-	setIsOpen: React.Dispatch<
-		React.SetStateAction<{
-			detail: boolean;
-			create: boolean;
-			edit: boolean;
-			delete: boolean;
-			import: boolean;
-		}>
-	>,
-	setSelectedConcern: React.Dispatch<React.SetStateAction<Concern | null>>,
-): ColumnDef<Concern>[] {
-	const baseColumns: ColumnDef<Concern>[] = [
-		{
-			accessorKey: "user_discipline",
-			header: "DISCIPLINE",
-			enableColumnFilter: false,
-		},
-		{
-			accessorKey: "review_focus",
-			header: "REVIEW FOCUS",
-			enableColumnFilter: false,
-		},
-	];
-
-	if (role !== ROLE.REVIEWER) {
-		baseColumns.push({
-			accessorKey: "action",
-			header: "ACTION",
-			enableColumnFilter: false,
-			enableSorting: false,
-			cell: ({ row }) => (
-				<span className="flex items-center gap-2">
-					<Eye
-						onClick={(e) => {
-							e.stopPropagation();
-							setIsOpen({ ...isOpen, detail: true });
-							setSelectedConcern(row.original);
-						}}
-						size={20}
-						className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
-					/>
-					<PencilLine
-						onClick={(e) => {
-							e.stopPropagation();
-							setIsOpen({ ...isOpen, edit: true });
-							setSelectedConcern(row.original);
-						}}
-						size={20}
-						className="text-[#737373] cursor-pointer hover:text-[#737373]/80"
-					/>
-					<Trash2
-						onClick={(e) => {
-							e.stopPropagation();
-							setIsOpen({ ...isOpen, delete: true });
-							setSelectedConcern(row.original);
-						}}
-						size={20}
-						className="text-[#C20E4D] cursor-pointer hover:text-[#C20E4D]/80"
-					/>
-				</span>
-			),
-		});
-	}
-
-	return baseColumns;
-}
-
-function getColumnKey(column: ColumnDef<Concern>): string | undefined {
-	if ("accessorKey" in column && typeof column.accessorKey === "string") {
-		return column.accessorKey;
-	}
-	return undefined;
 }

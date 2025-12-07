@@ -1,4 +1,11 @@
-import { EllipsisVertical, Eye, Pencil, Reply, Trash } from "lucide-react";
+import {
+	EllipsisVertical,
+	Eye,
+	File,
+	Pencil,
+	Reply,
+	Trash,
+} from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CommentDetailModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/CommentDetailModal";
@@ -11,6 +18,8 @@ import { COMMENT_STATUS, ROLE } from "@/lib/data";
 import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 import Button from "../button/Button";
+import LightboxModal from "../LightboxModal";
+import ButtonLink from "../links/ButtonLink";
 import ReplyCard from "./ReplyCard";
 
 interface CommentCardProps {
@@ -33,6 +42,7 @@ export default function CommentCard({
 	const { user } = useAuthStore();
 	const [showMenu, setShowMenu] = useState(false);
 	const [isCloseComment, setIsCloseComment] = useState(false);
+	const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		detail: false,
 		edit: false,
@@ -220,6 +230,20 @@ export default function CommentCard({
 			<p className="text-gray-800 text-sm leading-relaxed mb-3">
 				{comments.comment}
 			</p>
+			{/* Attachment Section */}
+			{comments.attach_file_url && (
+				<div className="mb-3">
+					<p className="text-sm text-gray-600 mb-2">Attachment</p>
+					<ButtonLink
+						href={`https://${comments.attach_file_url}`}
+						className="w-full"
+						variant="secondary"
+						leftIcon={File}
+					>
+						Open File
+					</ButtonLink>
+				</div>
+			)}
 			{/* Timestamp */}
 			<div className="text-right text-sm text-gray-500">
 				{comments.comment_at}
@@ -286,6 +310,14 @@ export default function CommentCard({
 				isOpen={isOpen.updateStatus}
 				onClose={() => setIsOpen({ ...isOpen, updateStatus: false })}
 			/>
+			{/* Lightbox for Image */}
+			{comments.attach_file_url && (
+				<LightboxModal
+					images={[`https://${comments.attach_file_url}`]}
+					open={isLightboxOpen}
+					onClose={() => setIsLightboxOpen(false)}
+				/>
+			)}
 		</div>
 	);
 }

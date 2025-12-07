@@ -81,7 +81,7 @@ export default function AreaOfConcernDetailModal({
 							onPointerDown={(e) => dragControls.start(e as any)}
 						/>
 						<div className="flex items-center justify-between">
-							<h3 className="text-lg font-semibold">Detail Area of Concern</h3>
+							<h3 className="text-lg font-semibold">Detail List Document</h3>
 							<IconButton
 								variant="ghost"
 								onClick={onClose}
@@ -95,15 +95,9 @@ export default function AreaOfConcernDetailModal({
 						<FormProvider {...methods}>
 							<div className="space-y-4">
 								<Input
-									id="area_of_concern_id"
-									label="Area of Concern ID"
-									placeholder="Area of Concern ID"
-									readOnly
-								/>
-								<Input
-									id="description"
-									label="Description"
-									placeholder="Description"
+									id="document.company_document_number"
+									label="Document ID"
+									placeholder="Document ID"
 									readOnly
 								/>
 								<div className="space-y-2">
@@ -111,7 +105,7 @@ export default function AreaOfConcernDetailModal({
 									<div className="flex flex-wrap gap-2">
 										{consolidators.map((consolidator) => (
 											<ConsolidatorChip
-												key={consolidator.id}
+												key={consolidator.discipline_group_consolidator_id}
 												name={consolidator.name}
 											/>
 										))}
@@ -160,22 +154,16 @@ export default function AreaOfConcernDetailModal({
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
 						<h2 className="text-2xl font-bold text-[#52525B]">
-							Detail Area of Concern
+							Detail List Document
 						</h2>
 					</div>
 
 					<FormProvider {...methods}>
 						<div className="my-8 space-y-4">
 							<Input
-								id="area_of_concern_id"
-								label="Area of Concern ID"
-								placeholder="Area of Concern ID"
-								readOnly
-							/>
-							<Input
-								id="description"
-								label="Description"
-								placeholder="Description"
+								id="document.company_document_number"
+								label="Document ID"
+								placeholder="Document ID"
 								readOnly
 							/>
 							<div className="space-y-2">
@@ -183,7 +171,7 @@ export default function AreaOfConcernDetailModal({
 								<div className="flex flex-wrap gap-2">
 									{consolidators.map((consolidator) => (
 										<ConsolidatorChip
-											key={consolidator.id}
+											key={consolidator.discipline_group_consolidator_id}
 											name={consolidator.name}
 										/>
 									))}
