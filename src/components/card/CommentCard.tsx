@@ -1,9 +1,17 @@
-import { EllipsisVertical, Eye, Pencil, Reply, Trash } from "lucide-react";
+import {
+	EllipsisVertical,
+	Eye,
+	File,
+	Pencil,
+	Reply,
+	Trash,
+} from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CommentDetailModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/CommentDetailModal";
 import EditCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_commentModals/EditCommentModal";
 import CreateReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/CreateReplyModal";
+import FilePreviewModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/AttachmentPreviewModal";
 import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import UpdateStatusModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/UpdateStatusModal";
 import useAuthStore from "@/app/stores/useAuthStore";
@@ -33,6 +41,7 @@ export default function CommentCard({
 	const { user } = useAuthStore();
 	const [showMenu, setShowMenu] = useState(false);
 	const [isCloseComment, setIsCloseComment] = useState(false);
+	const [isFilePreviewOpen, setIsFilePreviewOpen] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		detail: false,
 		edit: false,
@@ -206,7 +215,8 @@ export default function CommentCard({
 						)}
 					</div>
 				)}
-			</div>{" "}
+			</div>
+
 			{/* Baseline Section */}
 			<div className="mb-3">
 				<div className="bg-gray-100 border-l-4 border-blue-500 p-3 rounded">
@@ -216,14 +226,32 @@ export default function CommentCard({
 					</p>
 				</div>
 			</div>
+
 			{/* Comment Text */}
 			<p className="text-gray-800 text-sm leading-relaxed mb-3">
 				{comments.comment}
 			</p>
+
+			{/* Attachment Section */}
+			{comments.attach_file_url && (
+				<div className="mb-3">
+					<p className="text-sm text-gray-600 mb-2">Attachment</p>
+					<Button
+						onClick={() => setIsFilePreviewOpen(true)}
+						className="w-full"
+						variant="secondary"
+						leftIcon={File}
+					>
+						Open File
+					</Button>
+				</div>
+			)}
+
 			{/* Timestamp */}
 			<div className="text-right text-sm text-gray-500">
 				{comments.comment_at}
 			</div>
+
 			{/*Reply Section*/}
 			<div className="flex pl-[2rem] mt-4">
 				<div className="border-l-2 border-gray-200 w-[1rem]" />
@@ -259,6 +287,7 @@ export default function CommentCard({
 						)}
 				</div>
 			</div>
+
 			{/* Modals */}
 			<CommentDetailModal
 				comment={comments}
@@ -286,6 +315,15 @@ export default function CommentCard({
 				isOpen={isOpen.updateStatus}
 				onClose={() => setIsOpen({ ...isOpen, updateStatus: false })}
 			/>
+
+			{comments.attach_file_url && (
+				<FilePreviewModal
+					isOpen={isFilePreviewOpen}
+					onClose={() => setIsFilePreviewOpen(false)}
+					fileUrl={comments.attach_file_url}
+					fileName="Comment Attachment"
+				/>
+			)}
 		</div>
 	);
 }

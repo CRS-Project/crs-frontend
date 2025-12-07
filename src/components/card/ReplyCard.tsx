@@ -1,12 +1,16 @@
-import { EllipsisVertical, Pencil, Trash } from "lucide-react";
+import { EllipsisVertical, File, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import EditReplyModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/_replyModals/EditReplyModal";
+import FilePreviewModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/AttachmentPreviewModal";
 import DeleteCommentModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/DeleteCommentModal";
 import useAuthStore from "@/app/stores/useAuthStore";
 import { ROLE } from "@/lib/data";
 import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
+import Button from "../button/Button";
+import LightboxModal from "../LightboxModal";
+import ButtonLink from "../links/ButtonLink";
 
 interface ReplyCardProps {
 	replies: Comment;
@@ -27,6 +31,7 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 	const { user } = useAuthStore();
 	const ref = useRef<HTMLDivElement>(null);
 	const [showMenu, setShowMenu] = useState(false);
+	const [isFilePreviewOpen, setIsFilePreviewOpen] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		edit: false,
 		delete: false,
@@ -141,6 +146,21 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 				{comment}
 			</p>
 
+			{/* Attachment Section */}
+			{replies.attach_file_url && (
+				<div className="mb-3">
+					<p className="text-sm text-gray-600 mb-2">Attachment</p>
+					<Button
+						onClick={() => setIsFilePreviewOpen(true)}
+						className="w-full"
+						variant="secondary"
+						leftIcon={File}
+					>
+						Open File
+					</Button>
+				</div>
+			)}
+
 			{/* Timestamp */}
 			<div className="text-right text-sm text-gray-500">{comment_at}</div>
 
@@ -156,6 +176,15 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 				isOpen={isOpen.delete}
 				onClose={() => setIsOpen({ ...isOpen, delete: false })}
 			/>
+
+			{replies.attach_file_url && (
+				<FilePreviewModal
+					isOpen={isFilePreviewOpen}
+					onClose={() => setIsFilePreviewOpen(false)}
+					fileUrl={replies.attach_file_url}
+					fileName="Comment Attachment"
+				/>
+			)}
 		</div>
 	);
 }

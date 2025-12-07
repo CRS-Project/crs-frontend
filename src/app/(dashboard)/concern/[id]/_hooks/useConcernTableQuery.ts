@@ -75,7 +75,7 @@ export function useConcernTableQuery(id: string) {
 			filters.push(id);
 			filterBy.push("package_id");
 
-			const res = await api.get(`/v1/area-of-concern-group`, {
+			const res = await api.get(`/v1/discipline-group`, {
 				params: {
 					...queryParams,
 					filter: filters.join(","),

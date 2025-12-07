@@ -43,7 +43,7 @@ const AppSidebar: React.FC = () => {
 			},
 			{
 				icon: <NotebookPen />,
-				name: "Area of Concern",
+				name: "Discipline Groups",
 				path: "/concern",
 			},
 			{
@@ -70,7 +70,7 @@ const AppSidebar: React.FC = () => {
 						link.name === "Home" ||
 						link.name === "Data" ||
 						link.name === "Documents" ||
-						link.name === "Area of Concern",
+						link.name === "Discipline Groups",
 				);
 			case "REVIEWER":
 				return navItems.filter(
@@ -78,7 +78,7 @@ const AppSidebar: React.FC = () => {
 						link.name === "Home" ||
 						link.name === "Data" ||
 						link.name === "Documents" ||
-						link.name === "Area of Concern",
+						link.name === "Discipline Groups",
 				);
 			default:
 				return [];
@@ -373,6 +373,14 @@ const AppSidebar: React.FC = () => {
 								target="_blank"
 							>
 								Guidebook
+							</UnstyledLink>
+						</Button>
+						<Button rightIcon={ArrowRight} variant="white" className="w-full">
+							<UnstyledLink
+								href="https://1drv.ms/f/c/275fab05357fb5e1/IgBM_a447xSwSIMU3T8I_7O8AQSERY9KIVBvpef_xKu-2TQ?e=z0ZWoT"
+								target="_blank"
+							>
+								Resources
 							</UnstyledLink>
 						</Button>
 						<Button rightIcon={Play} variant="primary" className="w-full">

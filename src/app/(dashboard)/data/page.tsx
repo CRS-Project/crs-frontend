@@ -92,8 +92,8 @@ export default function DataPage() {
 					<RecapChart packageId={packageId} />
 					<div className="my-16 sm:my-8 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
 						<SummaryCard
-							title="Total Area Of Concern"
-							value={cardData?.data?.total_area_of_concern || 0}
+							title="Total Disciplines"
+							value={cardData?.data?.total_discipline_group || 0}
 							variant="primary"
 						/>
 						<SummaryCard

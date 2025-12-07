@@ -34,7 +34,7 @@ export default function Hero() {
 						title={item.name}
 						description={item.description}
 						linkHref={`/concern/${item.id}`}
-						value="Check Area of Concern"
+						value="Check Detail Discipline Groups"
 					/>
 				),
 			)}

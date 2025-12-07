@@ -7,13 +7,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import {
-	ArrowLeft,
-	Download,
-	ListOrdered,
-	PlusIcon,
-	Search,
-} from "lucide-react";
+import { ArrowLeft, ListOrdered, PlusIcon, Search } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
@@ -78,7 +72,7 @@ export default function DocumentsDetails() {
 	);
 
 	const highlightedTitle =
-		areaOfConcern?.user_discipline || "Area of Concern Unavailable";
+		areaOfConcern?.user_discipline || "Discipline List Document Unavailable";
 
 	if (isLoading) {
 		return <Loading />;
@@ -101,24 +95,13 @@ export default function DocumentsDetails() {
 								Back
 							</Button>
 							<h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-								Concern
+								Discipline
 							</h2>
 							<p className="text-sm text-white/70 md:text-base">
 								{highlightedTitle}
 							</p>
 						</div>
 						<div className="w-full flex gap-4 flex-col md:flex-row items-end md:justify-end z-10">
-							<Button
-								rightIcon={Download}
-								size="lg"
-								variant="white"
-								className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
-								onClick={() => {
-									router.push(`/pdf/area_of_concern/${id_concern}`);
-								}}
-							>
-								Download Data Concern
-							</Button>
 							{user?.role !== ROLE.REVIEWER && (
 								<Button
 									rightIcon={PlusIcon}
@@ -127,7 +110,7 @@ export default function DocumentsDetails() {
 									className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
 									onClick={() => setIsOpen({ ...isOpen, create: true })}
 								>
-									Create Area Of Concern
+									Create Document
 								</Button>
 							)}
 						</div>
@@ -146,7 +129,7 @@ export default function DocumentsDetails() {
 				<div className="w-full lg:col-span-7 lg:pr-[2.5rem] lg:border-r-1 lg:order-1 order-2">
 					<div className="flex justify-between items-center mb-4 max-md:flex-col max-md:gap-2">
 						<h1 className="font-bold text-[1.5rem] text-left w-full">
-							Area of Concern
+							List Documents
 						</h1>
 						<div className="flex items-center gap-3 w-full max-md:flex-col">
 							<div className="w-1/2 max-md:w-full flex-1">
@@ -210,7 +193,7 @@ export default function DocumentsDetails() {
 				</div>
 
 				<div className="flex flex-col gap-[27px] w-full lg:col-span-5 lg:pl-[2.5rem] lg:order-2 order-1">
-					<h1 className="font-bold text-[1.5rem]">Detail of Concern</h1>
+					<h1 className="font-bold text-[1.5rem]">Detail Discipline</h1>
 					<ConcernDetailContainer concern={areaOfConcern} />
 				</div>
 			</div>

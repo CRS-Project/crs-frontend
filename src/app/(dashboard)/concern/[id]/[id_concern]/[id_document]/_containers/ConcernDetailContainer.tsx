@@ -1,5 +1,7 @@
 "use client";
 
+import { File } from "lucide-react";
+import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
 import Input from "@/components/form/Input";
@@ -10,52 +12,115 @@ interface ConcernDetailModalProps {
 	concern: AreaOfConcern | undefined;
 }
 
-const defaultConcernValue: AreaOfConcern = {
-	id: "1",
-	area_of_concern_id: "Marine-1219-2132",
-	description: "01. Alignment of project execution strategy across Dual FEED",
-	package: "FPSO ITS",
-	consolidators: [],
-};
-
 export default function ConcernDetailModal({
 	concern,
 }: ConcernDetailModalProps) {
 	const methods = useForm<AreaOfConcern>({
 		mode: "onTouched",
-		defaultValues: concern || defaultConcernValue,
+		defaultValues: concern,
 	});
 
-	const consolidators =
-		concern?.consolidators || defaultConcernValue.consolidators;
+	const { watch } = methods;
+	const currentDocumentUrl = watch("document.document_url");
+	const consolidators = concern?.consolidators || [];
 
 	return (
 		<FormProvider {...methods}>
 			<div className="my-[10px] space-y-2">
+				<div className="space-y-2">
+					<LabelText>Consolidators</LabelText>
+					<div className="flex gap-[9px] justify-start items-center w-full flex-wrap">
+						{consolidators.map((consolidator) => (
+							<ConsolidatorChip
+								key={consolidator.id}
+								name={consolidator.name}
+							/>
+						))}
+					</div>
+				</div>
 				<Input
-					id="package"
-					label="Package"
+					id="document.id"
+					label="Document Number"
+					placeholder="Input Document Number"
+					readOnly
+				/>
+				<Input
+					id="document.document_title"
+					label="Document Title"
+					placeholder="Input Document Title"
+					readOnly
+				/>
+				<Input
+					id="document.document_serial_number"
+					label="Document Serial Number"
+					placeholder="Input Document Serial Number"
+					readOnly
+				/>
+				{currentDocumentUrl && (
+					<div className="space-y-2">
+						<h4 className="text-sm font-semibold text-gray-900">
+							Upload Document
+						</h4>
+						<Link
+							href={`https://${currentDocumentUrl}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
+						>
+							<File size={16} />
+							<span>View Current Document</span>
+						</Link>
+					</div>
+				)}
+				<Input
+					id="document.document_type"
+					label="Document Type"
+					placeholder="Input Document Type"
+					readOnly
+				/>
+				<Input
+					id="document.document_category"
+					label="Document Category"
+					placeholder="Input Document Category"
+					readOnly
+				/>
+				<Input
+					id="document.company_document_number"
+					label="Company Document Number"
+					placeholder="Input Company Document Number"
+					readOnly
+				/>
+				<Input
+					id="document.contractor_document_number"
+					label="Contractor Document Number"
+					placeholder="Input Contractor Document Number"
+					readOnly
+				/>
+				<Input
+					id="document.ctr_number"
+					label="CTR Number"
+					placeholder="Input CTR Number"
+					readOnly
+				/>
+				<Input id="document.wbs" label="WBS" placeholder="Input WBS" readOnly />
+				<Input
+					id="document.discipline"
+					label="Discipline"
 					placeholder="Input Discipline"
 					readOnly
 				/>
 				<Input
-					id="area_of_concern_id"
-					label="Area of Concern ID"
-					placeholder="Input Area of Concern ID"
+					id="document.sub_discipline"
+					label="SubDiscipline"
+					placeholder="Input SubDiscipline"
 					readOnly
 				/>
 				<Input
-					id="description"
-					label="Description"
-					placeholder="Input Description"
+					id="document.status"
+					label="Status Document"
+					placeholder="Input Status Document"
 					readOnly
 				/>
-				<LabelText>Consolidators</LabelText>
-				<div className="flex gap-[9px] justify-start items-center w-full">
-					{consolidators.map((consolidator) => (
-						<ConsolidatorChip key={consolidator.id} name={consolidator.name} />
-					))}
-				</div>
 			</div>
 		</FormProvider>
 	);

@@ -40,8 +40,8 @@ export default function RecapChart({ packageId }: { packageId: string }) {
 						<Legend verticalAlign="bottom" height={36} />
 
 						<Bar
-							dataKey="total_area_of_concern"
-							name="Area of Concern"
+							dataKey="total_discipline_list_document"
+							name="Total Disciplines"
 							fill="#64B5F6"
 							barSize={20}
 						/>

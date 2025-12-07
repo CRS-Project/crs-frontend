@@ -9,13 +9,13 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
-import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
 import type { CreateAreaOfConcernRequest } from "@/types/concern";
 import type { ConsolidatorUser } from "@/types/consolidator";
-import { useGetConsolidatorOption } from "../_hooks/useConsolidatorQuery";
+import { useGetAOCConsolidatorOption } from "../_hooks/useAOCConsolidatorQuery";
 import { useCreateAreaOfConcernMutation } from "../_hooks/useCreateAreaOfConcernMutation";
+import { useGetDocument } from "../[id_document]/_hooks/useGetDocument";
 
 interface CreateAreaOfConcernModalProps {
 	isOpen: boolean;
@@ -28,8 +28,11 @@ export default function CreateAreaOfConcernModal({
 	onClose,
 	concernGroupId,
 }: CreateAreaOfConcernModalProps) {
-	const { id } = useParams();
-	const { data: consolidatorOptions } = useGetConsolidatorOption(id as string);
+	const { id, id_concern } = useParams();
+	const { data: consolidatorOptions } = useGetAOCConsolidatorOption(
+		id_concern as string,
+	);
+	const { data: documentIDs } = useGetDocument(id as string);
 
 	const methods = useForm<CreateAreaOfConcernRequest>({
 		mode: "onTouched",
@@ -57,13 +60,15 @@ export default function CreateAreaOfConcernModal({
 	const addConsolidator = () => {
 		if (
 			selectedUserId &&
-			!selectedConsolidators.find((c) => c.user_id === selectedUserId)
+			!selectedConsolidators.find(
+				(c) => c.discipline_group_consolidator_id === selectedUserId,
+			)
 		) {
 			const user = consolidatorOptions?.user.find(
 				(u: any) => u.value === selectedUserId,
 			);
 			const newConsolidator: ConsolidatorUser = {
-				user_id: String(selectedUserId),
+				discipline_group_consolidator_id: String(selectedUserId),
 				name: user?.label,
 			};
 			const updated = [...selectedConsolidators, newConsolidator];
@@ -74,7 +79,9 @@ export default function CreateAreaOfConcernModal({
 	};
 
 	const removeConsolidator = (userId: string) => {
-		const updated = selectedConsolidators.filter((c) => c.user_id !== userId);
+		const updated = selectedConsolidators.filter(
+			(c) => c.discipline_group_consolidator_id !== userId,
+		);
 		setSelectedConsolidators(updated);
 		setValue("consolidators", updated);
 	};
@@ -93,9 +100,10 @@ export default function CreateAreaOfConcernModal({
 
 	const onSubmit: SubmitHandler<CreateAreaOfConcernRequest> = async (data) => {
 		data.package_id = id as string;
-		data.consolidators = data.consolidators.map((c) => ({
-			user_id: c.user_id,
-		}));
+		data.consolidators =
+			data.consolidators?.map((c) => ({
+				discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+			})) ?? [];
 		mutation.mutate(data);
 	};
 
@@ -135,7 +143,7 @@ export default function CreateAreaOfConcernModal({
 							onPointerDown={(e) => dragControls.start(e as any)}
 						/>
 						<div className="flex items-center justify-between">
-							<h3 className="text-lg font-semibold">Create Area of Concern</h3>
+							<h3 className="text-lg font-semibold">Add List Document</h3>
 							<IconButton
 								variant="ghost"
 								onClick={handleClose}
@@ -148,17 +156,25 @@ export default function CreateAreaOfConcernModal({
 					<div className="px-4 py-6">
 						<FormProvider {...methods}>
 							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-								<Input
-									id="area_of_concern_id"
-									label="Area of Concern ID"
-									placeholder="Input Area of Concern ID"
-									validation={{ required: "Area of Concern ID is required!" }}
-								/>
-								<Input
-									id="description"
-									label="Name Area of Concern"
-									placeholder="Input Name"
-									validation={{ required: "Name is required!" }}
+								<SelectInput
+									id="document_id"
+									label="Document ID"
+									options={
+										documentIDs
+											? documentIDs.map(
+													(doc: {
+														id: string;
+														document_title: string;
+														company_document_number: string;
+													}) => ({
+														value: doc.id,
+														label: `${doc.company_document_number} - ${doc.document_title}`,
+													}),
+												)
+											: []
+									}
+									placeholder="Select Document ID"
+									validation={{ required: "Document ID is required!" }}
 								/>
 
 								<div className="space-y-2">
@@ -184,18 +200,25 @@ export default function CreateAreaOfConcernModal({
 										</Button>
 									</div>
 									<div className="flex flex-wrap gap-2 mt-2">
-										{selectedConsolidators.map((consolidator) => (
+										{selectedConsolidators?.map((consolidator) => (
 											<div
-												key={consolidator.user_id}
+												key={consolidator.discipline_group_consolidator_id}
 												className="relative group"
 											>
 												<ConsolidatorChip
-													name={consolidator.name || consolidator.user_id}
+													name={
+														consolidator.name ??
+														consolidator.discipline_group_consolidator_id ??
+														""
+													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
-														removeConsolidator(consolidator.user_id)
+														removeConsolidator(
+															consolidator.discipline_group_consolidator_id ??
+																"",
+														)
 													}
 													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 												>
@@ -220,7 +243,7 @@ export default function CreateAreaOfConcernModal({
 										type="submit"
 										isLoading={mutation.isPending}
 									>
-										Create Area of Concern
+										Create List Document
 									</Button>
 								</div>
 							</form>
@@ -259,23 +282,31 @@ export default function CreateAreaOfConcernModal({
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
 						<h2 className="text-2xl font-bold text-[#52525B]">
-							Create Area of Concern
+							Create List Document
 						</h2>
 					</div>
 
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-4">
-							<Input
-								id="area_of_concern_id"
-								label="Area of Concern ID"
-								placeholder="Input Area of Concern ID"
-								validation={{ required: "Area of Concern ID is required!" }}
-							/>
-							<Input
-								id="description"
-								label="Name Area of Concern"
-								placeholder="Input Name"
-								validation={{ required: "Name is required!" }}
+							<SelectInput
+								id="document_id"
+								label="Document ID"
+								options={
+									documentIDs
+										? documentIDs.map(
+												(doc: {
+													id: string;
+													document_title: string;
+													company_document_number: string;
+												}) => ({
+													value: doc.id,
+													label: `${doc.company_document_number} - ${doc.document_title}`,
+												}),
+											)
+										: []
+								}
+								placeholder="Select Document ID"
+								validation={{ required: "Document ID is required!" }}
 							/>
 
 							<div className="space-y-2">
@@ -302,13 +333,24 @@ export default function CreateAreaOfConcernModal({
 								</div>
 								<div className="flex flex-wrap gap-2 mt-2">
 									{selectedConsolidators.map((consolidator) => (
-										<div key={consolidator.user_id} className="relative group">
+										<div
+											key={consolidator.discipline_group_consolidator_id}
+											className="relative group"
+										>
 											<ConsolidatorChip
-												name={consolidator.name || consolidator.user_id}
+												name={
+													consolidator.name ??
+													consolidator.discipline_group_consolidator_id ??
+													""
+												}
 											/>
 											<button
 												type="button"
-												onClick={() => removeConsolidator(consolidator.user_id)}
+												onClick={() =>
+													removeConsolidator(
+														consolidator.discipline_group_consolidator_id ?? "",
+													)
+												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 											>
 												×
@@ -328,7 +370,7 @@ export default function CreateAreaOfConcernModal({
 									Cancel
 								</Button>
 								<Button className="col-span-2 justify-center" type="submit">
-									Create Area of Concern
+									Create List Document
 								</Button>
 							</div>
 						</form>

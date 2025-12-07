@@ -9,13 +9,13 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
-import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
 import type { AreaOfConcern, EditAreaOfConcernRequest } from "@/types/concern";
 import type { ConsolidatorUser } from "@/types/consolidator";
-import { useGetConsolidatorOption } from "../_hooks/useConsolidatorQuery";
+import { useGetAOCConsolidatorOption } from "../_hooks/useAOCConsolidatorQuery";
 import { useEditAreaOfConcernMutation } from "../_hooks/useEditAreaOfConcernMutation";
+import { useGetDocument } from "../[id_document]/_hooks/useGetDocument";
 
 interface EditAreaOfConcernModalProps {
 	concern: AreaOfConcern | null;
@@ -31,7 +31,10 @@ export default function EditAreaOfConcernModal({
 	packageId,
 }: EditAreaOfConcernModalProps) {
 	const { id_concern } = useParams();
-	const { data: consolidatorOptions } = useGetConsolidatorOption(packageId);
+	const { data: consolidatorOptions } = useGetAOCConsolidatorOption(
+		id_concern as string,
+	);
+	const { data: documentIDs } = useGetDocument(packageId);
 
 	const { mutate: editAreaOfConcern, isPending } = useEditAreaOfConcernMutation(
 		{
@@ -46,51 +49,59 @@ export default function EditAreaOfConcernModal({
 	const methods = useForm<EditAreaOfConcernRequest>({
 		mode: "onTouched",
 		defaultValues: {
-			area_of_concern_id: concern?.area_of_concern_id || "",
-			description: concern?.description || "",
 			consolidators:
-				concern?.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) ||
-				[],
+				concern?.consolidators?.map((c) => ({
+					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+					name: c.name,
+				})) || [],
 		},
 	});
 
 	React.useEffect(() => {
-		if (concern) {
-			methods.reset({
-				area_of_concern_id: concern.area_of_concern_id,
-				description: concern.description,
-				consolidators:
-					concern.consolidators?.map((c) => ({
-						user_id: c.id,
+		if (concern && consolidatorOptions) {
+			const mappedConsolidators =
+				concern.consolidators?.map((c) => {
+					const matchingOption = consolidatorOptions.user.find(
+						(opt: any) => opt.label === c.name,
+					);
+					return {
+						discipline_group_consolidator_id: matchingOption?.value || c.id,
 						name: c.name,
-					})) || [],
+					};
+				}) || [];
+
+			methods.reset({
+				document_id: concern.document?.id || "",
+				consolidators: mappedConsolidators,
 			});
-			setSelectedConsolidators(
-				concern.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) ||
-					[],
-			);
+			setSelectedConsolidators(mappedConsolidators);
 		}
-	}, [concern, methods]);
+	}, [concern, consolidatorOptions, methods]);
 
 	const { handleSubmit, reset, setValue, watch } = methods;
 
 	const [selectedConsolidators, setSelectedConsolidators] = React.useState<
 		ConsolidatorUser[]
 	>(
-		concern?.consolidators?.map((c) => ({ user_id: c.id, name: c.name })) || [],
+		concern?.consolidators?.map((c) => ({
+			discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+			name: c.name,
+		})) || [],
 	);
 	const selectedUserId = watch("consolidator_select") || "";
 
 	const addConsolidator = () => {
 		if (
 			selectedUserId &&
-			!selectedConsolidators.find((c) => c.user_id === selectedUserId)
+			!selectedConsolidators.find(
+				(c) => c.discipline_group_consolidator_id === selectedUserId,
+			)
 		) {
 			const user = consolidatorOptions?.user.find(
 				(u: any) => u.value === selectedUserId,
 			);
 			const newConsolidator: ConsolidatorUser = {
-				user_id: String(selectedUserId),
+				discipline_group_consolidator_id: String(selectedUserId),
 				name: user?.label,
 			};
 			const updated = [...selectedConsolidators, newConsolidator];
@@ -101,7 +112,9 @@ export default function EditAreaOfConcernModal({
 	};
 
 	const removeConsolidator = (userId: string) => {
-		const updated = selectedConsolidators.filter((c) => c.user_id !== userId);
+		const updated = selectedConsolidators.filter(
+			(c) => c.discipline_group_consolidator_id !== userId,
+		);
 		setSelectedConsolidators(updated);
 		setValue("consolidators", updated);
 	};
@@ -109,9 +122,11 @@ export default function EditAreaOfConcernModal({
 	const onSubmit: SubmitHandler<EditAreaOfConcernRequest> = (data) => {
 		const requestBody: EditAreaOfConcernRequest = {
 			package_id: packageId,
-			area_of_concern_id: data.area_of_concern_id,
-			description: data.description,
-			consolidators: data.consolidators.map((c) => ({ user_id: c.user_id })),
+			document_id: data.document_id,
+			consolidators:
+				data.consolidators?.map((c) => ({
+					discipline_group_consolidator_id: c.discipline_group_consolidator_id,
+				})) || [],
 		};
 
 		editAreaOfConcern(requestBody);
@@ -164,7 +179,7 @@ export default function EditAreaOfConcernModal({
 							onPointerDown={(e) => dragControls.start(e as any)}
 						/>
 						<div className="flex items-center justify-between">
-							<h3 className="text-lg font-semibold">Edit Area of Concern</h3>
+							<h3 className="text-lg font-semibold">Edit List Document</h3>
 							<IconButton
 								variant="ghost"
 								onClick={handleClose}
@@ -177,17 +192,25 @@ export default function EditAreaOfConcernModal({
 					<div className="px-4 py-6">
 						<FormProvider {...methods}>
 							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-								<Input
-									id="area_of_concern_id"
-									label="Area of Concern ID"
-									placeholder="Input Area of Concern ID"
-									validation={{ required: "Area of Concern ID is required!" }}
-								/>
-								<Input
-									id="description"
-									label="Name Area of Concern"
-									placeholder="Input Name"
-									validation={{ required: "Name is required!" }}
+								<SelectInput
+									id="document_id"
+									label="Document ID"
+									options={
+										documentIDs
+											? documentIDs.map(
+													(doc: {
+														id: string;
+														document_title: string;
+														company_document_number: string;
+													}) => ({
+														value: doc.id,
+														label: `${doc.company_document_number} - ${doc.document_title}`,
+													}),
+												)
+											: []
+									}
+									placeholder="Select Document ID"
+									validation={{ required: "Document ID is required!" }}
 								/>
 
 								<div className="space-y-2">
@@ -213,18 +236,27 @@ export default function EditAreaOfConcernModal({
 										</Button>
 									</div>
 									<div className="flex flex-wrap gap-2 mt-2">
-										{selectedConsolidators.map((consolidator) => (
+										{selectedConsolidators.map((consolidator, idx) => (
 											<div
-												key={consolidator.user_id}
+												key={
+													consolidator.discipline_group_consolidator_id || idx
+												}
 												className="relative group"
 											>
 												<ConsolidatorChip
-													name={consolidator.name || consolidator.user_id}
+													name={
+														consolidator.name ??
+														consolidator.discipline_group_consolidator_id ??
+														"Unknown"
+													}
 												/>
 												<button
 													type="button"
 													onClick={() =>
-														removeConsolidator(consolidator.user_id)
+														removeConsolidator(
+															consolidator.discipline_group_consolidator_id ||
+																"",
+														)
 													}
 													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 												>
@@ -292,23 +324,31 @@ export default function EditAreaOfConcernModal({
 							iconClassName="w-6 h-6 text-[#3F3F46]"
 						/>
 						<h2 className="text-2xl font-bold text-[#52525B]">
-							Edit Area of Concern
+							Edit List Document
 						</h2>
 					</div>
 
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-4">
-							<Input
-								id="area_of_concern_id"
-								label="Area of Concern ID"
-								placeholder="Input Area of Concern ID"
-								validation={{ required: "Area of Concern ID is required!" }}
-							/>
-							<Input
-								id="description"
-								label="Name Area of Concern"
-								placeholder="Input Name"
-								validation={{ required: "Name is required!" }}
+							<SelectInput
+								id="document_id"
+								label="Document ID"
+								options={
+									documentIDs
+										? documentIDs.map(
+												(doc: {
+													id: string;
+													document_title: string;
+													company_document_number: string;
+												}) => ({
+													value: doc.id,
+													label: `${doc.company_document_number} - ${doc.document_title}`,
+												}),
+											)
+										: []
+								}
+								placeholder="Select Document ID"
+								validation={{ required: "Document ID is required!" }}
 							/>
 
 							<div className="space-y-2">
@@ -335,13 +375,24 @@ export default function EditAreaOfConcernModal({
 								</div>
 								<div className="flex flex-wrap gap-2 mt-2">
 									{selectedConsolidators.map((consolidator) => (
-										<div key={consolidator.user_id} className="relative group">
+										<div
+											key={consolidator.discipline_group_consolidator_id}
+											className="relative group"
+										>
 											<ConsolidatorChip
-												name={consolidator.name || consolidator.user_id}
+												name={
+													consolidator.name ??
+													consolidator.discipline_group_consolidator_id ??
+													"Unknown"
+												}
 											/>
 											<button
 												type="button"
-												onClick={() => removeConsolidator(consolidator.user_id)}
+												onClick={() =>
+													removeConsolidator(
+														consolidator.discipline_group_consolidator_id || "",
+													)
+												}
 												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
 											>
 												×

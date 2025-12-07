@@ -2,18 +2,19 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion, useDragControls } from "framer-motion";
-import { Send, X } from "lucide-react";
+import { File, Send, X } from "lucide-react";
 import { useParams } from "next/navigation";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
-import SelectInput from "@/components/form/SelectInput";
+import LabelText from "@/components/form/LabelText";
 import TextArea from "@/components/form/TextArea";
+import UploadFile from "@/components/form/UploadFile";
+import ButtonLink from "@/components/links/ButtonLink";
 import type { CreateCommentRequest } from "@/types/comment";
 import { useCreateCommentMutation } from "../../_hooks/useCreateCommentMutation";
-import { useGetDocument } from "../../_hooks/useGetDocument";
 
 interface CreateCommentModalProps {
 	isOpen: boolean;
@@ -24,14 +25,14 @@ export default function CreateCommentModal({
 	isOpen,
 	onClose,
 }: CreateCommentModalProps) {
-	const { id, id_concern, id_document } = useParams();
-	const { data: documentIDs } = useGetDocument(id as string);
+	const { id_concern, id_document } = useParams();
 
 	const methods = useForm<CreateCommentRequest>({
 		mode: "onTouched",
 	});
 
-	const { handleSubmit, reset } = methods;
+	const { handleSubmit, reset, watch } = methods;
+	const attachFileUrl = watch("attach_file_url");
 
 	const mutation = useCreateCommentMutation({
 		area_of_concern_group_id: id_concern as string,
@@ -119,32 +120,37 @@ export default function CreateCommentModal({
 									label="Baseline/Justification/Reference"
 									placeholder="Input Baseline/Justification/Reference"
 								/>
-								<SelectInput
-									id="document_id"
-									label="Document ID"
-									options={
-										documentIDs
-											? documentIDs.map(
-													(doc: {
-														id: string;
-														document_title: string;
-														company_document_number: string;
-													}) => ({
-														value: doc.id,
-														label: `${doc.company_document_number} - ${doc.document_title}`,
-													}),
-												)
-											: []
-									}
-									placeholder="Select Document ID"
-									validation={{ required: "Document ID is required!" }}
-								/>
 								<Input
 									id="section"
 									label="Section Document"
 									placeholder="Input Section Document"
 									validation={{ required: "Section Document is required!" }}
 								/>
+
+								<div>
+									<LabelText>Attachment (Optional)</LabelText>
+									{attachFileUrl && (
+										<ButtonLink
+											href={`https://${attachFileUrl}`}
+											className="w-full mb-2"
+											variant="secondary"
+											leftIcon={File}
+										>
+											Open File
+										</ButtonLink>
+									)}
+									<UploadFile
+										id="attach_file_url"
+										label=""
+										maxSize={5000 * 1024}
+										accept={{
+											"image/*": [".jpg", ".jpeg", ".png"],
+										}}
+										maxFiles={1}
+										uploadToApi
+										helperText="Max. size image 5mb"
+									/>
+								</div>
 
 								<div className="grid grid-cols-3 py-4 gap-3">
 									<Button
@@ -220,32 +226,37 @@ export default function CreateCommentModal({
 								label="Baseline/Justification/Reference"
 								placeholder="Input Baseline/Justification/Reference"
 							/>
-							<SelectInput
-								id="document_id"
-								label="Document ID"
-								options={
-									documentIDs
-										? documentIDs.map(
-												(doc: {
-													id: string;
-													document_title: string;
-													company_document_number: string;
-												}) => ({
-													value: doc.id,
-													label: `${doc.company_document_number} - ${doc.document_title}`,
-												}),
-											)
-										: []
-								}
-								placeholder="Select Document ID"
-								validation={{ required: "Document ID is required!" }}
-							/>
 							<Input
 								id="section"
 								label="Section Document"
 								placeholder="Input Section Document"
 								validation={{ required: "Section Document is required!" }}
 							/>
+
+							<div>
+								<LabelText>Attachment (Optional)</LabelText>
+								{attachFileUrl && (
+									<ButtonLink
+										href={`https://${attachFileUrl}`}
+										className="w-full mb-2"
+										variant="secondary"
+										leftIcon={File}
+									>
+										Open File
+									</ButtonLink>
+								)}
+								<UploadFile
+									id="attach_file_url"
+									label=""
+									maxSize={5000 * 1024}
+									accept={{
+										"image/*": [".jpg", ".jpeg", ".png"],
+									}}
+									maxFiles={1}
+									uploadToApi
+									helperText="Max. size image 5mb"
+								/>
+							</div>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button

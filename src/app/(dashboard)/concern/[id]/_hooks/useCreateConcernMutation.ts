@@ -19,11 +19,18 @@ export function useCreateConcernMutation({
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: CreateConcernRequest) => {
 			const payload = {
-				...data,
+				user_discipline: data.user_discipline,
+				discipline_initial: data.discipline_initial,
+				review_focus: data.review_focus,
+				discipline_group_consolidators: data.discipline_group_consolidators.map(
+					(c) => ({
+						user_id: c.user_id,
+					}),
+				),
 				package_id: packageId,
 			};
 
-			const response = await api.post("/v1/area-of-concern-group", payload);
+			const response = await api.post("/v1/discipline-group", payload);
 			return response.data;
 		},
 		onSuccess: () => {
