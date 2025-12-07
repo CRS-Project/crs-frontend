@@ -73,7 +73,7 @@ export function useAreaOfConcernQuery(id: string) {
 			}
 
 			const res = await api.get(
-				`/v1/area-of-concern-group/${id}/area-of-concern`,
+				`/v1/discipline-group/${id}/discipline-list-document`,
 				{
 					params: {
 						...queryParams,

@@ -1,11 +1,13 @@
 import type { Consolidator, ConsolidatorUser } from "./consolidator";
+import type { Document } from "./document";
 
 export type AreaOfConcern = {
 	id: string;
-	area_of_concern_id: string;
-	description: string;
 	package: string;
-	consolidators: Consolidator[];
+	document: Document;
+	area_of_concern_id?: string;
+	description?: string;
+	consolidators?: Consolidator[];
 };
 
 export type Concern = {
@@ -14,21 +16,19 @@ export type Concern = {
 	package: string;
 	user_discipline: string;
 	discipline_initial?: string;
-	consolidators?: Consolidator[];
+	discipline_group_consolidators?: Consolidator[];
 };
 
 export type CreateAreaOfConcernRequest = {
-	area_of_concern_id: string;
-	description: string;
-	consolidators: ConsolidatorUser[];
+	document_id?: string;
+	discipline_group_consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 	package_id: string;
 };
 
 export type EditAreaOfConcernRequest = {
-	area_of_concern_id: string;
-	description: string;
-	consolidators: ConsolidatorUser[];
+	document_id?: string;
+	discipline_group_consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 	package_id: string;
 };
@@ -37,7 +37,7 @@ export type CreateConcernRequest = {
 	user_discipline: string;
 	discipline_initial: string;
 	review_focus: string;
-	consolidators: ConsolidatorUser[];
+	discipline_group_consolidators: ConsolidatorUser[];
 	consolidator_select?: string;
 };
 
@@ -45,8 +45,6 @@ export type EditConcernRequest = {
 	user_discipline?: string;
 	discipline_initial?: string;
 	review_focus?: string;
-	consolidators?: ConsolidatorUser[];
+	discipline_group_consolidators?: ConsolidatorUser[];
 	consolidator_select?: string;
 };
-
-export type ConcernPageParams = Promise<{ id: string }>;

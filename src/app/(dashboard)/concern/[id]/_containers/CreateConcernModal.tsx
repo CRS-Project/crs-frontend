@@ -7,24 +7,18 @@ import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
-import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
+import ConsolidatorSelector from "@/components/form/ConsolidatorSelector";
 import Input from "@/components/form/Input";
-import LabelText from "@/components/form/LabelText";
-import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
 import type { CreateConcernRequest } from "@/types/concern";
 import type { ConsolidatorUser } from "@/types/consolidator";
+import { useGetConsolidatorOption } from "../_hooks/useConsolidatorQuery";
 import { useCreateConcernMutation } from "../_hooks/useCreateConcernMutation";
 
 interface CreateConcernModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	packageId: string;
-}
-
-interface ConsolidatorOption {
-	value: string;
-	label: string;
 }
 
 export default function CreateConcernModal({
@@ -35,7 +29,7 @@ export default function CreateConcernModal({
 	const methods = useForm<CreateConcernRequest>({
 		mode: "onTouched",
 		defaultValues: {
-			consolidators: [],
+			discipline_group_consolidators: [],
 		},
 	});
 
@@ -44,12 +38,9 @@ export default function CreateConcernModal({
 	const [selectedConsolidators, setSelectedConsolidators] = React.useState<
 		ConsolidatorUser[]
 	>([]);
-	const [consolidatorOptions] = React.useState<ConsolidatorOption[]>([
-		{ value: "user1", label: "User 1" },
-		{ value: "user2", label: "User 2" },
-		{ value: "user3", label: "User 3" },
-	]);
-
+	const { data: consolidatorOptions } = useGetConsolidatorOption(
+		packageId as string,
+	);
 	const selectedUserId = watch("consolidator_select") || "";
 
 	const addConsolidator = () => {
@@ -57,14 +48,16 @@ export default function CreateConcernModal({
 			selectedUserId &&
 			!selectedConsolidators.find((c) => c.user_id === selectedUserId)
 		) {
-			const user = consolidatorOptions?.find((u) => u.value === selectedUserId);
+			const user = consolidatorOptions?.user.find(
+				(u: any) => u.value === selectedUserId,
+			);
 			const newConsolidator: ConsolidatorUser = {
 				user_id: String(selectedUserId),
 				name: user?.label,
 			};
 			const updated = [...selectedConsolidators, newConsolidator];
 			setSelectedConsolidators(updated);
-			setValue("consolidators", updated);
+			setValue("discipline_group_consolidators", updated);
 			setValue("consolidator_select", "");
 		}
 	};
@@ -72,7 +65,7 @@ export default function CreateConcernModal({
 	const removeConsolidator = (userId: string) => {
 		const updated = selectedConsolidators.filter((c) => c.user_id !== userId);
 		setSelectedConsolidators(updated);
-		setValue("consolidators", updated);
+		setValue("discipline_group_consolidators", updated);
 	};
 
 	const [isMobile, setIsMobile] = React.useState(false);
@@ -99,9 +92,10 @@ export default function CreateConcernModal({
 	const onSubmit: SubmitHandler<CreateConcernRequest> = (data) => {
 		const payload = {
 			...data,
-			consolidators: data.consolidators.map((c) => ({
-				user_id: c.user_id,
-			})),
+			discipline_group_consolidators:
+				data.discipline_group_consolidators?.map((c) => ({
+					user_id: c.user_id,
+				})) || [],
 		};
 		mutate(payload as CreateConcernRequest);
 	};
@@ -175,50 +169,14 @@ export default function CreateConcernModal({
 									validation={{ required: "Review Focus is required!" }}
 								/>
 
-								<div className="space-y-2">
-									<LabelText required>Consolidator</LabelText>
-									<div className="flex gap-2">
-										<div className="flex-1">
-											<SelectInput
-												id="consolidator_select"
-												label={null}
-												placeholder="Add Consolidator"
-												options={consolidatorOptions}
-												isClearable={false}
-												isSearchable={true}
-											/>
-										</div>
-										<Button
-											type="button"
-											variant="blue"
-											onClick={addConsolidator}
-											className="whitespace-nowrap"
-										>
-											Add
-										</Button>
-									</div>
-									<div className="flex flex-wrap gap-2 mt-2">
-										{selectedConsolidators.map((consolidator) => (
-											<div
-												key={consolidator.user_id}
-												className="relative group"
-											>
-												<ConsolidatorChip
-													name={consolidator.name || consolidator.user_id}
-												/>
-												<button
-													type="button"
-													onClick={() =>
-														removeConsolidator(consolidator.user_id)
-													}
-													className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-												>
-													×
-												</button>
-											</div>
-										))}
-									</div>
-								</div>
+								<ConsolidatorSelector
+									selectedConsolidators={selectedConsolidators}
+									consolidatorOptions={consolidatorOptions}
+									selectedUserId={selectedUserId}
+									onAddConsolidator={addConsolidator}
+									onRemoveConsolidator={removeConsolidator}
+									required
+								/>
 
 								<div className="grid grid-cols-3 py-4 gap-3">
 									<Button
@@ -299,45 +257,14 @@ export default function CreateConcernModal({
 								validation={{ required: "Review Focus is required!" }}
 							/>
 
-							<div className="space-y-2">
-								<LabelText required>Consolidator</LabelText>
-								<div className="flex gap-2">
-									<div className="flex-1">
-										<SelectInput
-											id="consolidator_select"
-											label={null}
-											placeholder="Add Consolidator"
-											options={consolidatorOptions}
-											isClearable={false}
-											isSearchable={true}
-										/>
-									</div>
-									<Button
-										type="button"
-										variant="blue"
-										onClick={addConsolidator}
-										className="whitespace-nowrap"
-									>
-										Add
-									</Button>
-								</div>
-								<div className="flex flex-wrap gap-2 mt-2">
-									{selectedConsolidators.map((consolidator) => (
-										<div key={consolidator.user_id} className="relative group">
-											<ConsolidatorChip
-												name={consolidator.name || consolidator.user_id}
-											/>
-											<button
-												type="button"
-												onClick={() => removeConsolidator(consolidator.user_id)}
-												className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-											>
-												×
-											</button>
-										</div>
-									))}
-								</div>
-							</div>
+							<ConsolidatorSelector
+								selectedConsolidators={selectedConsolidators}
+								consolidatorOptions={consolidatorOptions}
+								selectedUserId={selectedUserId}
+								onAddConsolidator={addConsolidator}
+								onRemoveConsolidator={removeConsolidator}
+								required
+							/>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button

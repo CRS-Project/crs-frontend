@@ -26,10 +26,7 @@ export default function ConcernDetailModal({
 	onClose,
 	concern,
 }: ConcernDetailModalProps) {
-	const { data, isLoading, refetch } = useGetConcernByIDQuery(
-		concern?.id ?? "",
-		isOpen,
-	);
+	const { data, refetch } = useGetConcernByIDQuery(concern?.id ?? "", isOpen);
 	const methods = useForm<Concern>({
 		mode: "onTouched",
 	});
@@ -126,18 +123,20 @@ export default function ConcernDetailModal({
 								<div className="space-y-2">
 									<LabelText>Consolidators</LabelText>
 									<div className="flex flex-wrap gap-2">
-										{data?.data?.consolidators &&
-										data.data.consolidators.length > 0 ? (
-											data.data.consolidators.map((consolidator: any) => (
-												<ConsolidatorChip
-													key={consolidator.user_id || consolidator.id}
-													name={
-														consolidator.name ||
-														consolidator.user?.name ||
-														"Unknown"
-													}
-												/>
-											))
+										{data?.data?.discipline_group_consolidators &&
+										data.data.discipline_group_consolidators.length > 0 ? (
+											data.data.discipline_group_consolidators.map(
+												(consolidator: any) => (
+													<ConsolidatorChip
+														key={consolidator.user_id || consolidator.id}
+														name={
+															consolidator.name ||
+															consolidator.user?.name ||
+															"Unknown"
+														}
+													/>
+												),
+											)
 										) : (
 											<p className="text-sm text-gray-500">
 												No consolidators assigned
@@ -219,18 +218,20 @@ export default function ConcernDetailModal({
 							<div className="space-y-2">
 								<LabelText>Consolidators</LabelText>
 								<div className="flex flex-wrap gap-2">
-									{data?.data?.consolidators &&
-									data.data.consolidators.length > 0 ? (
-										data.data.consolidators.map((consolidator: any) => (
-											<ConsolidatorChip
-												key={consolidator.user_id || consolidator.id}
-												name={
-													consolidator.name ||
-													consolidator.user?.name ||
-													"Unknown"
-												}
-											/>
-										))
+									{data?.data?.discipline_group_consolidators &&
+									data.data.discipline_group_consolidators.length > 0 ? (
+										data.data.discipline_group_consolidators.map(
+											(consolidator: any) => (
+												<ConsolidatorChip
+													key={consolidator.user_id || consolidator.id}
+													name={
+														consolidator.name ||
+														consolidator.user?.name ||
+														"Unknown"
+													}
+												/>
+											),
+										)
 									) : (
 										<p className="text-sm text-gray-500">
 											No consolidators assigned
