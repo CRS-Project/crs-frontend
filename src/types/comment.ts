@@ -10,6 +10,7 @@ export interface Comment {
 	document_id: string;
 	user_comment: UserComment;
 	comment_replies: Comment[];
+	attach_file_url?: string;
 }
 
 export interface CreateCommentRequest {
@@ -17,6 +18,7 @@ export interface CreateCommentRequest {
 	section: string;
 	comment: string;
 	baseline: string;
+	attach_file_url?: string;
 }
 
 export interface CreateReplyRequest {
@@ -25,6 +27,7 @@ export interface CreateReplyRequest {
 	comment: string;
 	baseline: string;
 	is_close_out_comment: boolean;
+	attach_file_url?: string;
 }
 
 export interface EditCommentRequest {
@@ -34,4 +37,5 @@ export interface EditCommentRequest {
 	baseline: string;
 	is_close_out_comment: boolean;
 	status: string;
+	attach_file_url?: string;
 }
