@@ -375,17 +375,17 @@ const AppSidebar: React.FC = () => {
 								Guidebook
 							</UnstyledLink>
 						</Button>
-						<Button rightIcon={Play} variant="primary" className="w-full">
-							<UnstyledLink href="https://youtu.be/-3FpZI7EhKk" target="_blank">
-								Video Tutorial
-							</UnstyledLink>
-						</Button>
-						<Button rightIcon={Play} variant="white" className="w-full">
+						<Button rightIcon={ArrowRight} variant="white" className="w-full">
 							<UnstyledLink
 								href="https://1drv.ms/f/c/275fab05357fb5e1/IgBM_a447xSwSIMU3T8I_7O8AQSERY9KIVBvpef_xKu-2TQ?e=z0ZWoT"
 								target="_blank"
 							>
 								Resources
+							</UnstyledLink>
+						</Button>
+						<Button rightIcon={Play} variant="primary" className="w-full">
+							<UnstyledLink href="https://youtu.be/-3FpZI7EhKk" target="_blank">
+								Video Tutorial
 							</UnstyledLink>
 						</Button>
 					</div>
