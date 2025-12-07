@@ -52,7 +52,7 @@ export default function HomePage() {
 									title={item.name}
 									description={item.description}
 									linkHref={`/concern/${item.id}`}
-									value="Check Area of Concern"
+									value="Check Package"
 								/>
 							))}
 						</div>
