@@ -169,9 +169,9 @@ export default function AreaOfConcernDetailModal({
 							<div className="space-y-2">
 								<LabelText>Consolidator</LabelText>
 								<div className="flex flex-wrap gap-2">
-									{consolidators.map((consolidator) => (
+									{consolidators.map((consolidator, idx) => (
 										<ConsolidatorChip
-											key={consolidator.discipline_group_consolidator_id}
+											key={consolidator.discipline_group_consolidator_id || idx}
 											name={consolidator.name}
 										/>
 									))}
