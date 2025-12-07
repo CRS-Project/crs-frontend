@@ -48,7 +48,7 @@ export default function AreaOfConcernDetailModal({
 	const sheetRef = useRef<HTMLDivElement | null>(null);
 	const dragControls = useDragControls();
 
-	const consolidators = concern?.consolidators || [];
+	const consolidators = concern?.discipline_group_consolidators || [];
 
 	if (isMobile) {
 		return isOpen ? (

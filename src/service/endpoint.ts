@@ -7,15 +7,15 @@ export const MAIN_ENDPOINT = {
 	},
 	Comment: {
 		FetchComments:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id/comment?sort=desc&sort_by=created_at",
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment?sort=desc&sort_by=created_at",
 		CreateComment:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id/comment",
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment",
 		EditComment:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id/comment/:comment_id",
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment/:comment_id",
 		CreateReply:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id/comment/:comment_id/reply",
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment/:comment_id/reply",
 		DeleteComment:
-			"/v1/area-of-concern-group/:area_of_concern_group_id/area-of-concern/:area_of_concern_id/comment/:comment_id",
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment/:comment_id",
 	},
 	Document: {
 		FetchDocuments: "/v1/document",

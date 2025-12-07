@@ -53,8 +53,9 @@ export default function ConcernDetailContainer({
 				<div className="space-y-2">
 					<LabelText>Consolidator</LabelText>
 					<div className="flex flex-wrap gap-2">
-						{concern?.consolidators && concern.consolidators.length > 0 ? (
-							concern.consolidators.map((consolidator) => (
+						{concern?.discipline_group_consolidators &&
+						concern.discipline_group_consolidators.length > 0 ? (
+							concern.discipline_group_consolidators.map((consolidator) => (
 								<ConsolidatorChip
 									key={consolidator.id}
 									name={consolidator.name || "Unknown"}

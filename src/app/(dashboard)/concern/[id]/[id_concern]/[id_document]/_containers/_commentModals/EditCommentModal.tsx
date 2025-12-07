@@ -2,15 +2,18 @@
 
 import { Modal, ModalContent } from "@heroui/modal";
 import { motion, useDragControls } from "framer-motion";
-import { X } from "lucide-react";
+import { File, X } from "lucide-react";
 import { useParams } from "next/navigation";
 import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
 import Input from "@/components/form/Input";
+import LabelText from "@/components/form/LabelText";
 import SelectInput from "@/components/form/SelectInput";
 import TextArea from "@/components/form/TextArea";
+import UploadFile from "@/components/form/UploadFile";
+import ButtonLink from "@/components/links/ButtonLink";
 import type { Comment, EditCommentRequest } from "@/types/comment";
 import { useEditCommentMutation } from "../../_hooks/useEditCommentMutation";
 import { useGetDocument } from "../../_hooks/useGetDocument";
@@ -45,7 +48,8 @@ export default function EditCommentModal({
 		}
 	}, [comment, methods]);
 
-	const { handleSubmit, reset } = methods;
+	const { handleSubmit, reset, watch } = methods;
+	const attachFileUrl = watch("attach_file_url");
 
 	const mutation = useEditCommentMutation({
 		area_of_concern_group_id: id_concern as string,
@@ -169,6 +173,31 @@ export default function EditCommentModal({
 									validation={{ required: "Section Document is required!" }}
 								/>
 
+								<div>
+									<LabelText>Attachment (Optional)</LabelText>
+									{attachFileUrl && (
+										<ButtonLink
+											href={`https://${attachFileUrl}`}
+											className="w-full mb-2"
+											variant="secondary"
+											leftIcon={File}
+										>
+											Open File
+										</ButtonLink>
+									)}
+									<UploadFile
+										id="attach_file_url"
+										label=""
+										maxSize={5000 * 1024}
+										accept={{
+											"image/*": [".jpg", ".jpeg", ".png"],
+										}}
+										maxFiles={1}
+										uploadToApi
+										helperText="Max. size image 5mb"
+									/>
+								</div>
+
 								<div className="grid grid-cols-3 py-4 gap-3">
 									<Button
 										variant="secondary"
@@ -276,6 +305,31 @@ export default function EditCommentModal({
 								className="border-[#E2E8F0]"
 								validation={{ required: "Section Document is required!" }}
 							/>
+
+							<div>
+								<LabelText>Attachment (Optional)</LabelText>
+								{attachFileUrl && (
+									<ButtonLink
+										href={`https://${attachFileUrl}`}
+										className="w-full mb-2"
+										variant="secondary"
+										leftIcon={File}
+									>
+										Open File
+									</ButtonLink>
+								)}
+								<UploadFile
+									id="attach_file_url"
+									label=""
+									maxSize={5000 * 1024}
+									accept={{
+										"image/*": [".jpg", ".jpeg", ".png"],
+									}}
+									maxFiles={1}
+									uploadToApi
+									helperText="Max. size image 5mb"
+								/>
+							</div>
 
 							<div className="grid grid-cols-3 py-8 gap-3">
 								<Button

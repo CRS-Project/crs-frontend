@@ -57,10 +57,12 @@ export default function DocumentsDetails() {
 	}
 
 	const highlightedPackage =
-		concern?.area_of_concern_id || "Area of Concern Unavailable";
+		concern?.document?.document_title ||
+		concern?.area_of_concern_id ||
+		"Document Unavailable";
 	const highlightedTitle =
-		concern?.description ||
-		"No description available for this area of concern.";
+		concern?.document.document_category ||
+		"No description available for this document.";
 
 	return (
 		<div className="space-y-6 px-8 max-md:px-4">
@@ -81,7 +83,7 @@ export default function DocumentsDetails() {
 							<h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
 								{highlightedPackage}
 							</h2>
-							<p className="text-sm text-white/70 md:text-base">
+							<p className="text-[1.5rem] font-bold md:text-base">
 								{highlightedTitle}
 							</p>
 						</div>
@@ -98,7 +100,7 @@ export default function DocumentsDetails() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-0 mb-10">
 				<div className="w-full lg:col-span-5 lg:pl-[2.5rem] lg:order-2 order-1">
-					<h1 className="font-bold text-[1.5rem] mb-4">Detail of Concern</h1>
+					<h1 className="font-bold text-[1.5rem] mb-4">Detail Document</h1>
 					<ConcernDetailModal concern={concern} />
 				</div>
 
