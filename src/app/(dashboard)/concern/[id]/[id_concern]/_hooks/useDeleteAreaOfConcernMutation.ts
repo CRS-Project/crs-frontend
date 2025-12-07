@@ -29,11 +29,11 @@ export const useDeleteAreaOfConcernMutation = ({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["area-of-concern"] });
-			toast.success("Area of Concern deleted successfully!");
+			toast.success("Document list deleted successfully");
 			onSuccess();
 		},
 		onError: (error: Error) => {
-			toast.error(`Error deleting area of concern: ${error.message}`);
+			toast.error(`Error deleting document list: ${error.message}`);
 		},
 	});
 };

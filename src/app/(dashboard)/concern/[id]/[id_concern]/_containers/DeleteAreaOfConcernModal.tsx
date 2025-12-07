@@ -83,7 +83,7 @@ export default function DeleteAreaOfConcernModal({
 									className="w-full"
 									isLoading={isPending}
 								>
-									{isPending ? "Deleting..." : "Yes, Delete Area of Concern"}
+									{isPending ? "Deleting..." : "Yes, Delete Document List"}
 								</Button>
 							</div>
 						</ModalBody>

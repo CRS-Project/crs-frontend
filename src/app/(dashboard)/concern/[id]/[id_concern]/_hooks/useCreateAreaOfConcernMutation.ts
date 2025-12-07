@@ -32,11 +32,11 @@ export const useCreateAreaOfConcernMutation = ({
 			queryClient.invalidateQueries({
 				queryKey: ["area-of-concern", area_of_concern_group_id],
 			});
-			toast.success("Area of concern created successfully");
+			toast.success("Document list created successfully");
 			onSuccess();
 		},
 		onError: (error: Error) => {
-			toast.error(`Error creating area of concern: ${error.message}`);
+			toast.error(`Error creating document list: ${error.message}`);
 		},
 	});
 };
