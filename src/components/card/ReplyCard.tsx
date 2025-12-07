@@ -9,6 +9,8 @@ import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 import LightboxModal from "../LightboxModal";
 import ButtonLink from "../links/ButtonLink";
+import Button from "../button/Button";
+import FilePreviewModal from "@/app/(dashboard)/concern/[id]/[id_concern]/[id_document]/_containers/AttachmentPreviewModal";
 
 interface ReplyCardProps {
 	replies: Comment;
@@ -29,7 +31,7 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 	const { user } = useAuthStore();
 	const ref = useRef<HTMLDivElement>(null);
 	const [showMenu, setShowMenu] = useState(false);
-	const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+	const [isFilePreviewOpen, setIsFilePreviewOpen] = useState(false);
 	const [isOpen, setIsOpen] = useState({
 		edit: false,
 		delete: false,
@@ -148,14 +150,14 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 			{replies.attach_file_url && (
 				<div className="mb-3">
 					<p className="text-sm text-gray-600 mb-2">Attachment</p>
-					<ButtonLink
-						href={`https://${replies.attach_file_url}`}
+					<Button
+						onClick={() => setIsFilePreviewOpen(true)}
 						className="w-full"
 						variant="secondary"
 						leftIcon={File}
 					>
 						Open File
-					</ButtonLink>
+					</Button>
 				</div>
 			)}
 
@@ -175,12 +177,12 @@ export default function ReplyCard({ replies, parentComment }: ReplyCardProps) {
 				onClose={() => setIsOpen({ ...isOpen, delete: false })}
 			/>
 
-			{/* Lightbox for Image */}
 			{replies.attach_file_url && (
-				<LightboxModal
-					images={[`https://${replies.attach_file_url}`]}
-					open={isLightboxOpen}
-					onClose={() => setIsLightboxOpen(false)}
+				<FilePreviewModal
+					isOpen={isFilePreviewOpen}
+					onClose={() => setIsFilePreviewOpen(false)}
+					fileUrl={replies.attach_file_url}
+					fileName="Comment Attachment"
 				/>
 			)}
 		</div>
