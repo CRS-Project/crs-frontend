@@ -14,7 +14,6 @@ export interface Comment {
 }
 
 export interface CreateCommentRequest {
-	document_id: string;
 	section: string;
 	comment: string;
 	baseline: string;
@@ -22,7 +21,6 @@ export interface CreateCommentRequest {
 }
 
 export interface CreateReplyRequest {
-	document_id: string;
 	section: string;
 	comment: string;
 	baseline: string;
@@ -31,7 +29,6 @@ export interface CreateReplyRequest {
 }
 
 export interface EditCommentRequest {
-	document_id: string;
 	section: string;
 	comment: string;
 	baseline: string;

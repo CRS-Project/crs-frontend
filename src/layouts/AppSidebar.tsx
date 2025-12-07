@@ -43,7 +43,12 @@ const AppSidebar: React.FC = () => {
 			},
 			{
 				icon: <NotebookPen />,
-				name: "Area of Concern",
+				name: "Packages",
+				path: "/concern",
+			},
+			{
+				icon: <NotebookPen />,
+				name: "Discipline Groups",
 				path: "/concern",
 			},
 			{
@@ -63,14 +68,14 @@ const AppSidebar: React.FC = () => {
 	const filterNavItems = (role: string) => {
 		switch (role) {
 			case "SUPER ADMIN":
-				return navItems;
+				return navItems.filter((link) => link.name !== "Discipline Groups");
 			case "CONTRACTOR":
 				return navItems.filter(
 					(link) =>
 						link.name === "Home" ||
 						link.name === "Data" ||
 						link.name === "Documents" ||
-						link.name === "Area of Concern",
+						link.name === "Discipline Groups",
 				);
 			case "REVIEWER":
 				return navItems.filter(
@@ -78,7 +83,7 @@ const AppSidebar: React.FC = () => {
 						link.name === "Home" ||
 						link.name === "Data" ||
 						link.name === "Documents" ||
-						link.name === "Area of Concern",
+						link.name === "Discipline Groups",
 				);
 			default:
 				return [];

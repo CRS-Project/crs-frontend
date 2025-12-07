@@ -19,7 +19,6 @@ import { COMMENT_STATUS, ROLE } from "@/lib/data";
 import { trimText } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 import Button from "../button/Button";
-import ButtonLink from "../links/ButtonLink";
 import ReplyCard from "./ReplyCard";
 
 interface CommentCardProps {

@@ -4,7 +4,7 @@ import type { ApiResponse } from "@/types/api";
 
 export type AocCommentChart = {
 	name: string;
-	total_area_of_concern: number;
+	total_discipline_list_document: number;
 	total_documents: number;
 	total_comments: number;
 	total_comment_rejected: number;

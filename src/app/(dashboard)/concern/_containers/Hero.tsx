@@ -1,10 +1,12 @@
 "use client";
 
 import Loading from "@/app/loading";
+import useAuthStore from "@/app/stores/useAuthStore";
 import DirectoryMenu from "@/components/card/DirectoryMenu";
 import { useGetPackage } from "../../_hooks/useGetPackage";
 
 export default function Hero() {
+	const { user } = useAuthStore();
 	const { data, isLoading, error } = useGetPackage();
 	if (isLoading) {
 		return <Loading />;
@@ -34,7 +36,11 @@ export default function Hero() {
 						title={item.name}
 						description={item.description}
 						linkHref={`/concern/${item.id}`}
-						value="Check Area of Concern"
+						value={
+							user?.role === "SUPER ADMIN"
+								? "Check Detail Packages"
+								: "Check Detail Discipline Groups"
+						}
 					/>
 				),
 			)}
