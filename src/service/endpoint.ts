@@ -1,3 +1,5 @@
+import { Disc } from "lucide-react";
+
 export const MAIN_ENDPOINT = {
 	Auth: {
 		Login: "/v1/auth/login",

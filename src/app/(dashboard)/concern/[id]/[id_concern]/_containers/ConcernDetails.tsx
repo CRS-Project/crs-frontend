@@ -7,7 +7,13 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import { ArrowLeft, ListOrdered, PlusIcon, Search } from "lucide-react";
+import {
+	ArrowLeft,
+	Download,
+	ListOrdered,
+	PlusIcon,
+	Search,
+} from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
@@ -103,15 +109,28 @@ export default function DocumentsDetails() {
 						</div>
 						<div className="w-full flex gap-4 flex-col md:flex-row items-end md:justify-end z-10">
 							{user?.role !== ROLE.REVIEWER && (
-								<Button
-									rightIcon={PlusIcon}
-									size="lg"
-									variant="white"
-									className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
-									onClick={() => setIsOpen({ ...isOpen, create: true })}
-								>
-									Create Document
-								</Button>
+								<>
+									<Button
+										variant="white"
+										size="lg"
+										className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+										onClick={() => {
+											router.push(`/pdf/area-of-concern/${id_concern}`);
+										}}
+										rightIcon={Download}
+									>
+										Download Data Discipline
+									</Button>
+									<Button
+										rightIcon={PlusIcon}
+										size="lg"
+										variant="white"
+										className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
+										onClick={() => setIsOpen({ ...isOpen, create: true })}
+									>
+										Create Document
+									</Button>
+								</>
 							)}
 						</div>
 					</div>
