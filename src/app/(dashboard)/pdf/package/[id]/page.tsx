@@ -1,11 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useGenerateReportPackage } from "@/app/(dashboard)/concern/[id]/_hooks/useGenerateReportPackage";
+import Button from "@/components/button/Button";
+import { ArrowLeft } from "lucide-react";
 
 export default function PdfViewer() {
 	const { id } = useParams();
+	const router = useRouter();
 	const { data, isLoading, isError } = useGenerateReportPackage(id as string);
 
 	useEffect(() => {
@@ -38,12 +41,17 @@ export default function PdfViewer() {
 	}
 
 	return (
-		<div className="w-full h-screen flex justify-center items-center">
-			<iframe
-				src={data}
-				className="w-[80%] h-full"
-				title="Area of Concern PDF"
-			/>
+		<div className="w-full h-[calc(100vh-5rem)] px-8">
+			<Button
+				leftIcon={ArrowLeft}
+				size="lg"
+				variant="white"
+				className="sm:w-auto w-full lg:px-8 text-blue-500 font-semibold mb-[1rem]"
+				onClick={() => router.back()}
+			>
+				Back
+			</Button>
+			<iframe src={data} className="w-full h-full" title="Package PDF" />
 		</div>
 	);
 }
