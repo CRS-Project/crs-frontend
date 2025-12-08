@@ -7,13 +7,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import {
-	ArrowLeft,
-	Download,
-	ListOrdered,
-	PlusIcon,
-	Search,
-} from "lucide-react";
+import { ArrowLeft, ListOrdered, PlusIcon, Search } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
