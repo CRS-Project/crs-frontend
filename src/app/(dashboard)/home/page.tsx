@@ -20,7 +20,7 @@ export default function HomePage() {
 			{user?.role !== "SUPER ADMIN" && (
 				<div className="my-8 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
 					<SummaryCard
-						title="Total Area Of Concern"
+						title="Total Discipline Group"
 						value={cardData?.data?.total_discipline_group || 0}
 						variant="primary"
 					/>
