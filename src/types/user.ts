@@ -11,6 +11,7 @@ export type User = {
 	role: string;
 	package_id: string | null;
 	discipline_id: string | null;
+	password: string;
 };
 
 export type UserComment = {
@@ -41,6 +42,7 @@ export type EditUserRequest = {
 	institution: string;
 	discipline_number: number;
 	discipline_id?: string;
+	password?: string;
 };
 
 export type WithToken = {

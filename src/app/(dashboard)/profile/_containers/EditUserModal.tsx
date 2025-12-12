@@ -80,6 +80,7 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 			photo_profile: formData.photo_profile ?? user?.photo_profile ?? "",
 			institution: user?.institution ?? "",
 			discipline_number: user?.discipline_number ?? 0,
+			password: formData.password ?? "",
 		};
 
 		if (user?.role === "REVIEWER") {
@@ -168,15 +169,12 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 									readOnly
 									disabled
 								/>
-								<LabelText>Password</LabelText>
-								<Button
-									className="w-full"
-									size="lg"
-									variant="yellow"
-									onClick={() => setSelectedForm("PASSWORD")}
-								>
-									Reset Password
-								</Button>
+								<Input
+									id="password"
+									label="Password"
+									placeholder="Input New Password"
+									type="password"
+								/>
 								<LabelText>Profile Picture</LabelText>
 								<ButtonLink
 									href={`https://${user?.photo_profile ?? ""}`}
@@ -350,15 +348,12 @@ export default function EditUserModal({ isOpen, onClose }: EditUserModalProps) {
 									readOnly
 									disabled
 								/>
-								<LabelText>Password</LabelText>
-								<Button
-									className="w-full"
-									size="lg"
-									variant="yellow"
-									onClick={() => setSelectedForm("PASSWORD")}
-								>
-									Reset Password
-								</Button>
+								<Input
+									id="password"
+									label="Password"
+									placeholder="Input New Password"
+									type="password"
+								/>
 								<LabelText>Profile Picture</LabelText>
 								<ButtonLink
 									href={`https://${user?.photo_profile ?? ""}`}

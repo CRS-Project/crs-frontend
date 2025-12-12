@@ -1,10 +1,10 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useGenerateReportConcern } from "@/app/(dashboard)/concern/[id]/[id_concern]/_hooks/useGenerateDataConcern";
 import Button from "@/components/button/Button";
-import { ArrowLeft } from "lucide-react";
 
 export default function PdfViewer() {
 	const { id } = useParams();
