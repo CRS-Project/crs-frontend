@@ -41,6 +41,7 @@ export default function useLoginMutation() {
 					institution: data.personal_info.institution,
 					photo_profile: data.personal_info.photo_profile,
 					role: data.personal_info.role,
+					password: "",
 
 					package: data.package_access?.name ?? "",
 					package_id: data.package_access?.id ?? null,
