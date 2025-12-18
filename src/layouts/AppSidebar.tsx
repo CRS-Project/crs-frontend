@@ -368,7 +368,7 @@ const AppSidebar: React.FC = () => {
 						<Button rightIcon={ArrowRight} variant="white" className="w-full">
 							<UnstyledLink
 								href={
-									"https://drive.google.com/file/d/1aAhw7E3eE1qXirFjX-gvalnf5Q2w_D9p/view?usp=sharing"
+									"https://drive.google.com/file/d/11RZgbHuo0vhln-2Oo7Qyqbz0JMko0OI0/view?usp=sharing"
 								}
 								target="_blank"
 							>
