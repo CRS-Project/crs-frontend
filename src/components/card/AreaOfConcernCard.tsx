@@ -62,7 +62,9 @@ export default function AreaOfConcernCard({
 		<div className="px-6 py-4 border rounded-lg bg-blue-600 text-white flex gap-[24px] flex-col">
 			<div className="flex justify-between items-start">
 				<div>
-					<p className="font-semibold text-[20px]">{concern.id}</p>
+					<p className="font-semibold text-[20px]">
+						{concern.document.company_document_number}
+					</p>
 					<h1 className="font-bold text-[32px]">
 						{concern.document.document_title}
 					</h1>
