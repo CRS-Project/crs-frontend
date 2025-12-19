@@ -384,7 +384,7 @@ const AppSidebar: React.FC = () => {
 							</UnstyledLink>
 						</Button>
 						<Button rightIcon={Play} variant="primary" className="w-full">
-							<UnstyledLink href="https://youtu.be/-3FpZI7EhKk" target="_blank">
+							<UnstyledLink href="https://youtu.be/RuLvao-3nyQ" target="_blank">
 								Video Tutorial
 							</UnstyledLink>
 						</Button>
