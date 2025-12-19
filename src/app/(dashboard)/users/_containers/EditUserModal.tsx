@@ -82,6 +82,7 @@ export default function EditUserModal({
 			institution: formData.institution ?? user?.institution ?? "",
 			discipline_number:
 				formData.discipline_number ?? user?.discipline_number ?? 0,
+			password: formData.password ?? undefined,
 		};
 
 		if (user?.role === "REVIEWER") {
@@ -197,6 +198,12 @@ export default function EditUserModal({
 									placeholder="Select User Role"
 									disabled
 									readOnly
+								/>
+								<Input
+									id="password"
+									label="Password"
+									placeholder="Input User Password"
+									type="password"
 								/>
 								<Input
 									id="package"
@@ -354,6 +361,12 @@ export default function EditUserModal({
 								placeholder="Select User Role"
 								disabled
 								readOnly
+							/>
+							<Input
+								id="password"
+								label="Password"
+								placeholder="Input User Password"
+								type="password"
 							/>
 							<Input
 								id="package"
