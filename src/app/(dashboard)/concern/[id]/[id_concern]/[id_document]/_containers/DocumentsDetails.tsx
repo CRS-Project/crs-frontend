@@ -68,7 +68,7 @@ export default function DocumentsDetails() {
 			<div className="flex flex-col gap-4 xl:flex-row">
 				<div className="w-full rounded-2xl bg-blue-500 p-6 text-white md:p-8 relative overflow-hidden">
 					<div className="flex flex-col md:flex-row gap-4">
-						<div className="space-y-2 w-full">
+						<div className="space-y-2 w-full relative z-10">
 							<Button
 								leftIcon={ArrowLeft}
 								size="lg"
