@@ -39,7 +39,7 @@ export default function ConcernDetailModal({
 					</div>
 				</div>
 				<Input
-					id="document.id"
+					id="document.company_document_number"
 					label="Document Number"
 					placeholder="Input Document Number"
 					readOnly
@@ -82,18 +82,6 @@ export default function ConcernDetailModal({
 					id="document.document_category"
 					label="Document Category"
 					placeholder="Input Document Category"
-					readOnly
-				/>
-				<Input
-					id="document.company_document_number"
-					label="Company Document Number"
-					placeholder="Input Company Document Number"
-					readOnly
-				/>
-				<Input
-					id="document.contractor_document_number"
-					label="Contractor Document Number"
-					placeholder="Input Contractor Document Number"
 					readOnly
 				/>
 				<Input
