@@ -20,8 +20,11 @@ export function useDeleteDocumentMutation({
 			queryClient.invalidateQueries({ queryKey: ["documents"] });
 			if (onSuccess) onSuccess();
 		},
-		onError: (err) => {
-			toast.error(err.message);
+		onError: (err: any) => {
+			const apiMessage =
+				err?.response?.data?.error || err?.response?.data?.message;
+			const message = apiMessage || err?.message || "Gagal menghapus dokumen";
+			toast.error(message);
 		},
 	});
 
