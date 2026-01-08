@@ -11,6 +11,7 @@ import { ArrowLeft, Filter, Plus } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
+import toast from "react-hot-toast";
 import Loading from "@/app/loading";
 import useAuthStore from "@/app/stores/useAuthStore";
 import Button from "@/components/button/Button";
@@ -31,6 +32,14 @@ export default function DocumentsDetails() {
 		id_concern as string,
 		id_document as string,
 	);
+
+	React.useEffect(() => {
+		if (concern?.is_due_date) {
+			toast.error("This document is past its due date!", {
+				id: "document-due-toast",
+			});
+		}
+	}, [concern]);
 
 	const { data: comments, isLoading } = useFetchComments(
 		id_concern as string,
