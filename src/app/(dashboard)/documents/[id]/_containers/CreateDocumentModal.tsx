@@ -7,6 +7,7 @@ import * as React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
+import DateInput from "@/components/form/DateInput";
 import Input from "@/components/form/Input";
 import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
@@ -111,10 +112,12 @@ export default function CreateDocumentModal({
 						<FormProvider {...methods}>
 							<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 								<Input
-									id="id"
-									label="Document Number"
-									placeholder="Input Document Number"
-									validation={{ required: "Document Number wajib diisi!" }}
+									id="company_document_number"
+									label="Company Document Number"
+									placeholder="Input Company Document Number"
+									validation={{
+										required: "Company Document Number wajib diisi!",
+									}}
 								/>
 								<Input
 									id="document_title"
@@ -139,14 +142,14 @@ export default function CreateDocumentModal({
 									options={categoryOptions}
 								/>
 								<Input
-									id="company_document_number"
-									label="Company Document Number"
-									placeholder="Input Company Document Number"
-								/>
-								<Input
 									id="contractor_document_number"
 									label="Contractor Document Number"
 									placeholder="Input Contractor Document Number"
+								/>
+								<DateInput
+									id="due_date"
+									label="Due Date"
+									placeholder="Input Due Date"
 								/>
 								<Input
 									id="ctr_number"
@@ -240,10 +243,12 @@ export default function CreateDocumentModal({
 					<FormProvider {...methods}>
 						<form onSubmit={handleSubmit(onSubmit)} className="my-8 space-y-2">
 							<Input
-								id="id"
-								label="Document Number"
-								placeholder="Input Document Number"
-								validation={{ required: "Document Number wajib diisi!" }}
+								id="company_document_number"
+								label="Company Document Number"
+								placeholder="Input Company Document Number"
+								validation={{
+									required: "Company Document Number wajib diisi!",
+								}}
 							/>
 							<Input
 								id="document_title"
@@ -268,14 +273,14 @@ export default function CreateDocumentModal({
 								options={categoryOptions}
 							/>
 							<Input
-								id="company_document_number"
-								label="Company Document Number"
-								placeholder="Input Company Document Number"
-							/>
-							<Input
 								id="contractor_document_number"
 								label="Contractor Document Number"
 								placeholder="Input Contractor Document Number"
+							/>
+							<DateInput
+								id="due_date"
+								label="Due Date"
+								placeholder="Input Due Date"
 							/>
 							<Input
 								id="ctr_number"

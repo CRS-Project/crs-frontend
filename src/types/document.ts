@@ -1,13 +1,15 @@
 export type Document = {
 	id: string;
-	company_document_number: string;
+	document_number: string;
 	document_title: string;
+	company_document_number: string;
 	document_serial_number: string;
 	document_url?: string;
 	document_file?: File;
 	document_type: string;
 	document_category: string;
 	contractor_document_number: string;
+	due_date?: string;
 	ctr_number: string;
 	wbs: string;
 	discipline: string;
@@ -25,6 +27,7 @@ export type CreateDocumentRequest = {
 	document_type: string;
 	document_category: string;
 	contractor_document_number: string;
+	due_date?: string;
 	ctr_number: string;
 	wbs: string;
 	discipline: string;
@@ -34,14 +37,15 @@ export type CreateDocumentRequest = {
 };
 
 export type EditDocumentRequest = {
+	company_document_number?: string;
 	document_title?: string;
 	document_serial_number?: string;
 	document_url?: string;
 	document_file?: File;
 	document_type?: string;
 	document_category?: string;
-	company_document_number?: string;
 	contractor_document_number?: string;
+	due_date?: string;
 	ctr_number?: string;
 	wbs?: string;
 	discipline?: string;
