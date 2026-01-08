@@ -62,6 +62,11 @@ export default function AreaOfConcernCard({
 		<div className="px-6 py-4 border rounded-lg bg-blue-600 text-white flex gap-[24px] flex-col">
 			<div className="flex justify-between items-start">
 				<div>
+					{concern.is_due_date && (
+						<div className="inline-block mb-3 px-3 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-full">
+							This Documents Is Due!
+						</div>
+					)}
 					<p className="font-semibold text-[20px]">
 						{concern.document.company_document_number}
 					</p>

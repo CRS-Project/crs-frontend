@@ -4,6 +4,7 @@ import type { Document } from "./document";
 export type AreaOfConcern = {
 	id: string;
 	package: string;
+	is_due_date: boolean;
 	document: Document;
 	area_of_concern_id?: string;
 	description?: string;

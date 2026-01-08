@@ -4,8 +4,10 @@ import { File } from "lucide-react";
 import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import ConsolidatorChip from "@/components/chip/ConsolidatorChip";
+import DateInput from "@/components/form/DateInput";
 import Input from "@/components/form/Input";
 import LabelText from "@/components/form/LabelText";
+import { formatDateForInput } from "@/lib/utils";
 import type { AreaOfConcern } from "@/types/concern";
 
 interface ConcernDetailModalProps {
@@ -15,9 +17,21 @@ interface ConcernDetailModalProps {
 export default function ConcernDetailModal({
 	concern,
 }: ConcernDetailModalProps) {
+	const formattedConcern = concern
+		? {
+				...concern,
+				document: concern.document
+					? {
+							...concern.document,
+							due_date: formatDateForInput(concern.document.due_date),
+						}
+					: concern.document,
+			}
+		: concern;
+
 	const methods = useForm<AreaOfConcern>({
 		mode: "onTouched",
-		defaultValues: concern,
+		defaultValues: formattedConcern,
 	});
 
 	const { watch } = methods;
@@ -40,8 +54,8 @@ export default function ConcernDetailModal({
 				</div>
 				<Input
 					id="document.company_document_number"
-					label="Document Number"
-					placeholder="Input Document Number"
+					label="Company Document Number"
+					placeholder="Input Company Document Number"
 					readOnly
 				/>
 				<Input
@@ -59,7 +73,7 @@ export default function ConcernDetailModal({
 				{currentDocumentUrl && (
 					<div className="space-y-2">
 						<h4 className="text-sm font-semibold text-gray-900">
-							Upload Document
+							Document URL
 						</h4>
 						<Link
 							href={`https://${currentDocumentUrl}`}
@@ -68,7 +82,7 @@ export default function ConcernDetailModal({
 							className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
 						>
 							<File size={16} />
-							<span>View Current Document</span>
+							<span>View Document</span>
 						</Link>
 					</div>
 				)}
@@ -82,6 +96,18 @@ export default function ConcernDetailModal({
 					id="document.document_category"
 					label="Document Category"
 					placeholder="Input Document Category"
+					readOnly
+				/>
+				<Input
+					id="document.contractor_document_number"
+					label="Contractor Document Number"
+					placeholder="Input Contractor Document Number"
+					readOnly
+				/>
+				<DateInput
+					id="document.due_date"
+					label="Due Date"
+					placeholder="Input Due Date"
 					readOnly
 				/>
 				<Input

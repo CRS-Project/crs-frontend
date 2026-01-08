@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import { formatDateForRequest } from "@/lib/utils";
 import api from "@/service/api";
 import type { ApiError } from "@/types/api";
 import type { CreateDocumentRequest } from "@/types/document";
@@ -36,6 +37,7 @@ export function useCreateDocumentMutation({
 			const payload = {
 				...data,
 				...(documentUrl && { document_url: documentUrl }),
+				...(data.due_date && { due_date: formatDateForRequest(data.due_date) }),
 				package_id: packageId,
 				document_file: undefined,
 			};

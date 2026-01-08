@@ -8,7 +8,9 @@ import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import IconButton from "@/components/button/IconButton";
+import DateInput from "@/components/form/DateInput";
 import Input from "@/components/form/Input";
+import { formatDateForInput } from "@/lib/utils";
 import type { Document } from "@/types/document";
 import { useGetDocumentByIDQuery } from "../_hooks/useGetDocumentByIDQuery";
 
@@ -34,7 +36,11 @@ export default function DocumentDetailModal({
 
 	React.useEffect(() => {
 		if (data?.data) {
-			methods.reset(data.data);
+			const formattedData = {
+				...data.data,
+				due_date: formatDateForInput(data.data.due_date),
+			};
+			methods.reset(formattedData);
 		}
 	}, [data, methods]);
 
@@ -94,11 +100,13 @@ export default function DocumentDetailModal({
 						<FormProvider {...methods}>
 							<div className="mb-2 space-y-2">
 								<Input
-									id="id"
-									label="Document Number"
-									placeholder="Input Document Number"
+									id="company_document_number"
+									label="Company Document Number"
+									placeholder="Input Company Document Number"
 									readOnly
-									validation={{ required: "Document Number wajib diisi!" }}
+									validation={{
+										required: "Company Document Number wajib diisi!",
+									}}
 								/>
 								<Input
 									id="document_title"
@@ -116,7 +124,7 @@ export default function DocumentDetailModal({
 								{currentDocumentUrl && (
 									<div className="space-y-2">
 										<h4 className="text-sm font-semibold text-gray-900">
-											Upload Document
+											Document URL
 										</h4>
 										<Link
 											href={`https://${currentDocumentUrl}`}
@@ -125,7 +133,7 @@ export default function DocumentDetailModal({
 											className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
 										>
 											<File size={16} />
-											<span>View Current Document</span>
+											<span>View Document</span>
 										</Link>
 									</div>
 								)}
@@ -142,15 +150,15 @@ export default function DocumentDetailModal({
 									readOnly
 								/>
 								<Input
-									id="company_document_number"
-									label="Company Document Number"
-									placeholder="Input Company Document Number"
-									readOnly
-								/>
-								<Input
 									id="contractor_document_number"
 									label="Contractor Document Number"
 									placeholder="Input Contractor Document Number"
+									readOnly
+								/>
+								<DateInput
+									id="due_date"
+									label="Due Date"
+									placeholder="Input Due Date"
 									readOnly
 								/>
 								<Input
@@ -226,11 +234,13 @@ export default function DocumentDetailModal({
 					<FormProvider {...methods}>
 						<div className="my-8 space-y-2">
 							<Input
-								id="id"
-								label="Document Number"
-								placeholder="Input Document Number"
+								id="company_document_number"
+								label="Company Document Number"
+								placeholder="Input Company Document Number"
 								readOnly
-								validation={{ required: "Document Number wajib diisi!" }}
+								validation={{
+									required: "Company Document Number wajib diisi!",
+								}}
 							/>
 							<Input
 								id="document_title"
@@ -243,13 +253,12 @@ export default function DocumentDetailModal({
 								id="document_serial_number"
 								label="Document Serial Number"
 								placeholder="Input Document Serial Number"
-								validation={{ required: "Document Serial Number wajib diisi!" }}
 								readOnly
 							/>
 							{currentDocumentUrl && (
 								<div className="space-y-2">
 									<h4 className="text-sm font-semibold text-gray-900">
-										Upload Document
+										Document URL
 									</h4>
 									<Link
 										href={`https://${currentDocumentUrl}`}
@@ -258,7 +267,7 @@ export default function DocumentDetailModal({
 										className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors"
 									>
 										<File size={16} />
-										<span>View Current Document</span>
+										<span>View Document</span>
 									</Link>
 								</div>
 							)}
@@ -266,67 +275,49 @@ export default function DocumentDetailModal({
 								id="document_type"
 								label="Document Type"
 								placeholder="Input Document Type"
-								validation={{ required: "Document Type wajib diisi!" }}
 								readOnly
 							/>
 							<Input
 								id="document_category"
 								label="Document Category"
 								placeholder="Input Document Category"
-								validation={{ required: "Document Category wajib diisi!" }}
-								readOnly
-							/>
-							<Input
-								id="company_document_number"
-								label="Company Document Number"
-								placeholder="Input Company Document Number"
-								validation={{
-									required: "Company Document Number wajib diisi!",
-								}}
 								readOnly
 							/>
 							<Input
 								id="contractor_document_number"
 								label="Contractor Document Number"
 								placeholder="Input Contractor Document Number"
-								validation={{
-									required: "Contractor Document Number wajib diisi!",
-								}}
+								readOnly
+							/>
+							<DateInput
+								id="due_date"
+								label="Due Date"
+								placeholder="Input Due Date"
 								readOnly
 							/>
 							<Input
 								id="ctr_number"
 								label="CTR Number"
 								placeholder="Input CTR Number"
-								validation={{ required: "CTR Number wajib diisi!" }}
 								readOnly
 							/>
-							<Input
-								id="wbs"
-								label="WBS"
-								placeholder="Input WBS"
-								validation={{ required: "WBS wajib diisi!" }}
-								readOnly
-							/>
+							<Input id="wbs" label="WBS" placeholder="Input WBS" readOnly />
 							<Input
 								id="discipline"
 								label="Discipline"
 								placeholder="Input Discipline"
-								validation={{ required: "Discipline wajib diisi!" }}
 								readOnly
 							/>
 							<Input
 								id="sub_discipline"
 								label="SubDiscipline"
 								placeholder="Input SubDiscipline"
-								validation={{ required: "SubDiscipline wajib diisi!" }}
 								readOnly
 							/>
 							<Input
 								id="status"
 								label="Status Document"
 								placeholder="Input Status Document"
-								validation={{ required: "Status Document wajib diisi!" }}
 								readOnly
 							/>
 						</div>

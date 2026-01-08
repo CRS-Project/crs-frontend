@@ -62,7 +62,7 @@ export default function DateInput({
 				<input
 					{...fieldProps}
 					ref={handleRef}
-					type="date"
+					type="datetime-local"
 					id={id}
 					name={id}
 					className={clsxm(
