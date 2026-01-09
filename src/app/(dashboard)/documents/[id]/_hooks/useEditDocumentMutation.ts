@@ -37,7 +37,9 @@ export function useEditDocumentMutation({
 			const payload = {
 				...data,
 				...(documentUrl && { document_url: documentUrl }),
-				...(data.due_date && { due_date: formatDateForRequest(data.due_date) }),
+				...(data.due_date
+					? { due_date: formatDateForRequest(data.due_date) }
+					: { due_date: null }),
 				document_file: undefined,
 			};
 
