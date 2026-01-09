@@ -37,7 +37,9 @@ export function useCreateDocumentMutation({
 			const payload = {
 				...data,
 				...(documentUrl && { document_url: documentUrl }),
-				...(data.due_date && { due_date: formatDateForRequest(data.due_date) }),
+				...(data.due_date
+					? { due_date: formatDateForRequest(data.due_date) }
+					: { due_date: null }),
 				package_id: packageId,
 				document_file: undefined,
 			};
