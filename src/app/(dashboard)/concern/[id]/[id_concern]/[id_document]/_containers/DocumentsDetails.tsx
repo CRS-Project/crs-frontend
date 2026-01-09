@@ -11,6 +11,7 @@ import { ArrowLeft, Filter, Plus } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Loading from "@/app/loading";
 import useAuthStore from "@/app/stores/useAuthStore";
@@ -27,6 +28,7 @@ export default function DocumentsDetails() {
 	const router = useRouter();
 	const { id_concern, id_document } = useParams();
 	const { user } = useAuthStore();
+	const [isDue, setIsDue] = useState(false);
 
 	const { data: concern } = useGetAreaConcernByID(
 		id_concern as string,
@@ -35,6 +37,7 @@ export default function DocumentsDetails() {
 
 	React.useEffect(() => {
 		if (concern?.is_due_date) {
+			setIsDue(true);
 			toast.error("This document is past its due date!", {
 				id: "document-due-toast",
 			});
@@ -118,12 +121,13 @@ export default function DocumentsDetails() {
 						<div className="flex gap-2 w-full sm:w-auto">
 							{user?.role !== ROLE.CONTRACTOR && (
 								<Button
-									variant="blue"
-									leftIcon={Plus}
+									variant={isDue ? "red" : "blue"}
+									leftIcon={isDue ? undefined : Plus}
 									className="flex-1 sm:w-fit md:flex-auto"
+									disabled={isDue}
 									onClick={() => setIsOpen({ ...isOpen, create: true })}
 								>
-									Add Comment
+									{isDue ? "Past Due Date" : "Add Comment"}
 								</Button>
 							)}
 							<Dropdown>
