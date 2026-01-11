@@ -160,6 +160,7 @@ export default function DocumentDetailModal({
 									label="Due Date"
 									placeholder="Input Due Date"
 									readOnly
+									disabled
 								/>
 								<Input
 									id="ctr_number"
@@ -294,6 +295,7 @@ export default function DocumentDetailModal({
 								label="Due Date"
 								placeholder="Input Due Date"
 								readOnly
+								disabled
 							/>
 							<Input
 								id="ctr_number"

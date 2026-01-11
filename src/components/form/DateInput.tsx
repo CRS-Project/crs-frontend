@@ -71,6 +71,7 @@ export default function DateInput({
 						"placeholder:text-sm placeholder:text-gray-500 hover:ring-1 hover:ring-inset hover:ring-gray-900",
 						error &&
 							"border-none ring-2 ring-inset ring-red-500 placeholder:text-gray-500 focus:ring-red-500 bg-red-100",
+						"disabled:cursor-not-allowed",
 						className,
 					)}
 					data-cy={dataCy}
