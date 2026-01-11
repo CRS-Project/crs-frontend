@@ -2,9 +2,6 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-RUN apk add --no-cache tzdata
-ENV TZ=Asia/Jakarta
-
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
@@ -27,9 +24,6 @@ RUN pnpm build
 # ===== Runner =====
 FROM node:20-alpine
 WORKDIR /app
-
-RUN apk add --no-cache tzdata
-ENV TZ=Asia/Jakarta
 
 RUN npm install -g pnpm
 ENV NODE_ENV=production
