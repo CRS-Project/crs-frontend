@@ -109,6 +109,7 @@ export default function ConcernDetailModal({
 					label="Due Date"
 					placeholder="Input Due Date"
 					readOnly
+					disabled
 				/>
 				<Input
 					id="document.ctr_number"
