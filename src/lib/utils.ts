@@ -22,14 +22,7 @@ export function formatDateForRequest(
 ): string | undefined {
 	if (!dateString) return undefined;
 
-	try {
-		const date = dateString + ":00Z";
-		const isoDate = new Date(date).toISOString();
-		return isoDate;
-	} catch (error) {
-		console.error("Error formatting date for request:", error);
-		return undefined;
-	}
+	return `${dateString}:00+07:00`;
 }
 
 export function formatDateForInput(
@@ -39,11 +32,12 @@ export function formatDateForInput(
 
 	try {
 		const date = new Date(dateString);
-		const year = date.getUTCFullYear();
-		const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-		const day = String(date.getUTCDate()).padStart(2, "0");
-		const hours = String(date.getUTCHours()).padStart(2, "0");
-		const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const day = String(date.getDate()).padStart(2, "0");
+		const hours = String(date.getHours()).padStart(2, "0");
+		const minutes = String(date.getMinutes()).padStart(2, "0");
 
 		return `${year}-${month}-${day}T${hours}:${minutes}`;
 	} catch (error) {
