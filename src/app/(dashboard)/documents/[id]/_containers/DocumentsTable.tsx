@@ -53,6 +53,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 			"document_title",
 			"document_type",
 			"package",
+			"total_comment",
 			"status",
 		]),
 	);
@@ -120,6 +121,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 					"document_title",
 					"document_type",
 					"package",
+					"total_comment",
 					"status",
 				]),
 			);
@@ -233,6 +235,7 @@ export default function DocumentsTable({ id }: { id: string }) {
 								<DropdownItem key="document_title">Document Title</DropdownItem>
 								<DropdownItem key="document_type">Doc Type</DropdownItem>
 								<DropdownItem key="package">Package</DropdownItem>
+								<DropdownItem key="total_comment">Total Comments</DropdownItem>
 								<DropdownItem key="status">Status</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
@@ -348,6 +351,11 @@ function getDocumentTableColumns(
 			header: "PACKAGE",
 			enableColumnFilter: false,
 			enableSorting: false,
+		},
+		{
+			accessorKey: "total_comment",
+			header: "TOTAL COMMENTS",
+			enableColumnFilter: false,
 		},
 		{
 			accessorKey: "status",
