@@ -7,7 +7,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 } from "@heroui/dropdown";
-import { ArrowLeft, Filter, Plus } from "lucide-react";
+import { ArrowLeft, Download, Filter, Plus } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import * as React from "react";
@@ -20,6 +20,7 @@ import CommentCard from "@/components/card/CommentCard";
 import { ROLE } from "@/lib/data";
 import type { Comment } from "@/types/comment";
 import { useFetchComments } from "../_hooks/useCommentQuery";
+import { useGenerateExcelDocument } from "../_hooks/useGenerateExcelDocument";
 import { useGetAreaConcernByID } from "../_hooks/useGetAreaConcernByID";
 import CreateCommentModal from "./_commentModals/CreateCommentModal";
 import ConcernDetailModal from "./ConcernDetailContainer";
@@ -31,6 +32,10 @@ export default function DocumentsDetails() {
 	const [isDue, setIsDue] = useState(false);
 
 	const { data: concern } = useGetAreaConcernByID(
+		id_concern as string,
+		id_document as string,
+	);
+	const { data: excelData } = useGenerateExcelDocument(
 		id_concern as string,
 		id_document as string,
 	);
@@ -53,9 +58,7 @@ export default function DocumentsDetails() {
 		new Set(["ACCEPT", "REJECT", "NULL"]),
 	);
 
-	const [isOpen, setIsOpen] = React.useState({
-		create: false,
-	});
+	const [isOpen, setIsOpen] = React.useState({ create: false });
 
 	const filteredComments = React.useMemo(() => {
 		if (!comments) return [];
@@ -96,6 +99,21 @@ export default function DocumentsDetails() {
 							<p className="text-[1.5rem] font-bold md:text-base">
 								{highlightedTitle}
 							</p>
+						</div>
+						<div className="w-full flex gap-4 flex-col md:flex-row items-end md:justify-end z-10">
+							{user?.role !== ROLE.REVIEWER && (
+								<Button
+									variant="white"
+									size="lg"
+									className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+									onClick={() => {
+										window.open(excelData!);
+									}}
+									rightIcon={Download}
+								>
+									Download Excel Data
+								</Button>
+							)}
 						</div>
 					</div>
 					<Image
