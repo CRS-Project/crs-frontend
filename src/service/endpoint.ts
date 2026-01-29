@@ -33,6 +33,8 @@ export const MAIN_ENDPOINT = {
 		DeleteAreaOfConcern:
 			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id",
 		GeneratePdf: "/v1/discipline-group/:area_of_concern_group_id/generate-pdf",
+		GenerateExcel:
+			"/v1/discipline-group/:area_of_concern_group_id/generate-excel",
 		GetConsolidators:
 			"/v1/discipline-group/:area_of_concern_group_id/consolidator",
 	},
