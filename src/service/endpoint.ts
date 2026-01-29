@@ -17,9 +17,7 @@ export const MAIN_ENDPOINT = {
 		DeleteComment:
 			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/comment/:comment_id",
 	},
-	Document: {
-		FetchDocuments: "/v1/document",
-	},
+	Document: { FetchDocuments: "/v1/document" },
 	Concern: {
 		FetchConcernsById: "/v1/discipline-group/:area_of_concern_group_id",
 	},
@@ -33,6 +31,10 @@ export const MAIN_ENDPOINT = {
 		DeleteAreaOfConcern:
 			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id",
 		GeneratePdf: "/v1/discipline-group/:area_of_concern_group_id/generate-pdf",
+		GenerateExcelListDocument:
+			"/v1/discipline-group/:area_of_concern_group_id/discipline-list-document/:area_of_concern_id/generate-excel",
+		GenerateExcel:
+			"/v1/discipline-group/:area_of_concern_group_id/generate-excel",
 		GetConsolidators:
 			"/v1/discipline-group/:area_of_concern_group_id/consolidator",
 	},
@@ -40,7 +42,5 @@ export const MAIN_ENDPOINT = {
 		FetchUsersByPackageAndRole:
 			"/v1/user?filter=Reviewer,:id&filter_by=role,package_id",
 	},
-	Package: {
-		GeneratePdf: "/v1/package/:package_id/generate-pdf",
-	},
+	Package: { GeneratePdf: "/v1/package/:package_id/generate-pdf" },
 };

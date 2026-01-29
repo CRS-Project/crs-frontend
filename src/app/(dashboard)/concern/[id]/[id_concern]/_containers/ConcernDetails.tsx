@@ -26,6 +26,7 @@ import Input from "@/components/form/Input";
 import ServerPagination from "@/components/table/ServerPagination";
 import { ROLE } from "@/lib/data";
 import { useAreaOfConcernQuery } from "../_hooks/useAreaOfConcernQuery";
+import { useGenerateExcelConcern } from "../_hooks/useGenerateExcelConcern";
 import { useGetConcernByID } from "../_hooks/useGetConcernByID";
 import ConcernDetailContainer from "./ConcernDetailContainer";
 import CreateAreaOfConcernModal from "./CreateAreaOfConcernModal";
@@ -36,20 +37,15 @@ export default function DocumentsDetails() {
 	const { user } = useAuthStore();
 
 	const { data: areaOfConcern } = useGetConcernByID(id_concern as string);
+	const { data: excelData } = useGenerateExcelConcern(id_concern as string);
 
 	const [selectedPerPage, setSelectedPerPage] = React.useState<any>(
 		new Set(["10"]),
 	);
 
-	const [isOpen, setIsOpen] = React.useState({
-		create: false,
-	});
+	const [isOpen, setIsOpen] = React.useState({ create: false });
 
-	const methods = useForm({
-		defaultValues: {
-			per_page: 10,
-		},
-	});
+	const methods = useForm({ defaultValues: { per_page: 10 } });
 
 	const {
 		currentPage,
@@ -109,28 +105,46 @@ export default function DocumentsDetails() {
 						</div>
 						<div className="w-full flex gap-4 flex-col md:flex-row items-end md:justify-end z-10">
 							{user?.role !== ROLE.REVIEWER && (
-								<>
-									<Button
-										variant="white"
-										size="lg"
-										className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
-										onClick={() => {
-											router.push(`/pdf/area-of-concern/${id_concern}`);
-										}}
-										rightIcon={Download}
-									>
-										Download Data Discipline
-									</Button>
+								<div className="flex flex-row md:flex-col gap-3 items-end w-full md:w-auto">
 									<Button
 										rightIcon={PlusIcon}
 										size="lg"
 										variant="white"
 										className="md:w-fit w-full sm:w-auto text-blue-500 font-semibold"
-										onClick={() => setIsOpen({ ...isOpen, create: true })}
+										onClick={() =>
+											setIsOpen({
+												...isOpen,
+												create: true,
+											})
+										}
 									>
 										Create Document
 									</Button>
-								</>
+									<div className="flex gap-3">
+										<Button
+											variant="white"
+											size="lg"
+											className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+											onClick={() => {
+												router.push(`/pdf/area-of-concern/${id_concern}`);
+											}}
+											rightIcon={Download}
+										>
+											Download Data Discipline
+										</Button>
+										<Button
+											variant="white"
+											size="lg"
+											className="w-full sm:w-auto text-blue-500 font-semibold justify-center"
+											onClick={() => {
+												window.open(excelData!);
+											}}
+											rightIcon={Download}
+										>
+											Download Excel Data
+										</Button>
+									</div>
+								</div>
 							)}
 						</div>
 					</div>
